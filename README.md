@@ -1,1 +1,0 @@
-# A_Game_to_Benchmark_Quantum_Computers
