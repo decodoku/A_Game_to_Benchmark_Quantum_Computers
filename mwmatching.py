@@ -1,3 +1,6 @@
+# This implementation is by Joris van Rantwijk
+# More information can be found at http://jorisvr.nl/article/maximum-matching
+
 """Weighted maximum matching in general graphs.
 
 The algorithm is taken from "Efficient Algorithms for Finding Maximum
