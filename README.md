@@ -1,6 +1,6 @@
 # Quantum Awesomeness: A Game to Benchmark Quantum Computers
 
-This game is designed to run on any and all prototype devices capable of universal quantum computation. The better the device, the better the game will run. This therefore allows a simple and accessible way to asses and compare these prototypes.
+This game is designed to run on any and all prototype devices capable of universal quantum computation. The better the device, the better the game will run. This therefore allows a simple and accessible way to asses and compare these prototypes. For more info on the gritty details, see [here](https://medium.com/@decodoku/benchmarking-quantum-computers-with-a-game-806503b2c983).
 
 The easiest way to run the game is using data that has already been extracted from the quantum computers. Simply clone the repository and run the Jupter notebook [Play_Quantum_Awesomeness.ipynb](Play_Quantum_Awesomeness.ipynb).
 
