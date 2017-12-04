@@ -206,7 +206,7 @@ def printM ( string, move ):
         print(string)
 
 
-def entangle( device, move, shots, sim, gates, conjugates, perfect=False):
+def entangle( device, move, shots, sim, gates, conjugates ):
     
     # Input:
     # * *device* - String specifying the device on which the game is played.
@@ -216,7 +216,6 @@ def entangle( device, move, shots, sim, gates, conjugates, perfect=False):
     # * *sim* -
     # * *gates* - Entangling gates applied so far. Each round of the game corresponds to two 'slices'. *gates* is a list with a dictionary for each slice. The dictionary has pairs of qubits as keys and fractions of pi defining a corresponding entangling gate as values.
     # * *conjugates* - List of single qubit gates to conjugate entangling gates of previous rounds. Each is specified by a two element list. First is a string specifying the rotation axis ('X' or 'Z'), and the second specifies the fraction of pi for the rotation.
-    # * *perfect=False* - setting this to true ignores the player chosen inverse, and implements the perfect one instead.
     #
     # Process:
     # * Sets up and runs a quantum circuit consisting of all gates thus far.
@@ -229,40 +228,47 @@ def entangle( device, move, shots, sim, gates, conjugates, perfect=False):
     q, c, engine, script = initializeQuantumProgram(device)
 
     # apply all gates
-    # gates has two entries for each round, which we call slices
-    slices = len(gates)
-    for s in range(slices):
+    # gates has two entries for each round, except for the current round which has only one
+    rounds = int( (len(gates)+1)/2 )
+    
+    # loop over past rounds and apply the required gates
+    for r in range(rounds-1):
+
+        # do the first part of conjugation (the inverse)
+        for n in range(num):
+            implementGate ( device, conjugates[r][n][0], q[n], script, frac=-conjugates[r][n][1] )
+
+        # get the sets of gates that create and (attempt to) remove the puzzle for this round
+        gates_create = gates[2*r]
+        gates_remove = gates[2*r+1]
         
-        r = int(s/2) # round number
-        
-        # if perfect=True is chosen, each odd slice is a perfect inverse of the one before
-        if (perfect and (s%2)==1):
-            gateSlice = copy.deepcopy( gates[s-1] )
-            for p in gateSlice.keys():
-                gateSlice[p] = -gateSlice[p]
-        # otherwise it is as chosen by the player
-        else:
-            gateSlice = gates[s]
-        
-        # if it's an even slice and not the most recent, do the first part of conjugation (the inverse)
-        if ((s%2)==0 and s<(slices-1) ):
-            for n in range(num):
-                implementGate ( device, conjugates[r][n][0], q[n], script, frac=-conjugates[r][n][1] )
-                #print([conjugates[r][n][0],-conjugates[r][n][1],n])
-        
-        # then the main gates of the slice
-        for p in gateSlice.keys():
-            frac = gateSlice[p]
-            implementGate ( device, "XX", [ q[ pairs[p][0] ], q[ pairs[p][1] ] ], script, frac=frac )
-            #print(["XX",frac,pairs[p][0],pairs[p][1]])
+        # determine which pairs are for both, and which are unique
+        pairs_both = list( set(gates_create.keys()) & set(gates_remove.keys()) )
+        pairs_create = list( set(gates_create.keys()) - set(gates_remove.keys()) )
+        pairs_remove = list( set(gates_remove.keys()) - set(gates_create.keys()) )
+              
+        # then do the exp[ i XX * frac ] gates accordinglu
+        for p in pairs_both:
+            #print([r,p,gates_create[p]+gates_remove[p]] )
+            implementGate ( device, "XX", [ q[pairs[p][0]], q[pairs[p][1]] ], script, frac=(gates_create[p]+gates_remove[p]) )
+        for p in pairs_create:
+            #print([r,p,gates_create[p]] )
+            implementGate ( device, "XX", [ q[pairs[p][0]], q[pairs[p][1]] ], script, frac=(gates_create[p]) )
+        for p in pairs_remove:
+            #print([r,p,gates_remove[p]] )
+            implementGate ( device, "XX", [ q[pairs[p][0]], q[pairs[p][1]] ], script, frac=(gates_remove[p]) )
             
-        # if it's an odd slice and not the most recent, do the second part of conjugation
-        if ((s%2)==1 and s<(slices-1) ):
-            for n in range(num):
-                implementGate ( device, conjugates[r][n][0], q[n], script, frac=conjugates[r][n][1] )
-                #print([conjugates[r][n][0],-conjugates[r][n][1],n])
-            
-            
+        # do the second part of conjugation
+        for n in range(num):
+            implementGate ( device, conjugates[r][n][0], q[n], script, frac=conjugates[r][n][1] )
+    
+    # then the same for the current round (only needs the exp[ i XX * (frac - frac_inverse) ] )
+    r = rounds-1
+    for p in gates[2*r].keys():
+        #print([r,p,gates[2*r][p]] )
+        implementGate ( device, "XX", [ q[ pairs[p][0] ], q[ pairs[p][1] ] ], script, frac=gates[2*r][p] )
+    
+    
     resultsRaw = getResults( device, sim, shots, q, c, engine, script )
     
     strings = list(resultsRaw.keys())
@@ -583,7 +589,7 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True ):
         printM("", move)
         printM("", move)
         if move=='M':
-            input(">...\n")
+            input(">Press Enter for the next round...\n")
     
     if move=="M":
         input("> The data has run out :( Press Enter to restart...\n")
