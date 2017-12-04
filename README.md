@@ -17,12 +17,7 @@ For more on the gritty details, see [here](https://medium.com/@decodoku/benchmar
 
 The easiest way to run the game is using data that has already been extracted from the quantum computers. Simply clone the repository and run the Jupter notebook [Play_Quantum_Awesomeness.ipynb](Play_Quantum_Awesomeness.ipynb).
 
-If you want to play the game live, run something along the lines of
-
-    from QuantumAwesomeness import *
-    GetData( 'ibmqx3', 'M', 100, True, 1, 20 )
-    
-See the documentation on GetData in [QuantumAwesomeness.py](QuantumAwesomeness.py) to understand how to set up different games.
+Play the game live if you want to experience it as it was meant to be played. Any mistakes you make will add to the increase in difficulty. To do this, run the commented line in the file above. This invokes the *GetData* function. See the documentation in [QuantumAwesomeness.py](QuantumAwesomeness.py) to understand how to set up different games.
 
 ### Contributing data
 
