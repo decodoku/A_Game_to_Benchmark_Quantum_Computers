@@ -523,7 +523,7 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True ):
             unpaired = num
             while (unpaired>1):  
 
-                pairGuess = str.upper(input("\nChoose a pair\n"))
+                pairGuess = input("\nChoose a pair\n")
 
                 if (pairGuess in pairs.keys()) and (pairGuess not in guessedPairs) :
 
