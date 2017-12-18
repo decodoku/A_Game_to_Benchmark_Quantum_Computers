@@ -137,7 +137,7 @@ def getLayout (device):
                15: [0,0], 16: [2,0], 17: [4,0], 18: [6,0], 19: [8,0] }
         example = [.32, .48, .58, None,.15, .52, .33, .47, .59, .17, .51, .76, .89, .23, .65, .02, .78, .91, .25, .64]
         #          0    1    2    3    4    5     6   7    8    9    10   11   12   13   14   15   16   17   18   19
-        sdk = "ProjectQ"
+        sdk = "Forest"
         runs = {True:{'shots':[100,1000,10000],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[8192],'move':['C'],'maxScore':10,'samples':20}}
         
     else:
