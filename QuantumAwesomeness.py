@@ -19,13 +19,19 @@ try:
     import Qconfig
 except:
     pass#print("QISKit is not installed. This is not a problem if you don't plan to use it, but a big one if you do.")
-# If you don't use ProjectQ, and don't have it installed, comment these lines out
+
 try:
     import projectq
     from projectq.ops import H, Measure, CNOT, C, Z, Rx, Rz
 except:
     pass#print("Project Q is not installed. This is not a problem if you don't plan to use it, but a big one if you do.")
 
+try:
+    from pyquil.quil import Program
+    import pyquil.api as api
+    from pyquil.gates import I, H, CNOT, CZ, RX, RZ
+except:
+    pass#print("Forest is not installed. This is not a problem if you don't plan to use it, but a big one if you do.")
 
 def initializeQuantumProgram ( device ):
     
@@ -39,8 +45,8 @@ def initializeQuantumProgram ( device ):
     # Output:
     # * *q* - Register of qubits (needed by both QISKit and ProjectQ).
     # * *c* - Register of classical bits (needed by QISKit only).
-    # * *engine* - Class required to create programs in both QISKit and ProjectQ.
-    # * *script* - The quantum program (needed by QISKit only).
+    # * *engine* - Class required to create programs in QISKit, ProjectQ and Forest.
+    # * *script* - The quantum program, needed by QISKit and Forest.
 
     num, area, entangleType, pairs, pos, example, sdk, runs = getLayout(device)
     
@@ -56,6 +62,11 @@ def initializeQuantumProgram ( device ):
         q = engine.allocate_qureg( num )
         c = None
         script = None
+    elif sdk=="Forest":
+        engine = api.QVMConnection()#use_queue=True)
+        script = Program()
+        q = range(num)
+        c = range(num)
         
     return q, c, engine, script
 
@@ -85,7 +96,7 @@ def implementGate (device, gate, qubit, script, frac = 0 ):
         if gate=='X':
             script.u3(frac * math.pi, -math.pi/2,math.pi/2, qubit )
         elif gate=='Z':
-            script.u3(frac * math.pi, 0,0, qubit )
+            script.u3(frac * math.pi, 0,0, qubit ) # this isn't a Z, it's a Y! 
         elif gate=='XX':
             if entangleType=='CX':
                 script.cx( qubit[0], qubit[1] )
@@ -121,6 +132,24 @@ def implementGate (device, gate, qubit, script, frac = 0 ):
         elif gate=='finish':
             Measure | qubit
             
+    elif sdk=="Forest":
+        if gate=='X':
+            script.inst( RX ( frac * math.pi, qubit ) )
+        elif gate=='Z':
+            script.inst( RZ ( frac * math.pi, qubit ) )
+        elif gate=='XX':
+            if entangleType=='CX':
+                script.inst( CNOT( qubit[0], qubit[1] ) )
+                script.inst( RX ( frac * math.pi, qubit[0] ) )
+                script.inst( CNOT( qubit[0], qubit[1] ) )
+            elif entangleType=='CZ':
+                script.inst( H (qubit[1]) )
+                script.inst( CZ( qubit[0], qubit[1] ) )
+                script.inst( RX ( frac * math.pi, qubit[0] ) )
+                script.inst( CZ( qubit[0], qubit[1] ) )
+                script.inst( H (qubit[1]) )
+            else:
+                print("Support for this is yet to be added")
 
 def getResults ( device, sim, shots, q, c, engine, script ):
     
@@ -194,6 +223,23 @@ def getResults ( device, sim, shots, q, c, engine, script ):
         resultsRaw = {}
         for string in strings:
             resultsRaw[ string ] = engine.backend.get_probability( string, q )
+            
+    elif sdk=="Forest":
+        
+        # add measurement for all qubits
+        for qubit in range (num):
+            script.measure(qubit, [qubit] )
+        # get results
+        resultsVeryRaw = engine.run(script, range(num), trials=shots)
+        # convert them the correct form
+        resultsRaw = {}
+        for sample in resultsVeryRaw:
+            bitString = ""
+            for bit in sample:
+                bitString += str(bit)
+            if bitString not in resultsRaw.keys():
+                resultsRaw[bitString] = 0
+            resultsRaw[bitString] += 1/shots 
     
     return resultsRaw
 
@@ -247,7 +293,7 @@ def entangle( device, move, shots, sim, gates, conjugates ):
         pairs_create = list( set(gates_create.keys()) - set(gates_remove.keys()) )
         pairs_remove = list( set(gates_remove.keys()) - set(gates_create.keys()) )
               
-        # then do the exp[ i XX * frac ] gates accordinglu
+        # then do the exp[ i XX * frac ] gates accordingly
         for p in pairs_both:
             #print([r,p,gates_create[p]+gates_remove[p]] )
             implementGate ( device, "XX", [ q[pairs[p][0]], q[pairs[p][1]] ], script, frac=(gates_create[p]+gates_remove[p]) )
@@ -265,7 +311,6 @@ def entangle( device, move, shots, sim, gates, conjugates ):
     # then the same for the current round (only needs the exp[ i XX * (frac - frac_inverse) ] )
     r = rounds-1
     for p in gates[2*r].keys():
-        #print([r,p,gates[2*r][p]] )
         implementGate ( device, "XX", [ q[ pairs[p][0] ], q[ pairs[p][1] ] ], script, frac=gates[2*r][p] )
     
     
