@@ -2,7 +2,7 @@ def supportedDevices ():
 
 	# Returns the list of all supported devices
 
-	return ["ibmqx4","ibmqx5","QS1_1"]
+	return ["ibmqx2","ibmqx4","ibmqx5","QS1_1","rigetti19"]
 
 def getLayout (device):
 
@@ -26,6 +26,8 @@ def getLayout (device):
     # * *runs* - Data that has been obtained. As a dictionary with values of *sim* as keys.
     
     if device=="ibmqx5":
+        # A 16 qubit device by IBM
+        # https://github.com/QISKit/ibmqx-backend-information/tree/master/backends/ibmqx5
     
         # the positions of qubits on the device (numbers), and names of pairs (letters) for ibmqx5
         #    [1]---(A)---[2]---(B)---[3]---(C)---[4]---(D)---[5]---(E)---[6]---(F)---[7]---(G)---[8]
@@ -45,10 +47,38 @@ def getLayout (device):
         example = [0.11, 0.09, 0.49, 0.52, 0.31, 0.89, 0.15, 0.18, 0.47, 0.43, 0.67, 0.62, 0.93, 0.29, 0.77, 0.73]
         sdk = "QISKit"
         runs = {True:{'shots':[100,1000,10000],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[8192],'move':['C'],'maxScore':10,'samples':20}}
+
     
+    elif device=="ibmqx2": #
+        # A 5 qubit device by IBM
+        # https://github.com/QISKit/ibmqx-backend-information/tree/master/backends/ibmqx2
+    
+        # the positions of qubits on the device (numbers), and names of pairs (letters) for ibmqx2
+        #    [4]         [0]
+        #     | \       / |
+        #     | (D)   (B) | 
+        #     |   \   /   |
+        #    (F)   [2]   (A)
+        #     |   /  \    |
+        #     | (E)  (C)  |
+        #     | /       \ |
+        #    [3]         [1]
+    
+        num = 5
+        area = [3,3]
+        entangleType = "CX"
+        pairs = { 'A': [0,1], 'B': [0,2], 'C': [1,2], 'D': [4,2], 'E': [3,2], 'F': [3,4] }
+        pos = { 0: [1,1], 1: [1,0],  2: [0.5,0.5],  3: [0,0],  4: [0,1] }
+        example = [0.11,0.09,0.49,0.52,0.31]
+        sdk = "QISKit"
+        runs = {True:{'shots':[100,1000,10000],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[8192],'move':['C'],'maxScore':10,'samples':20}}
+
+        
     elif device=="ibmqx4":
+        # A 5 qubit device by IBM
+        # https://github.com/QISKit/ibmqx-backend-information/tree/master/backends/ibmqx4
     
-        # the positions of qubits on the device (numbers), and names of pairs (letters) for ibmqx3
+        # the positions of qubits on the device (numbers), and names of pairs (letters) for ibmqx4
         #    [4]         [0]
         #     | \       / |
         #     | (D)   (B) | 
@@ -69,6 +99,8 @@ def getLayout (device):
         runs = {True:{'shots':[100,1000,10000],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[8192],'move':['C'],'maxScore':10,'samples':20}}
 
     elif device=="QS1_1":
+        # A 20 qubit device by IBM
+        # https://quantumexperience.ng.bluemix.net/qx/devices
     
         num = 20
         area = [7,7]
@@ -87,6 +119,25 @@ def getLayout (device):
         example = [.32, .33, .92, .82, .11, .16, .15, .91, .12, .84, .52, .43, .78, .19, .47, .52, .78, .42, .48, .18]
         #          0    1    2    3    4    5     6   7    8    9    10   11   12   13   14   15   16   17   18   19
         sdk = "QISKit"
+        runs = {True:{'shots':[100,1000,10000],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[8192],'move':['C'],'maxScore':10,'samples':20}}
+        
+    elif device=="rigetti19":
+        # A device by Rigetti with 20 qubits, but since one is isolated it is effectively 19
+        # https://arxiv.org/abs/1712.05771
+    
+        num = 20
+        area = [10,4]
+        entangleType = "CZ"
+        pairs = { 'A': [0,5], 'B': [0,6], 'C': [1,6], 'D': [1,7], 'E': [2,7], 'F': [2,8], 'G': [4,9],
+                  'H': [5,10], 'I': [6,11], 'J': [7,12], 'K': [8,13], 'L': [9,14],
+                  'M': [10,15], 'N': [10,16], 'O': [11,16], 'P': [11,17], 'Q': [12,17], 'R': [12,18], 'S': [13,18], 'T': [13,19], 'U': [14,19] }
+        pos = { 0: [1,3], 1: [3,3], 2: [5,3], 4: [9,3],
+                5: [0,2], 6: [2,2], 7: [4,2], 8: [6,2], 9: [8,2],
+               10: [1,1], 11: [3,1], 12: [5,1], 13: [7,1], 14: [9,1],
+               15: [0,0], 16: [2,0], 17: [4,0], 18: [6,0], 19: [8,0] }
+        example = [.32, .48, .58, None,.15, .52, .33, .47, .59, .17, .51, .76, .89, .23, .65, .02, .78, .91, .25, .64]
+        #          0    1    2    3    4    5     6   7    8    9    10   11   12   13   14   15   16   17   18   19
+        sdk = "ProjectQ"
         runs = {True:{'shots':[100,1000,10000],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[8192],'move':['C'],'maxScore':10,'samples':20}}
         
     else:
