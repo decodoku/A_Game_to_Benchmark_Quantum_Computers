@@ -53,7 +53,6 @@ def initializeQuantumProgram ( device ):
     if sdk in ["QISKit","ManualQISKit"]:
         engine = QuantumProgram()
         engine.set_api(Qconfig.APItoken, Qconfig.config["url"]) # set the APIToken and API url
-        #print(engine.available_backends())
         q = engine.create_quantum_register("q", num)
         c = engine.create_classical_register("c", num)
         script = engine.create_circuit("script", [q], [c]) 
@@ -63,7 +62,7 @@ def initializeQuantumProgram ( device ):
         c = None
         script = None
     elif sdk=="Forest":
-        engine = api.QVMConnection()#use_queue=True)
+        engine = api.QVMConnection(use_queue=True)
         script = Program()
         q = range(num)
         c = range(num)
