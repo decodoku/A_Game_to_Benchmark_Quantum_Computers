@@ -22,14 +22,14 @@ except:
 
 try:
     import projectq
-    from projectq.ops import H, Measure, CNOT, C, Z, Rx, Rz
+    from projectq.ops import H, Measure, CNOT, C, Z, Rx, Ry
 except:
     pass#print("Project Q is not installed. This is not a problem if you don't plan to use it, but a big one if you do.")
 
 try:
     from pyquil.quil import Program
     import pyquil.api as api
-    from pyquil.gates import I, H, CNOT, CZ, RX, RZ
+    from pyquil.gates import I, H, CNOT, CZ, RX, RY
 except:
     pass#print("Forest is not installed. This is not a problem if you don't plan to use it, but a big one if you do.")
 
@@ -94,8 +94,8 @@ def implementGate (device, gate, qubit, script, frac = 0 ):
     if sdk in ["QISKit","ManualQISKit"]:
         if gate=='X':
             script.u3(frac * math.pi, -math.pi/2,math.pi/2, qubit )
-        elif gate=='Z':
-            script.u3(frac * math.pi, 0,0, qubit ) # this isn't a Z, it's a Y! 
+        elif gate=='Z': # actually a Y axis rotation
+            script.u3(frac * math.pi, 0,0, qubit )
         elif gate=='XX':
             if entangleType=='CX':
                 script.cx( qubit[0], qubit[1] )
@@ -113,8 +113,8 @@ def implementGate (device, gate, qubit, script, frac = 0 ):
     elif sdk=="ProjectQ":
         if gate=='X':
             Rx( frac * math.pi ) | qubit
-        elif gate=='Z':
-            Rz( frac * math.pi ) | qubit
+        elif gate=='Z': # actually a Y axis rotation
+            Ry( frac * math.pi ) | qubit
         elif gate=='XX':
             if entangleType=='CX':
                 CNOT | ( qubit[0], qubit[1] )
@@ -134,8 +134,8 @@ def implementGate (device, gate, qubit, script, frac = 0 ):
     elif sdk=="Forest":
         if gate=='X':
             script.inst( RX ( frac * math.pi, qubit ) )
-        elif gate=='Z':
-            script.inst( RZ ( frac * math.pi, qubit ) )
+        elif gate=='Z': # actually a Y axis rotation
+            script.inst( RY ( frac * math.pi, qubit ) )
         elif gate=='XX':
             if entangleType=='CX':
                 script.inst( CNOT( qubit[0], qubit[1] ) )
@@ -579,7 +579,7 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True ):
                     printM("\n\n\n", move)
 
                 else:
-                    printM("That isn't a valid pair. Try again.", move)
+                    printM("That isn't a valid pair. Try again.\n(Note that input is case sensitive)", move)
 
                 # check if all vertices have been covered
                 unpaired = 0
