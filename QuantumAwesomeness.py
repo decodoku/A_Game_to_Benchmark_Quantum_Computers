@@ -33,13 +33,14 @@ try:
 except:
     pass#print("Forest is not installed. This is not a problem if you don't plan to use it, but a big one if you do.")
 
-def initializeQuantumProgram ( device ):
+def initializeQuantumProgram ( device, sim ):
     
     # *This function contains SDK specific code.*
     # 
     # Input:
     # * *device* - String specifying the device on which the game is played.
     #              Details about the device will be obtained using getLayout.
+    # * *sim* - Whether this is a simulated run
     # Process:
     # * Initializes everything required by the SDK for the quantum program. The details depend on which SDK is used.
     # Output:
@@ -62,7 +63,10 @@ def initializeQuantumProgram ( device ):
         c = None
         script = None
     elif sdk=="Forest":
-        engine = api.QVMConnection(use_queue=True)
+        if sim:
+            engine = api.QVMConnection(use_queue=True)
+        else:
+            engine = api.QPUConnection(device)   
         script = Program()
         q = range(num)
         c = range(num)
@@ -225,17 +229,19 @@ def getResults ( device, sim, shots, q, c, engine, script ):
             
     elif sdk=="Forest":
         
-        # add measurement for all qubits
-        for qubit in range (num):
-            script.measure(qubit, [qubit] )
+        # make list of active qubits
+        qubit_range = list( range(3) ) + list( range(4,20) )
         # get results
-        resultsVeryRaw = engine.run(script, range(num), trials=shots)
+        resultsVeryRaw = engine.run_and_measure(script, qubit_range, trials=shots)
         # convert them the correct form
         resultsRaw = {}
         for sample in resultsVeryRaw:
             bitString = ""
-            for bit in sample:
-                bitString += str(bit)
+            for qubit in range(3): # results for first three qubits
+                bitString += str(sample[qubit])
+            bitString += "0" # fake result for qubit 3
+            for qubit in range(4,20): # results for the rest of the qubits
+                bitString += str(sample[qubit-1])
             if bitString not in resultsRaw.keys():
                 resultsRaw[bitString] = 0
             resultsRaw[bitString] += 1/shots 
@@ -270,7 +276,7 @@ def entangle( device, move, shots, sim, gates, conjugates ):
     
     num, area, entangleType, pairs, pos, example, sdk, runs = getLayout(device)
     
-    q, c, engine, script = initializeQuantumProgram(device)
+    q, c, engine, script = initializeQuantumProgram(device,sim)
 
     # apply all gates
     # gates has two entries for each round, except for the current round which has only one
@@ -566,8 +572,10 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True ):
             # get the player choosing until the choosing is done
             unpaired = num
             while (unpaired>1):  
-
-                pairGuess = input("\nChoose a pair\n")
+                
+                pairGuess = input("\nChoose a pair (or type 'done')\n")
+                if num<=26 : # if there are few enough qubits, we don't need to be case sensitive
+                    pairGuess = str.upper(pairGuess)
 
                 if (pairGuess in pairs.keys()) and (pairGuess not in guessedPairs) :
 
@@ -577,14 +585,17 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True ):
                     for j in [0,1]:
                         displayedOneProb[ pairs[pairGuess][j] ] = 2
                     printM("\n\n\n", move)
-
+                    
+                    # check if all vertices have been covered
+                    unpaired = 0
+                    for n in range(num):
+                        unpaired += ( displayedOneProb[n] <= 1 )
+                
+                elif (str.upper(pairGuess)=="DONE") : # player has decided to stop pairing
+                    unpaired = 0
                 else:
-                    printM("That isn't a valid pair. Try again.\n(Note that input is case sensitive)", move)
+                    printM("That isn't a valid pair. Try again.\n(Note that input can be case sensitive)", move)
 
-                # check if all vertices have been covered
-                unpaired = 0
-                for n in range(num):
-                    unpaired += ( displayedOneProb[n] <= 1 )
             
                 printPuzzle ( device, displayedOneProb, move )
         
