@@ -2,7 +2,7 @@ def supportedDevices ():
 
 	# Returns the list of all supported devices
 
-	return ["ibmqx2","ibmqx4","ibmqx5","QS1_1","rigetti19"]
+	return ["ibmqx2","ibmqx4","ibmqx5","QS1_1","19Q-Acorn","5Q-Test"]
 
 def getLayout (device):
 
@@ -72,8 +72,7 @@ def getLayout (device):
         example = [0.11,0.09,0.49,0.52,0.31]
         sdk = "QISKit"
         runs = {True:{'shots':[100,1000,10000],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[8192],'move':['C'],'maxScore':10,'samples':20}}
-
-        
+       
     elif device=="ibmqx4":
         # A 5 qubit device by IBM
         # https://github.com/QISKit/ibmqx-backend-information/tree/master/backends/ibmqx4
@@ -121,9 +120,10 @@ def getLayout (device):
         sdk = "QISKit"
         runs = {True:{'shots':[100,1000,10000],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[8192],'move':['C'],'maxScore':10,'samples':20}}
         
-    elif device=="rigetti19":
+    elif device=="19Q-Acorn":
         # A device by Rigetti with 20 qubits, but since one is isolated it is effectively 19
         # https://arxiv.org/abs/1712.05771
+        # http://pyquil.readthedocs.io/en/latest/qpu_overview.html#acorn-qpu-properties
     
         num = 20
         area = [10,4]
