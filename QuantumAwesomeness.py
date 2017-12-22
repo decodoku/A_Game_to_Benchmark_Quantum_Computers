@@ -137,9 +137,11 @@ def implementGate (device, gate, qubit, script, frac = 0 ):
             
     elif sdk=="Forest":
         if gate=='X':
-            script.inst( RX ( frac * math.pi, qubit ) )
+            if qubit in pos.keys(): # only if qubit is active
+                script.inst( RX ( frac * math.pi, qubit ) )
         elif gate=='Z': # actually a Y axis rotation
-            script.inst( RY ( frac * math.pi, qubit ) )
+            if qubit in pos.keys(): # only if qubit is active
+                script.inst( RY ( frac * math.pi, qubit ) )
         elif gate=='XX':
             if entangleType=='CX':
                 script.inst( CNOT( qubit[0], qubit[1] ) )
@@ -151,6 +153,9 @@ def implementGate (device, gate, qubit, script, frac = 0 ):
                 script.inst( RX ( frac * math.pi, qubit[0] ) )
                 script.inst( CZ( qubit[0], qubit[1] ) )
                 script.inst( H (qubit[1]) )
+            elif entangleType=='none':
+                script.inst( RX ( frac * math.pi, qubit[0] ) )
+                script.inst( RX ( frac * math.pi, qubit[1] ) )
             else:
                 print("Support for this is yet to be added")
 
@@ -179,11 +184,6 @@ def getResults ( device, sim, shots, q, c, engine, script ):
         # add measurement for all qubits
         for n in range(num):
             script.measure( q[n], c[n] )
-          
-        # make sure the qasm compiles properly (commented out because of https://github.com/QISKit/qiskit-sdk-py/issues/157)
-        #cmap = engine.get_backend_configuration(device)['coupling_map']
-        #qobj = engine.compile(["script"], backend=device, coupling_map=cmap)
-        #print(engine.get_compiled_qasm(qobj,"script"))
            
         # execute job
         noResults = True
@@ -229,19 +229,31 @@ def getResults ( device, sim, shots, q, c, engine, script ):
             
     elif sdk=="Forest":
         
-        # make list of active qubits
-        qubit_range = list( range(3) ) + list( range(4,20) )
-        # get results
-        resultsVeryRaw = engine.run_and_measure(script, qubit_range, trials=shots)
+        # get list of active (and therefore plotted) qubits
+        qubits_active = list(pos.keys())
+
+        # execute job
+        noResults = True
+        while noResults:
+            try: # try to run, and wait for 5 mins if it fails
+                #print(script)
+                resultsVeryRaw = engine.run_and_measure(script, qubits_active, trials=shots)
+                noResults = False
+            except:
+                print("Job failed. We'll wait and try again.")
+                time.sleep(300)
+                
         # convert them the correct form
         resultsRaw = {}
         for sample in resultsVeryRaw:
             bitString = ""
-            for qubit in range(3): # results for first three qubits
-                bitString += str(sample[qubit])
-            bitString += "0" # fake result for qubit 3
-            for qubit in range(4,20): # results for the rest of the qubits
-                bitString += str(sample[qubit-1])
+            disabled_so_far = 0
+            for qubit in range(num):
+                if qubit in qubits_active:
+                    bitString += str(sample[qubit-disabled_so_far])
+                else:
+                    bitString += "0" # fake result for dead qubit
+                    disabled_so_far += 1
             if bitString not in resultsRaw.keys():
                 resultsRaw[bitString] = 0
             resultsRaw[bitString] += 1/shots 
@@ -586,9 +598,9 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True ):
                         displayedOneProb[ pairs[pairGuess][j] ] = 2
                     printM("\n\n\n", move)
                     
-                    # check if all vertices have been covered
+                    # check if all active (and therefore displayed) vertices have been covered
                     unpaired = 0
-                    for n in range(num):
+                    for n in pos.keys():
                         unpaired += ( displayedOneProb[n] <= 1 )
                 
                 elif (str.upper(pairGuess)=="DONE") : # player has decided to stop pairing
@@ -605,7 +617,7 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True ):
         # store the oneProb
         oneProbs.append( oneProb )
         
-        # see whether the game over condition is satisfied (totalFuzz for this level > 0.1)
+        # see whether the game over condition is satisfied
         gameOn = (score<maxScore)
         
         # given the chosen pairs, the gates are now deduced from oneProb
@@ -627,7 +639,7 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True ):
         # now we can add to the list of all gates
         gates.append(guessedGates)
         
-        # finally randomly generate X or Z rotation to conjugate this round with
+        # finally randomly generate X or Z rotation for each active qubit to conjugate this round with
         newconjugates = []
         for n in range(num):
             newconjugates.append( [ numpy.random.choice(['X','Z']) , random.random() ] )
