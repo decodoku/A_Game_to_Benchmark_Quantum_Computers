@@ -2,7 +2,7 @@ def supportedDevices ():
 
 	# Returns the list of all supported devices
 
-	return ["ibmqx2","ibmqx4","ibmqx5","QS1_1","19Q-Acorn","5Q-Test"]
+	return ["ibmqx2","ibmqx4","ibmqx5","19Q-Acorn","5Q-Test"]
 
 def getLayout (device):
 
