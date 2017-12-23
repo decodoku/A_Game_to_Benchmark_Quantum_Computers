@@ -820,11 +820,18 @@ def PlayGame():
     
     intro = str.upper(input("\n> Do you want to read the introduction? (y/n)...\n"))
     if intro!="N":
-        input("> This game let's you tackle puzzles that were forged on quantum computers...\n")
-        input("> You don't need to know about quantum stuff to play...\n")
-        input("> Nor will you learn any of the mysteries of the quantum world by playing...\n")
-        input("> But you will get a bit of hands on experience of real prototype devices...\n")
-        input("> And get an idea of how different devices compare...\n")
+        input("> There are lots of quantum processors around these days. But how good are they really?...\n")
+        input("> How do they compare to each other, and how do they compare to normal computers?...\n")
+        input("> To find out, we can run a simple program on them and see what happens...\n")
+        input("> So that's what we've done. We made a game, and we are running it on all the quantum computers we can...\n")
+              
+        input("> Have a play, and see what you think...\n")
+        input("> You won't learn anything about the mysteries of the quantum world by playing...\n")
+        input("> But you will find out how good current quantum computers are at being computers...\n")
+        input("> The better the connectivity of a quantum processor, the better the puzzles in the game...\n")
+        input("> The noisier that a quantum processor is, the more infuriatingly steep the difficult curve will be...\n")
+        input("> So the quality of the processor is direcly proportional to how much fun you have playing on it...\n")
+        input("> Now choose a device to test out...\n")
     deviceNotChosen = True
     attempt = 0
     deviceList = ""
@@ -841,23 +848,18 @@ def PlayGame():
     
     num, area, entangleType, pairs, pos, example, sdk, runs = getLayout( device )
     
-    tut = str.upper(input("> Do you want to read the tutorial? (y/n)...\n"))
+    num_active_qubits = len(pos.keys())
+    
+    tut = str.upper(input("\n> Do you want to read the tutorial? (y/n)...\n"))
     if tut!="N":
         printPuzzle(device,example,"M")
         input("> The game is a series of puzzles, which look something like this...\n")
-        input("> Each circle" + ((num%2)==1)*" except one" + " is part of a pair...\n")
+        input("> Each circle" + ((num_active_qubits%2)==1)*" except one" + " is part of a pair...\n")
         input("> Your job is to find these pairs...\n")
-        input("> All the possible ways that the circles can pair are labelled by letters...\n")
-        input("> The colours and numbers for paired circles should be similar...\n")
-        input("> But as the game progresses, these things get a bit fuzzy...\n")
-        input("> They will become less and less similar, and the puzzle will become harder...\n")
-        input("> The nature of the puzzles depends strongly on the quantum device that runs them...\n")
-        input("> The possible pairings depend on the connectivity of the quantum device...\n")
-        input("> A better connected device means more possibilities, and so a better puzzle...\n")
-        input("> The device also influences the way the fuzziness, and hence the difficulty, increases...\n")
+        input("> The colours and numbers for paired circles should be very similar at the beginning...\n")
+        input("> As the game progresses they will get less similar, and so the puzzles will become harder...\n")
         input("> The game is designed to have a nice gentle increase in difficulty...\n")
-        input("> This would be due to a process that has been proposed\n  to prove that quantum computers can be better than normal ones...\n")
-        input("> But noise increases difficulty too, and can do so in a faster and dirtier way...\n")
+        input("> But noise in the quantum processors increases fuzziness too, and will do so in a faster and dirtier way...\n")
         input("> If you want to see how potent noise is, compare a run on the real device with one on a (noiseless) simulator...\n")
         input("> Do the simulator first, to get an idea for how things are supposed to be...\n")  
         
