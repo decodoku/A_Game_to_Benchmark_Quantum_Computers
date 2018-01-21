@@ -6,7 +6,7 @@ except:
     pass
 
 # other tools
-import random, numpy, math, time, copy, os, subprocess
+import random, numpy, math, time, copy, os
 import networkx as nx
 import matplotlib.pyplot as plt
 from itertools import product
@@ -178,7 +178,7 @@ def getResults ( device, sim, shots, q, c, engine, script ):
     if sdk=="QISKit":
         # pick the right backend
         if sim:
-            backend = 'ibmqx_qasm_simulator'
+            backend = 'local_qasm_simulator'
         else:
             backend = device
         # add measurement for all qubits
@@ -188,8 +188,8 @@ def getResults ( device, sim, shots, q, c, engine, script ):
         # execute job
         noResults = True
         while noResults:
-            try: # try to run, and wait for 5 mins if it fails
-                executedJob = engine.execute(["script"], backend=backend, shots=shots, max_credits = 5, wait=2, timeout=600, silent=False)
+            try: # try to run, and wait if it fails
+                executedJob = engine.execute(["script"], backend=backend, shots=shots, max_credits = 5, wait=30, timeout=600)
                 # get results
                 resultsVeryRaw = executedJob.get_counts("script")
                 if ('status' not in resultsVeryRaw.keys()): # see if it actually is data, and wai for 5 mins if not
@@ -200,7 +200,7 @@ def getResults ( device, sim, shots, q, c, engine, script ):
                     time.sleep(300)
             except:
                 print("Job failed. We'll wait and try again")
-                time.sleep(300)
+                time.sleep(600)
                 
         # invert order of the bit string and turn into probs
         resultsRaw = {}
@@ -235,13 +235,12 @@ def getResults ( device, sim, shots, q, c, engine, script ):
         # execute job
         noResults = True
         while noResults:
-            try: # try to run, and wait for 5 mins if it fails
-                #print(script)
+            try: # try to run, and wait for 10 mins if it fails
                 resultsVeryRaw = engine.run_and_measure(script, qubits_active, trials=shots)
                 noResults = False
             except:
                 print("Job failed. We'll wait and try again.")
-                time.sleep(300)
+                time.sleep(1800)
                 
         # convert them the correct form
         resultsRaw = {}
@@ -429,7 +428,7 @@ def printPuzzle ( device, oneProb, move ):
                     colors.append( (0.5,0.5,0.5) )
                 else: # otherwise it is on the spectrum between red and blue
                     E = calculateEntanglement( oneProb[node] ) # colour is determined by entanglement
-                    colors.append( (1-E,0,E) )
+                    colors.append( (E,0,1-E) )
                 sizes.append( 3000 )
                 if oneProb[node]>1:
                     labels[node] = ""
@@ -480,7 +479,7 @@ def getDisjointPairs ( pairs ):
     return matchingPairs
 
 
-def runGame ( device, move, shots, sim, maxScore, dataNeeded=True ):
+def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False):
     
     # Input:
     # * *device* - String specifying the device on which the game is played.
@@ -517,12 +516,50 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True ):
         saveFile = open('results_' + device + '/gates_'+filename)
         gateSamples = saveFile.readlines()
         saveFile.close()
+        
+        samples = len(oneProbSamples) # find out how many samples there are
+        
+        if maxScore==0: # if a maxScore is not given, use the value from the first sample
+            maxScore = len( eval( oneProbSamples[ 0 ] ) )
+        
         # choose a game
-        game = random.randint( 0, len(oneProbSamples)-1 )
+        game = random.randint( 0, samples-1 )
+        # get the data for this game
         oneProbs = eval( oneProbSamples[ game ] )
+        originalOneProbs = copy.deepcopy( oneProbs )
         gates = eval( gateSamples[ game ] )
-        if maxScore==0: # in this case, we run to the end of the list
-            maxScore = len( oneProbs )
+        
+        if clean:
+            # define arrays for the mean and variance of each qubit for each round
+            firstMoments = [[0]*num for _ in range(maxScore)]
+            secondMoments = [[0]*num for _ in range(maxScore)]
+            # loop over samples and rounds to calculate these
+            for game in range( samples ):
+                oneProbSample = eval( oneProbSamples[ game ] )
+                for score in range(maxScore):
+                    for n in range(num):
+                        firstMoments[score][n] += oneProbSample[score][n]/samples
+                        secondMoments[score][n] += oneProbSample[score][n]**2/samples
+            # final processing of variance
+            for score in range(maxScore):
+                for n in range(num):
+                    secondMoments[score][n] = secondMoments[score][n] - firstMoments[score][n]**2
+            
+            for score in range(maxScore):
+                for n in range(num):
+                    
+                    # stretch to idea standard deviation
+                    if math.sqrt(secondMoments[score][n])!=0:
+                        oneProbs[score][n] = firstMoments[score][n] + (oneProbs[score][n] - firstMoments[score][n]) * ( 0.155 / math.sqrt(secondMoments[score][n]) )
+                    
+                    # shift mean to ideal
+                    oneProbs[score][n] += (0.183-firstMoments[score][n])
+                    
+                    # push outliers back into correct interval
+                    if oneProbs[score][n]>1:
+                        oneProbs[score][n] = 1
+                    elif oneProbs[score][n]<0:
+                        oneProbs[score][n] = 0      
     
     gameOn = True
     score = 0
@@ -530,7 +567,7 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True ):
         
         score += 1
         
-        # Step 1: et a new puzzle
+        # Step 1: get a new puzzle
         
         if dataNeeded:
           
@@ -568,6 +605,10 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True ):
         # prepare grid and print to screen
         printM("",move)
         printM("Round "+str(score), move)
+        if clean:
+            printM("\nOriginal version (without postprocessing)",move)
+            printPuzzle( device, originalOneProbs[score-1], move )
+            printM("Cleaned version (with postprocessing)",move)
         printPuzzle( device, displayedOneProb, move )
 
         guessedPairs = []
@@ -608,7 +649,6 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True ):
                 else:
                     printM("That isn't a valid pair. Try again.\n(Note that input can be case sensitive)", move)
 
-            
                 printPuzzle ( device, displayedOneProb, move )
         
         
@@ -870,7 +910,7 @@ def PlayGame():
         input("> The following game data will be from a simulated run...\n")
     
     shots = min( runs[sim]['shots'] )
-        
+    
     try:
         runGame ( device, 'M', shots, sim, 0, dataNeeded=False )
     except:
