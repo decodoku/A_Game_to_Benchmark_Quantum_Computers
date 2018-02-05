@@ -139,6 +139,25 @@ def getLayout (device):
         #          0    1    2    3    4    5     6   7    8    9    10   11   12   13   14   15   16   17   18   19
         sdk = "Forest"
         runs = {True:{'shots':[100,1000,10000],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[10000],'move':['C','R'],'maxScore':5,'samples':20}}
+
+    elif device=="8Q-Wallraff":
+        # A device from the group of A. Wallraff at ETH
+        # https://arxiv.org/abs/1801.07904
+    
+        num = 9 # actually there are 8. But they number from 1, so 0 is unused
+        area = [4,2]
+        entangleType = "CZ"
+        pairs = { 'A': [1,2], 'B': [2,3], 'C': [3,4], 'D': [4,5], 'E': [5,6], 'F': [6,7], 'G': [7,8],
+                  'fake1':[1,4], 'fake2':[1,6], 'fake3':[1,8],
+                  'fake4':[2,5], 'fake5':[2,7],
+                  'fake6':[3,6], 'fake7':[3,8],
+                  'fake8':[4,7],
+                  'fake9':[5,8] }
+        pos = { 1: [0,1], 2: [1,1], 3: [2,1], 4: [3,1],
+                8: [0,0], 7: [1,0], 6: [2,0], 5: [3,0] }
+        example = [None, .48, .50, .12, .15, .35, .33, .47, .45]
+        sdk = "ProjectQ"
+        runs = {True:{'shots':[100],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[10000],'move':['C','R'],'maxScore':5,'samples':20}}
         
     else:
         
