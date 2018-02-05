@@ -479,7 +479,7 @@ def getDisjointPairs ( pairs ):
     return matchingPairs
 
 
-def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False):
+def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, game=-1):
     
     # Input:
     # * *device* - String specifying the device on which the game is played.
@@ -522,8 +522,9 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False):
         if maxScore==0: # if a maxScore is not given, use the value from the first sample
             maxScore = len( eval( oneProbSamples[ 0 ] ) )
         
-        # choose a game
-        game = random.randint( 0, samples-1 )
+        # choose a game randomly, if a specific one was not requested
+        if game==-1:
+            game = random.randint( 0, samples-1 )
         # get the data for this game
         oneProbs = eval( oneProbSamples[ game ] )
         originalOneProbs = copy.deepcopy( oneProbs )
@@ -692,7 +693,7 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False):
         printM("Correct pairs for this round", move)
         printM(sorted(matchingPairs), move)
         printM("Fuzziness for this round", move)
-        printM(str(round(200*totalFuzz[-1])) +"%" , move)
+        printM(str(round(100*totalFuzz[-1])) +"%" , move) # note that this is the fuzz of oneProb, not of the values displayed
         printM("", move)
         printM("", move)
         if move=='M':
