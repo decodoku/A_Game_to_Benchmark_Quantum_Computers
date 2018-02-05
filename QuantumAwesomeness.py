@@ -18,20 +18,21 @@ try:
     from qiskit import QuantumProgram
     import Qconfig
 except:
-    pass#print("QISKit is not installed. This is not a problem if you don't plan to use it, but a big one if you do.")
-
-try:
-    import projectq
-    from projectq.ops import H, Measure, CNOT, C, Z, Rx, Ry
-except:
-    pass#print("Project Q is not installed. This is not a problem if you don't plan to use it, but a big one if you do.")
+    print("QISKit is not installed. This is not a problem if you don't plan to use it, but a big one if you do.")
 
 try:
     from pyquil.quil import Program
     import pyquil.api as api
     from pyquil.gates import I, H, CNOT, CZ, RX, RY
 except:
-    pass#print("Forest is not installed. This is not a problem if you don't plan to use it, but a big one if you do.")
+    print("Forest is not installed. This is not a problem if you don't plan to use it, but a big one if you do.")
+
+try:
+    import projectq
+    from projectq.ops import H, Measure, CNOT, C, Z, Rx, Ry
+except:
+    print("Project Q is not installed. This is not a problem if you don't plan to use it, but a big one if you do.")
+
 
 def initializeQuantumProgram ( device, sim ):
     
@@ -363,6 +364,14 @@ def calculateEntanglement( oneProb ):
     
     return E
 
+def calculateFrac (oneProb):
+
+    # Prob(1) = sin(frac*pi/2)^2
+    # therefore frac = asin(sqrt(oneProb)) *2 /pi
+    frac = math.asin(math.sqrt( oneProb )) * 2 / math.pi
+    
+    return frac
+    
 
 def calculateFuzz ( oneProb, pairs, matchingPairs ):
     
@@ -410,15 +419,16 @@ def printPuzzle ( device, oneProb, move ):
         G=nx.Graph()
 
         for p in pairs:
-            G.add_edge(pairs[p][0],pairs[p][1])
+            if p[0:4]!='fake':
+                G.add_edge(pairs[p][0],pairs[p][1])
 
         for p in pairs:
-            G.add_edge(pairs[p][0],p)
-            G.add_edge(pairs[p][1],p)
-            pos[p] = [(pos[pairs[p][0]][dim] + pos[pairs[p][1]][dim])/2 for dim in range(2)]
+            if p[0:4]!='fake':
+                G.add_edge(pairs[p][0],p)
+                G.add_edge(pairs[p][1],p)
+                pos[p] = [(pos[pairs[p][0]][dim] + pos[pairs[p][1]][dim])/2 for dim in range(2)]
 
         # colour and label the edges with the oneProb data
-
         colors = []
         sizes = []
         labels = {}
@@ -427,6 +437,7 @@ def printPuzzle ( device, oneProb, move ):
                 if (oneProb[node]>1): # if oneProb is out of bounds (due to this node having already been selected) make it grey
                     colors.append( (0.5,0.5,0.5) )
                 else: # otherwise it is on the spectrum between red and blue
+                    # E = min(1, 2*calculateFrac( oneProb[node] ) ) # colour is determine by the guessed frac
                     E = calculateEntanglement( oneProb[node] ) # colour is determined by entanglement
                     colors.append( (E,0,1-E) )
                 sizes.append( 3000 )
@@ -468,12 +479,12 @@ def getDisjointPairs ( pairs ):
     
     # match[j] = k means that edge j and k are matched
     match = mw.maxWeightMatching(edges, maxcardinality=True)
-
-    # get a list of the pair names for each pair in the matching
+    
+    # get a list of the pair names for each pair in the matching (not including fakes)
     matchingPairs = []
     for v in range(len(match)):
         for p in pairs.keys():
-            if (pairs[p]==[v,match[v]]):
+            if pairs[p]==[v,match[v]] and p[0:4]!='fake' :
                 matchingPairs.append(p)
                 
     return matchingPairs
@@ -670,10 +681,8 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
             for j in range(2):
                 guessedOneProb += oneProb[ pairs[p][j] ] / 2
             
-            # Prob(1) = sin(frac*pi/2)^2
-            # therefore frac = asin(sqrt(oneProb)) *2 /pi
-            guessedFrac = math.asin(math.sqrt(guessedOneProb)) * 2 / math.pi
-
+            guessedFrac = calculateFrac( guessedOneProb )
+            
             # since the player wishes to apply the inverse gate, the opposite frac is stored
             guessedGates[p] = -guessedFrac
 
