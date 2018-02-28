@@ -878,8 +878,8 @@ def PlayGame():
         input("> Have a play, and see what you think...\n")
         input("> You won't learn anything about the mysteries of the quantum world by playing...\n")
         input("> But you will find out how good current quantum computers are at being computers...\n")
-        input("> The better the connectivity of a quantum processor, the better the puzzles in the game...\n")
-        input("> The noisier that a quantum processor is, the more infuriatingly steep the difficult curve will be...\n")
+        input("> The larger and fancier a quantum processor is, the better the puzzles in the game will be...\n")
+        input("> The noisier that a quantum processor is, the more infuriatingly steep the difficulty curve will be...\n")
         input("> So the quality of the processor is direcly proportional to how much fun you have playing on it...\n")
         input("> Now choose a device to test out...\n")
     deviceNotChosen = True
@@ -904,17 +904,18 @@ def PlayGame():
     if tut!="N":
         printPuzzle(device,example,"M")
         input("> The game is a series of puzzles, which look something like this...\n")
-        input("> Each circle" + ((num_active_qubits%2)==1)*" except one" + " is part of a pair...\n")
-        input("> Your job is to find these pairs...\n")
-        input("> The colours and numbers for paired circles should be very similar at the beginning...\n")
-        input("> As the game progresses they will get less similar, and so the puzzles will become harder...\n")
-        input("> The game is designed to have a nice gentle increase in difficulty...\n")
-        input("> But noise in the quantum processors increases fuzziness too, and will do so in a faster and dirtier way...\n")
+        input("> All the coloured circles" + ((num_active_qubits%2)==1)*" (except one)" + " are paired up...\n")
+        input("> Your job is to identify these pairs...\n")
+        input("> You do this by looking at the numbers: Circles should have very similar numbers if they are paired...\n")
+        input("> As you proceed through the game, the two numbers in each pair will get less similar. This will make the puzzles harder...\n")
+        input("> The game is designed to have a nice gentle increase in difficulty.")
+        input("> But noise in the quantum processors increases the difficulty much faster...\n")
         input("> If you want to see how potent noise is, compare a run on the real device with one on a (noiseless) simulator...\n")
-        input("> Do the simulator first, to get an idea for how things are supposed to be...\n")  
+        input("> You can play some games on the simulator to see how things should be...\n")
+        input("> Or you can play using data from the real device...\n")  
         
             
-    s = str.upper(input("> Do you want to play a game from the real device? (y/n)...\n"))
+    s = str.upper(input("> Do you want to play a game using from the real device? (y/n)...\n"))
     sim = (s!='Y')
     if sim:
         input("> The following game data will be from a simulated run...\n")
