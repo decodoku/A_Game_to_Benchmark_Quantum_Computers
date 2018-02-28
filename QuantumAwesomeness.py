@@ -712,7 +712,7 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
         if move=='M':
             input(">Press Enter for the next round...\n")
     
-    if move=="M":
+    if move=="M" and restart==False:
         input("> The data has run out :( Press Enter to restart...\n")
     
     return gates, conjugates, totalFuzz, oneProbs
