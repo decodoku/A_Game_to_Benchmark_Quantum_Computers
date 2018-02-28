@@ -636,9 +636,10 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
 
             # get the player choosing until the choosing is done
             unpaired = num
+            restart = False
             while (unpaired>1):  
                 
-                pairGuess = input("\nChoose a pair (or type 'done')\n")
+                pairGuess = input("\nChoose a pair\n(or type 'done' to skip to the next round, or 'restart' for a new game)\n")
                 if num<=26 : # if there are few enough qubits, we don't need to be case sensitive
                     pairGuess = str.upper(pairGuess)
 
@@ -658,6 +659,9 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
                 
                 elif (str.upper(pairGuess)=="DONE") : # player has decided to stop pairing
                     unpaired = 0
+                elif (str.upper(pairGuess)=="RESTART") : # player has decided to stop the game
+                    unpaired = 0
+                    restart = True
                 else:
                     printM("That isn't a valid pair. Try again.\n(Note that input can be case sensitive)", move)
 
@@ -670,7 +674,7 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
         oneProbs.append( oneProb )
         
         # see whether the game over condition is satisfied
-        gameOn = (score<maxScore)
+        gameOn = (score<maxScore) and restart==False
         
         # given the chosen pairs, the gates are now deduced from oneProb
         guessedGates = {}
@@ -915,7 +919,7 @@ def PlayGame():
         input("> Or you can play using data from the real device...\n")  
         
             
-    s = str.upper(input("> Do you want to play a game using from the real device? (y/n)...\n"))
+    s = str.upper(input("> Do you want to play a game using data from the real device? (y/n)...\n"))
     sim = (s!='Y')
     if sim:
         input("> The following game data will be from a simulated run...\n")
