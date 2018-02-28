@@ -18,20 +18,20 @@ try:
     from qiskit import QuantumProgram
     import Qconfig
 except:
-    print("QISKit is not installed. This is not a problem if you don't plan to use it, but a big one if you do.")
+    pass
 
 try:
     from pyquil.quil import Program
     import pyquil.api as api
     from pyquil.gates import I, H, CNOT, CZ, RX, RY
 except:
-    print("Forest is not installed. This is not a problem if you don't plan to use it, but a big one if you do.")
+    pass
 
 try:
     import projectq
     from projectq.ops import H, Measure, CNOT, C, Z, Rx, Ry
 except:
-    print("Project Q is not installed. This is not a problem if you don't plan to use it, but a big one if you do.")
+    pass
 
 
 def initializeQuantumProgram ( device, sim ):
