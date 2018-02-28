@@ -15,7 +15,7 @@ For more on the gritty details, see [here](https://medium.com/@decodoku/benchmar
 
 ### Running the game
 
-The easiest way to play is to use the browser version [here](https://hub.mybinder.org/user/decodoku-a_game-antum_computers-x1a6bscn/notebooks/Play_Quantum_Awesomeness.ipynb#). Just press the run button, as highlighted in red in the image below.
+The easiest way to play is to use the browser version [here](https://mybinder.org/v2/gh/decodoku/A_Game_to_Benchmark_Quantum_Computers/master?filepath=Play_Quantum_Awesomeness.ipynb). Just press the run button, as highlighted in red in the image below.
 
 ![alt text](example.png)
 
