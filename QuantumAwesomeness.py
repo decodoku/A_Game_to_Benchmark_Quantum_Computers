@@ -908,7 +908,7 @@ def PlayGame():
         input("> Your job is to identify these pairs...\n")
         input("> You do this by looking at the numbers: Circles should have very similar numbers if they are paired...\n")
         input("> As you proceed through the game, the two numbers in each pair will get less similar. This will make the puzzles harder...\n")
-        input("> The game is designed to have a nice gentle increase in difficulty.")
+        input("> The game is designed to have a nice gentle increase in difficulty...\n")
         input("> But noise in the quantum processors increases the difficulty much faster...\n")
         input("> If you want to see how potent noise is, compare a run on the real device with one on a (noiseless) simulator...\n")
         input("> You can play some games on the simulator to see how things should be...\n")
