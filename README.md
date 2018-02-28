@@ -15,9 +15,11 @@ For more on the gritty details, see [here](https://medium.com/@decodoku/benchmar
 
 ### Running the game
 
-The easiest way to run the game is using data that has already been extracted from the quantum computers. Simply clone the repository and run the Jupter notebook [Play_Quantum_Awesomeness.ipynb](Play_Quantum_Awesomeness.ipynb).
+The easiest way to play is to use the browser version [here](https://hub.mybinder.org/user/decodoku-a_game-antum_computers-x1a6bscn/notebooks/Play_Quantum_Awesomeness.ipynb#). Just press the run button, as highlighted in red in the image below.
 
-Play the game live if you want to experience it as it was meant to be played. Any mistakes you make will add to the increase in difficulty. To do this, run the commented line in the file above. This invokes the *GetData* function. See the documentation in [QuantumAwesomeness.py](QuantumAwesomeness.py) to understand how to set up different games.
+![alt text](example.png)
+
+This version either simulates a game on the chosen device, or creates one using data that has already been extracted from the real quantum computer.
 
 ### Contributing data
 
