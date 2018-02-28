@@ -574,6 +574,7 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
                         oneProbs[score][n] = 0      
     
     gameOn = True
+    restart = False
     score = 0
     while gameOn:
         
@@ -709,7 +710,7 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
         printM(str(round(100*totalFuzz[-1])) +"%" , move) # note that this is the fuzz of oneProb, not of the values displayed
         printM("", move)
         printM("", move)
-        if move=='M':
+        if move=="M" and restart==False:
             input(">Press Enter for the next round...\n")
     
     if move=="M" and restart==False:
