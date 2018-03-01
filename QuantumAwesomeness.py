@@ -7,6 +7,7 @@ except:
 
 # other tools
 import random, numpy, math, time, copy, os
+from IPython.display import clear_output
 import networkx as nx
 import matplotlib.pyplot as plt
 from itertools import product
@@ -615,15 +616,6 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
         
         displayedOneProb = copy.copy( oneProb )
         
-        # prepare grid and print to screen
-        printM("",move)
-        printM("Round "+str(score), move)
-        if clean:
-            printM("\nOriginal version (without postprocessing)",move)
-            printPuzzle( device, originalOneProbs[score-1], move )
-            printM("Cleaned version (with postprocessing)",move)
-        printPuzzle( device, displayedOneProb, move )
-
         guessedPairs = []
 
         # if choices are all correct, we just give the player the right answer
@@ -634,13 +626,18 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
             guessedPairs = getDisjointPairs( pairs )
         # if choices are manual, let's get choosing
         if (move=="M"):
-
+            
             # get the player choosing until the choosing is done
             unpaired = num
             restart = False
             while (unpaired>1):  
                 
-                pairGuess = input("\nChoose a pair\n(or type 'done' to skip to the next round, or 'restart' for a new game)\n")
+                clear_output()
+                print("")
+                print("Round "+str(score))
+                printPuzzle( device, displayedOneProb, move )
+                
+                pairGuess = input("\nChoose a pair  (or type 'done' to skip to the next round, or 'restart' for a new game)\n")
                 if num<=26 : # if there are few enough qubits, we don't need to be case sensitive
                     pairGuess = str.upper(pairGuess)
 
@@ -665,8 +662,6 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
                     restart = True
                 else:
                     printM("That isn't a valid pair. Try again.\n(Note that input can be case sensitive)", move)
-
-                printPuzzle ( device, displayedOneProb, move )
         
         
         # get the fuzz for this level
@@ -699,22 +694,24 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
         for n in range(num):
             newconjugates.append( [ numpy.random.choice(['X','Z']) , random.random() ] )
         conjugates.append(newconjugates)
-                
+               
+        printPuzzle ( device, oneProb, move )
         printM("", move)
+        printM("Round "+str(score)+" complete", move)
         printM("", move)
         printM("Pairs you guessed for this round", move)
         printM(sorted(guessedPairs), move)
         printM("Correct pairs for this round", move)
         printM(sorted(matchingPairs), move)
-        printM("Fuzziness for this round", move)
-        printM(str(round(100*totalFuzz[-1])) +"%" , move) # note that this is the fuzz of oneProb, not of the values displayed
+        correctGuesses = list( set(guessedPairs).intersection( set(matchingPairs) ) )
+        printM("\nYou guessed "+str(len(correctGuesses))+" out of "+str(len(matchingPairs))+" pairs correctly!", move)
         printM("", move)
         printM("", move)
         if move=="M" and restart==False:
             input(">Press Enter for the next round...\n")
     
     if move=="M" and restart==False:
-        input("> The data has run out :( Press Enter to restart...\n")
+        input("> There is no more data on this game :( Press Enter to restart...\n")
     
     return gates, conjugates, totalFuzz, oneProbs
 
@@ -854,6 +851,7 @@ def ProcessData ( device, move, shots, sim ):
 
 def PlayGame():
     
+    clear_output()
     print("")
     print("")
     print("            __   _  _   __   __ _  ____  _  _  _  _               ")          
