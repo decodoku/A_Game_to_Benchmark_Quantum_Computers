@@ -877,13 +877,13 @@ def PlayGame():
         input("> There are lots of quantum processors around these days. But how good are they really?...\n")
         input("> How do they compare to each other, and how do they compare to normal computers?...\n")
         input("> To find out, we can run a simple program on them and see what happens...\n")
-        input("> So that's what we've done. We made a game, and we are running it on all the quantum computers we can...\n")
+        input("> So that's what we've done. We made a game, and we are running it on as many quantum computers as we can...\n")
               
-        input("> Have a play, and see what you think...\n")
+        input("> Have a play and see what you think...\n")
         input("> You won't learn anything about the mysteries of the quantum world by playing...\n")
         input("> But you will find out how good current quantum computers are at being computers...\n")
         input("> The larger and fancier a quantum processor is, the better the puzzles in the game will be...\n")
-        input("> The noisier that a quantum processor is, the more infuriatingly steep the difficulty curve will be...\n")
+        input("> The noisier a quantum processor is, the more infuriatingly steep the difficulty curve will be...\n")
         input("> So the quality of the processor is direcly proportional to how much fun you have playing on it...\n")
         input("> Now choose a device to test out...\n")
     deviceNotChosen = True
@@ -892,7 +892,7 @@ def PlayGame():
     for device in supportedDevices():
         deviceList += device + " "
     while deviceNotChosen:
-        message = "> The devices you can play on are\n\n  " + deviceList + "\n\n> Type the one you'd like below...\n"
+        message = "> The devices you can play on are\n\n  " + deviceList + "\n\n> Type below the name of one you'd like to play...\n"
         message = "\n> I'm afraid I didn't understand that.\n"*(attempt>0) + message
         device = input(message)
         if device in supportedDevices():
@@ -907,22 +907,22 @@ def PlayGame():
     tut = str.upper(input("\n> Do you want to read the tutorial? (y/n)...\n"))
     if tut!="N":
         printPuzzle(device,example,"M")
-        input("> The game is a series of puzzles, which look something like this...\n")
-        input("> All the coloured circles" + ((num_active_qubits%2)==1)*" (except one)" + " are paired up...\n")
+        input("> The game is a series of puzzle rounds. Each round look will look like this...\n")
+        input("> All the coloured circles" + ((num_active_qubits%2)==1)*" (except one)" + " come from pairs...\n")
         input("> Your job is to identify these pairs...\n")
-        input("> You do this by looking at the numbers: Circles should have very similar numbers if they are paired...\n")
-        input("> As you proceed through the game, the two numbers in each pair will get less similar. This will make the puzzles harder...\n")
+        input("> You do this by comparing the values: paired circles should have very similar numbers...\n")
+        input("> As you proceed through the game, the two values in paired circles become less similar, making puzzles harder...\n")
         input("> The game is designed to have a nice gentle increase in difficulty...\n")
-        input("> But noise in the quantum processors increases the difficulty much faster...\n")
-        input("> If you want to see how potent noise is, compare a run on the real device with one on a (noiseless) simulator...\n")
-        input("> You can play some games on the simulator to see how things should be...\n")
-        input("> Or you can play using data from the real device...\n")  
+        input("> But noise in the quantum processors increases difficulty faster with each round...\n")
+        input("> If you want to see how potent the effect of the noise is, compare a run on the real device with one from a (noiseless) simulator...\n")
+        input("> You can play some rounds on the simulator to see how things are without any noise...\n")
+        input("> Or you can start immediately playing using data from a real device...\n")  
         
             
-    s = str.upper(input("> Do you want to play a game using data from the real device? (y/n)...\n"))
+    s = str.upper(input("> Do you want to play a game using data from a real device? (y/n)...\n"))
     sim = (s!='Y')
     if sim:
-        input("> The following game data will be from a simulated run...\n")
+        input("> The following game data will be from a simulated (noiseless) run...\n")
     
     shots = min( runs[sim]['shots'] )
     
