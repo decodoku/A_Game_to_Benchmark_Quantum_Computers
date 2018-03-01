@@ -695,6 +695,7 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
             newconjugates.append( [ numpy.random.choice(['X','Z']) , random.random() ] )
         conjugates.append(newconjugates)
                
+        clear_output()
         printPuzzle ( device, oneProb, move )
         printM("", move)
         printM("Round "+str(score)+" complete", move)
