@@ -549,6 +549,7 @@ def maxWeightMatching(edges, maxcardinality=False):
         assert min(dualvar[nvertex:]) >= 0
         # 0. all edges have non-negative slack and
         # 1. all matched edges have zero slack;
+        # Note: zero was replaced by sensitivites of 1e-9 by James Wootton
         for k in range(nedge):
             (i, j, wt) = edges[k]
             s = dualvar[i] + dualvar[j] - 2 * wt
@@ -564,13 +565,13 @@ def maxWeightMatching(edges, maxcardinality=False):
                 if bi != bj:
                     break
                 s += 2 * dualvar[bi]
-            assert s >= 0
+            assert s >= -1e-9 # changed by James Wootton
             if mate[i] // 2 == k or mate[j] // 2 == k:
                 assert mate[i] // 2 == k and mate[j] // 2 == k
-                assert s == 0
+                assert s > -1e-9 and s < 1e-9 # changed by James Wootton
         # 2. all single vertices have zero dual value;
         for v in range(nvertex):
-            assert mate[v] >= 0 or dualvar[v] + vdualoffset == 0
+            assert mate[v] >= -1e-9 or dualvar[v] + vdualoffset == 0
         # 3. all blossoms with positive dual value are full.
         for b in range(nvertex, 2*nvertex):
             if blossombase[b] >= 0 and dualvar[b] > 0:
