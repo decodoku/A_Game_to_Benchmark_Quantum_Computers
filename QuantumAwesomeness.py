@@ -361,11 +361,14 @@ def entangle( device, move, shots, sim, gates, conjugates ):
 
 def calculateEntanglement( oneProb ):
     
-    E = 1-2*abs( 0.5-oneProb )
+    # was once the mixedness
+    # E = 1-2*abs( 0.5-oneProb )
+    #but now based on frac
     
-    return E
+    E = ( 2 * calculateFrac( oneProb ) )    
+    return min( E, 1)
 
-def calculateFrac (oneProb):
+def calculateFrac ( oneProb ):
 
     # Prob(1) = sin(frac*pi/2)^2
     # therefore frac = asin(sqrt(oneProb)) *2 /pi
@@ -461,8 +464,15 @@ def printPuzzle ( device, oneProb, move ):
 
         plt.show()
 
+        
+def calculateFracDifference (frac1, frac2):
+    
+    delta = max(frac1,frac2) - min(frac1,frac2)
+    delta = min( delta, 1-delta )
+    return delta  
+        
 
-def getDisjointPairs ( pairs ):
+def getDisjointPairs ( pairs, oneProb = [] ):
 
     # Input:
     # * *pairs* - A dictionary with names of pairs as keys and lists of the two qubits of each pair as values
@@ -474,9 +484,17 @@ def getDisjointPairs ( pairs ):
     # Output:
     # * *matchingPairs* - A list of the names of a random set of disjoint pairs included in the matching.
     
+    # if a set of oneProbs is supplied, the weight for an edge is the difference between their fracs
+    weight = {}
+    for p in pairs.keys():
+        if oneProb:
+            weight[p] = -calculateFracDifference( calculateFrac( oneProb[ pairs[p][0] ] ) , calculateFrac( oneProb[ pairs[p][1] ] ) )
+        else:
+            weight[p] = random.randint(0,100)     
+    
     edges = []
     for p in pairs.keys():
-        edges.append( (pairs[p][0], pairs[p][1], random.randint(0,100) ) )
+        edges.append( ( pairs[p][0], pairs[p][1], weight[p] ) )
     
     # match[j] = k means that edge j and k are matched
     match = mw.maxWeightMatching(edges, maxcardinality=True)
@@ -541,38 +559,9 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
         oneProbs = eval( oneProbSamples[ game ] )
         originalOneProbs = copy.deepcopy( oneProbs )
         gates = eval( gateSamples[ game ] )
-        
-        if clean:
-            # define arrays for the mean and variance of each qubit for each round
-            firstMoments = [[0]*num for _ in range(maxScore)]
-            secondMoments = [[0]*num for _ in range(maxScore)]
-            # loop over samples and rounds to calculate these
-            for game in range( samples ):
-                oneProbSample = eval( oneProbSamples[ game ] )
-                for score in range(maxScore):
-                    for n in range(num):
-                        firstMoments[score][n] += oneProbSample[score][n]/samples
-                        secondMoments[score][n] += oneProbSample[score][n]**2/samples
-            # final processing of variance
-            for score in range(maxScore):
-                for n in range(num):
-                    secondMoments[score][n] = secondMoments[score][n] - firstMoments[score][n]**2
+
             
-            for score in range(maxScore):
-                for n in range(num):
-                    
-                    # stretch to idea standard deviation
-                    if math.sqrt(secondMoments[score][n])!=0:
-                        oneProbs[score][n] = firstMoments[score][n] + (oneProbs[score][n] - firstMoments[score][n]) * ( 0.155 / math.sqrt(secondMoments[score][n]) )
-                    
-                    # shift mean to ideal
-                    oneProbs[score][n] += (0.183-firstMoments[score][n])
-                    
-                    # push outliers back into correct interval
-                    if oneProbs[score][n]>1:
-                        oneProbs[score][n] = 1
-                    elif oneProbs[score][n]<0:
-                        oneProbs[score][n] = 0      
+            
     
     gameOn = True
     restart = False
@@ -610,6 +599,9 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
             
             oneProb = oneProbs[score-1]
             matchingPairs = list(gates[ 2*(score-1) ].keys())
+            
+            #rawOneProb = copy.copy( oneProb )
+            #onepProb = CleanData([0.9738415386108479, 0.17136714125145475, 0.6570613910686468, -0.4049062006204463, 0.8279469669214491, 0.06886165802725541, 0.5259991338702945, 0.1705404978526586, 1.1073117445006242, -0.1495970624698746, 0.8924091185860883, 0.01464239225931483, 1.0275477884441937, 0.17756205518906018, 0.9049031949729898, 0.280396190827653, 1.2514180812275613, -0.11943897690379385, 0.8361128832390184, 0.2723795879551341, 1.0740835372348418, 0.18770411873513015, 1.0433061367657521, 0.08620002219277448, 1.0700458928035512, 0.036695062474293084, 1.358823265090365, 0.2344385515227468, 1.0781565176136898, 0.1215383109298111, 1.1196610768179336, -0.02413677657431527, 0.5486294115960706, -0.08863255029559444, 0.8011715218602745, -0.1561339422399854, 0.9524787659612552, -0.22868678766470124, 1.018739461233587, -0.13198786838761742],oneProb) 
         
         
         # Step 2: Get player to guess pairs
@@ -624,6 +616,9 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
         # if choices are random, we generate a set of random pairs
         if (move=="R"):
             guessedPairs = getDisjointPairs( pairs )
+        # if choices are via MWPM, we do this
+        if (move=="B"):
+            guessedPairs = getDisjointPairs( pairs, oneProb=oneProb )
         # if choices are manual, let's get choosing
         if (move=="M"):
             
@@ -694,14 +689,17 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
         for n in range(num):
             newconjugates.append( [ numpy.random.choice(['X','Z']) , random.random() ] )
         conjugates.append(newconjugates)
-               
+             
         clear_output()
-        printPuzzle ( device, oneProb, move )
+        #printPuzzle( device, rawOneProb, move )
+        printPuzzle( device, oneProb, move )
         printM("", move)
         printM("Round "+str(score)+" complete", move)
         printM("", move)
         printM("Pairs you guessed for this round", move)
         printM(sorted(guessedPairs), move)
+        printM("Pairs our bot would have guessed", move)
+        printM(sorted(getDisjointPairs( pairs, oneProb=oneProb )), move)
         printM("Correct pairs for this round", move)
         printM(sorted(matchingPairs), move)
         correctGuesses = list( set(guessedPairs).intersection( set(matchingPairs) ) )
@@ -710,11 +708,13 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
         printM("", move)
         if move=="M" and restart==False:
             input(">Press Enter for the next round...\n")
+            print(" The next round is being prepared\n")
     
     if move=="M" and restart==False:
         input("> There is no more data on this game :( Press Enter to restart...\n")
     
     return gates, conjugates, totalFuzz, oneProbs
+
 
 
 def MakeGraph(X,Y,y,axisLabel,labels=[],verbose=False,log=False):
@@ -795,6 +795,119 @@ def GetData ( device, move, shots, sim, samples, maxScore ):
         saveFile.write( str(conjugates)+'\n' )
         saveFile.close()
         
+        
+def CalculateQuality ( x, oneProbSamples, gateSamples, pairs, score, type='both') :
+    
+    # see what fraction of the matchings we have corrent
+    
+    fractionCorrect = 0
+    closenessToIdeal = 0
+    for oneProbs, gates in zip(oneProbSamples, gateSamples):
+        
+        oneProb = eval(oneProbs)[score-1]
+        
+        if x!=[]:
+            oneProb = CleanData ( x, oneProb )
+
+        gate = eval(gates)[ 2*(score-1) ]
+        
+        matchingPairs = list(gate.keys())
+        guessedPairs = getDisjointPairs( pairs, oneProb=oneProb )
+        correctGuesses = list( set(guessedPairs).intersection( set(matchingPairs) ) )
+        fractionCorrect += len(correctGuesses) / len(matchingPairs)
+            
+        realFracs = [0]*len(oneProb)
+        for p in gate.keys():
+            realFracs[pairs[p][0]] = gate[p]
+            realFracs[pairs[p][1]] = gate[p]
+        for prob,realFrac in zip(oneProb,realFracs):
+            closenessToIdeal += (calculateFrac(prob)-realFrac)**2 / len(oneProb)
+            
+    
+    fractionCorrect = fractionCorrect / len( oneProbSamples )
+    closenessToIdeal = 1-math.sqrt( closenessToIdeal / len( oneProbSamples ) )
+            
+    return [fractionCorrect,closenessToIdeal]
+
+
+def CleanData ( x, oneProb ):
+     
+    for n in range(len(oneProb)):
+        oneProb[n] = x[2*n] * oneProb[n] + x[2*n+1]
+        oneProb[n] = min(1,oneProb[n])
+        oneProb[n] = max(0,oneProb[n])
+    
+    return oneProb
+
+
+def Metropolis ( x, oneProbSamples, gateSamples, num, pairs, score, steps=1000, repetitions=10, delta=0.025, T=0.01 ):
+
+    best_x = copy.deepcopy(x)
+    bestQuality = CalculateQuality ( x, oneProbSamples, gateSamples, pairs, score )
+    bestDiff = 0
+        
+    for rep in range(repetitions):
+        
+        print("\nrepetition = ", rep, "\nbest fraction = ", bestQuality[0], ", best closeness = ", bestQuality[1])
+        
+        x = copy.deepcopy(best_x)
+        quality = copy.deepcopy(bestQuality)
+        
+        for step in range(steps):
+
+            n = random.randint(0,2*num-1)
+            random_delta = random.uniform(+delta,-delta)
+
+            x[n] += random_delta
+
+            proposedQuality = CalculateQuality ( x, oneProbSamples, gateSamples, pairs, score )
+
+            diff = 1*(proposedQuality[0]-quality[0]) + 2*(proposedQuality[1]-quality[1])
+            
+            accept = ( random.random() < math.exp(diff/T) )
+
+            if accept:
+                quality = copy.deepcopy(proposedQuality)
+            else:
+                x[n] -= random_delta
+
+            if (quality[0]>bestQuality[0]):
+                bestDiff
+                best_x = copy.deepcopy(x)
+                bestQuality = copy.deepcopy(quality)
+                print("\nstep = ",step,"\nbest fraction = ", bestQuality[0], ", best closeness = ", bestQuality[1], "\nbest x = ", best_x)
+            
+    return best_x
+
+
+def CreateCleaningProfile ( device, move, shots, sim ) :
+    
+    num, area, entangleType, pairs, pos, example, sdk, runs = getLayout(device)
+    
+    # oneProbs
+    filename = 'move=' + move + '_shots=' + str(shots) + '_sim=' + str(sim) + '.txt'
+    saveFile = open('results_' + device + '/oneProbs_'+filename)
+    oneProbSamples = saveFile.readlines()
+    saveFile.close()
+    # gates
+    filename = 'move=' + move + '_shots=' + str(shots) + '_sim=' + str(sim) + '.txt'
+    saveFile = open('results_' + device + '/gates_'+filename)
+    gateSamples = saveFile.readlines()
+    saveFile.close()
+        
+    maxScore = len( eval(oneProbSamples[0]) )
+    
+    cleaner = []
+    for score in range(1,maxScore+1):
+        x = [1,0]*num
+        print("score = ",score)
+        cleaner.append( Metropolis ( x, oneProbSamples, gateSamples, num, pairs, score ) )
+     
+    filename = 'move=' + move + '_shots=' + str(shots) + '_sim=' + str(sim) + '.txt'
+    saveFile = open('results_' + device + '/cleaner_'+filename, 'a')
+    saveFile.write( str(cleaner)+'\n' )
+    saveFile.close()
+
 
 def ProcessData ( device, move, shots, sim ):
     
@@ -811,6 +924,7 @@ def ProcessData ( device, move, shots, sim ):
     saveFile = open('results_' + device + '/oneProbs_'+filename)
     oneProbSamples = saveFile.readlines()
     saveFile.close()
+    
     # for each round, get mean of all Es
     # note, variable names make it sound like we are averaging oneProb, but we aren't: hacky mess :(
     meanOneProbSamples = []
@@ -826,6 +940,8 @@ def ProcessData ( device, move, shots, sim ):
     
     # find number of samples
     samples = len(fuzzSamples)
+    
+    # note: from here on, score means something that starts at 0, rather than starting at 1 as it does elsewhere
     
     # find number of round in samples (assume same for all)
     maxScore = len(eval(fuzzSamples[0]))
@@ -847,8 +963,17 @@ def ProcessData ( device, move, shots, sim ):
     for score in range(maxScore):
         entangleAv[1][score] -= entangleAv[0][score]**2
         
+    # get gate data
+    saveFile = open('results_' + device + '/gates_'+filename)
+    gateSamples = saveFile.readlines()
+    saveFile.close() 
+        
+    quality = []
+    for score in range(maxScore):
+        quality.append( CalculateQuality ( [], oneProbSamples, gateSamples, pairs, score+1 ) )
+        
+    return fuzzAv, entangleAv, quality
 
-    return fuzzAv, entangleAv
 
 def PlayGame():
     
@@ -877,13 +1002,13 @@ def PlayGame():
         input("> There are lots of quantum processors around these days. But how good are they really?...\n")
         input("> How do they compare to each other, and how do they compare to normal computers?...\n")
         input("> To find out, we can run a simple program on them and see what happens...\n")
-        input("> So that's what we've done. We made a game, and we are running it on as many quantum computers as we can...\n")
+        input("> So that's what we've done. We made a game, and we are running it on all the quantum computers we can...\n")
               
-        input("> Have a play and see what you think...\n")
+        input("> Have a play, and see what you think...\n")
         input("> You won't learn anything about the mysteries of the quantum world by playing...\n")
         input("> But you will find out how good current quantum computers are at being computers...\n")
         input("> The larger and fancier a quantum processor is, the better the puzzles in the game will be...\n")
-        input("> The noisier a quantum processor is, the more infuriatingly steep the difficulty curve will be...\n")
+        input("> The noisier that a quantum processor is, the more infuriatingly steep the difficulty curve will be...\n")
         input("> So the quality of the processor is direcly proportional to how much fun you have playing on it...\n")
         input("> Now choose a device to test out...\n")
     deviceNotChosen = True
@@ -892,7 +1017,7 @@ def PlayGame():
     for device in supportedDevices():
         deviceList += device + " "
     while deviceNotChosen:
-        message = "> The devices you can play on are\n\n  " + deviceList + "\n\n> Type below the name of one you'd like to play...\n"
+        message = "> The devices you can play on are\n\n  " + deviceList + "\n\n> Type the one you'd like below...\n"
         message = "\n> I'm afraid I didn't understand that.\n"*(attempt>0) + message
         device = input(message)
         if device in supportedDevices():
@@ -907,25 +1032,25 @@ def PlayGame():
     tut = str.upper(input("\n> Do you want to read the tutorial? (y/n)...\n"))
     if tut!="N":
         printPuzzle(device,example,"M")
-        input("> The game is a series of puzzle rounds. Each round look will look like this...\n")
-        input("> All the coloured circles" + ((num_active_qubits%2)==1)*" (except one)" + " come from pairs...\n")
+        input("> The game is a series of puzzles, which look something like this...\n")
+        input("> All the coloured circles" + ((num_active_qubits%2)==1)*" (except one)" + " are paired up...\n")
         input("> Your job is to identify these pairs...\n")
-        input("> You do this by comparing the values: paired circles should have very similar numbers...\n")
-        input("> As you proceed through the game, the two values in paired circles become less similar, making puzzles harder...\n")
+        input("> You do this by looking at the numbers: Circles should have very similar numbers if they are paired...\n")
+        input("> As you proceed through the game, the two numbers in each pair will get less similar. This will make the puzzles harder...\n")
         input("> The game is designed to have a nice gentle increase in difficulty...\n")
-        input("> But noise in the quantum processors increases difficulty faster with each round...\n")
-        input("> If you want to see how potent the effect of the noise is, compare a run on the real device with one from a (noiseless) simulator...\n")
-        input("> You can play some rounds on the simulator to see how things are without any noise...\n")
-        input("> Or you can start immediately playing using data from a real device...\n")  
+        input("> But noise in the quantum processors increases the difficulty much faster...\n")
+        input("> If you want to see how potent noise is, compare a run on the real device with one on a (noiseless) simulator...\n")
+        input("> You can play some games on the simulator to see how things should be...\n")
+        input("> Or you can play using data from the real device...\n")  
         
             
-    s = str.upper(input("> Do you want to play a game using data from a real device? (y/n)...\n"))
+    s = str.upper(input("> Do you want to play a game using data from the real device? (y/n)...\n"))
     sim = (s!='Y')
     if sim:
-        input("> The following game data will be from a simulated (noiseless) run...\n")
+        input("> The following game data will be from a simulated run...\n")
     
     shots = min( runs[sim]['shots'] )
-    
+    runGame ( device, 'M', shots, sim, 0, dataNeeded=False )
     try:
         runGame ( device, 'M', shots, sim, 0, dataNeeded=False )
     except:
