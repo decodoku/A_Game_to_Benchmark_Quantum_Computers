@@ -14,26 +14,33 @@ from itertools import product
 import warnings
 warnings.filterwarnings('ignore')
 
-# import the required SDKs
-try:
-    from qiskit import QuantumProgram
-    import Qconfig
-except:
-    pass
+def importSDK ( device ):
+    
+    num, area, entangleType, pairs, pos, example, sdk, runs = getLayout(device)
 
-try:
-    from pyquil.quil import Program
-    import pyquil.api as api
-    from pyquil.gates import I, H, CNOT, CZ, RX, RY
-except:
-    pass
+    if sdk in ["QISKit","ManualQISKit"]:
+        global QuantumProgram, Qconfig
+        from qiskit import QuantumProgram
+        import Qconfig 
+    elif sdk=="ProjectQ":
+        global projectq, H, Measure, CNOT, C, Z, Rx, Ry
+        import projectq
+        from projectq.ops import H, Measure, CNOT, C, Z, Rx, Ry
+    elif sdk=="Forest":
+        global Program, api, I, H, CNOT, CZ, RX, RY
+        from pyquil.quil import Program
+        import pyquil.api as api
+        from pyquil.gates import I, H, CNOT, CZ, RX, RY
 
-try:
-    import projectq
-    from projectq.ops import H, Measure, CNOT, C, Z, Rx, Ry
-except:
-    pass
 
+def make_layout ( num_qubits ):
+    # from https://qiskit.slack.com/archives/C7SJ0PJ5A/p1519912149000214
+    # Create a mapping fixing qubit q0 to q0, q1 to q1, etc.
+    # Input is number of qubits for the map
+    layout = {}
+    for i in range(num_qubits):
+        layout[('q', i)] = ('q', i)
+    return layout
 
 def initializeQuantumProgram ( device, sim ):
     
@@ -53,6 +60,8 @@ def initializeQuantumProgram ( device, sim ):
 
     num, area, entangleType, pairs, pos, example, sdk, runs = getLayout(device)
     
+    importSDK ( device )
+    
     if sdk in ["QISKit","ManualQISKit"]:
         engine = QuantumProgram()
         engine.set_api(Qconfig.APItoken, Qconfig.config["url"]) # set the APIToken and API url
@@ -65,6 +74,11 @@ def initializeQuantumProgram ( device, sim ):
         c = None
         script = None
     elif sdk=="Forest":
+        
+        from pyquil.quil import Program
+        import pyquil.api as api
+        from pyquil.gates import I, H, CNOT, CZ, RX, RY
+        
         if sim:
             engine = api.QVMConnection(use_queue=True)
         else:
@@ -89,7 +103,7 @@ def implementGate (device, gate, qubit, script, frac = 0 ):
     # * *frac* -  
     # 
     # Process:
-    # * For gates of type 'X', 'Z' and 'XX', the gate $U = \exp(-i \,\times\, gate \,\times\, frac )$ is implemented on the qubit or pair of qubits in *qubit*.
+    # * For gates of type 'X', 'Y' and 'XX', the gate $U = \exp(-i \,\times\, gate \,\times\, frac )$ is implemented on the qubit or pair of qubits in *qubit*.
     # * *gate='Finish'* implements the measurement command on the qubit register required for ProjectQ to not complain.
     # 
     # Output:
@@ -100,7 +114,7 @@ def implementGate (device, gate, qubit, script, frac = 0 ):
     if sdk in ["QISKit","ManualQISKit"]:
         if gate=='X':
             script.u3(frac * math.pi, -math.pi/2,math.pi/2, qubit )
-        elif gate=='Z': # actually a Y axis rotation
+        elif gate=='Y': # a Y axis rotation
             script.u3(frac * math.pi, 0,0, qubit )
         elif gate=='XX':
             if entangleType=='CX':
@@ -119,7 +133,7 @@ def implementGate (device, gate, qubit, script, frac = 0 ):
     elif sdk=="ProjectQ":
         if gate=='X':
             Rx( frac * math.pi ) | qubit
-        elif gate=='Z': # actually a Y axis rotation
+        elif gate=='Y': # a Y axis rotation
             Ry( frac * math.pi ) | qubit
         elif gate=='XX':
             if entangleType=='CX':
@@ -141,7 +155,7 @@ def implementGate (device, gate, qubit, script, frac = 0 ):
         if gate=='X':
             if qubit in pos.keys(): # only if qubit is active
                 script.inst( RX ( frac * math.pi, qubit ) )
-        elif gate=='Z': # actually a Y axis rotation
+        elif gate=='Y': # a Y axis rotation
             if qubit in pos.keys(): # only if qubit is active
                 script.inst( RY ( frac * math.pi, qubit ) )
         elif gate=='XX':
@@ -150,17 +164,32 @@ def implementGate (device, gate, qubit, script, frac = 0 ):
                 script.inst( RX ( frac * math.pi, qubit[0] ) )
                 script.inst( CNOT( qubit[0], qubit[1] ) )
             elif entangleType=='CZ':
-                script.inst( H (qubit[1]) )
+                script.inst( H ( qubit[1] ) )
                 script.inst( CZ( qubit[0], qubit[1] ) )
                 script.inst( RX ( frac * math.pi, qubit[0] ) )
                 script.inst( CZ( qubit[0], qubit[1] ) )
-                script.inst( H (qubit[1]) )
+                script.inst( H ( qubit[1] ) )
             elif entangleType=='none':
                 script.inst( RX ( frac * math.pi, qubit[0] ) )
                 script.inst( RX ( frac * math.pi, qubit[1] ) )
             else:
                 print("Support for this is yet to be added")
 
+                
+def resultsLoad ( fileType, move, shots, sim, device ) :
+    
+    filename = 'move='+move+'_shots=' + str(shots) + '_sim=' + str(sim) + '.txt'
+    saveFile = open('results_' + device + '/'+fileType+'_'+filename)
+    sampleStrings = saveFile.readlines()
+    saveFile.close()
+    
+    samples = []
+    for sampleString in sampleStrings:
+        samples.append( eval( sampleString ) )
+    
+    return samples
+                
+            
 def getResults ( device, sim, shots, q, c, engine, script ):
     
     # *This function contains SDK specific code.*
@@ -191,7 +220,14 @@ def getResults ( device, sim, shots, q, c, engine, script ):
         noResults = True
         while noResults:
             try: # try to run, and wait if it fails
-                executedJob = engine.execute(["script"], backend=backend, shots=shots, max_credits = 5, wait=30, timeout=600)
+                
+                print("Now sending job")
+                executedJob = engine.execute(["script"], backend=backend, shots=shots, max_credits = 5, wait=30, timeout=3600,initial_layout=make_layout(num))
+                
+                # get ran
+                #print("Qasm that was executed")
+                #print(executedJob.get_ran_qasm("script"))
+                
                 # get results
                 resultsVeryRaw = executedJob.get_counts("script")
                 if ('status' not in resultsVeryRaw.keys()): # see if it actually is data, and wai for 5 mins if not
@@ -279,7 +315,7 @@ def entangle( device, move, shots, sim, gates, conjugates ):
     # * *shots* -
     # * *sim* -
     # * *gates* - Entangling gates applied so far. Each round of the game corresponds to two 'slices'. *gates* is a list with a dictionary for each slice. The dictionary has pairs of qubits as keys and fractions of pi defining a corresponding entangling gate as values.
-    # * *conjugates* - List of single qubit gates to conjugate entangling gates of previous rounds. Each is specified by a two element list. First is a string specifying the rotation axis ('X' or 'Z'), and the second specifies the fraction of pi for the rotation.
+    # * *conjugates* - List of single qubit gates to conjugate entangling gates of previous rounds. Each is specified by a two element list. First is a string specifying the rotation axis ('X' or 'Y'), and the second specifies the fraction of pi for the rotation.
     #
     # Process:
     # * Sets up and runs a quantum circuit consisting of all gates thus far.
@@ -353,10 +389,18 @@ def entangle( device, move, shots, sim, gates, conjugates ):
         for v in range(num):
             if (bitString[v]=="1"):
                 oneProb[v] += results[bitString]
+                
+                
+    sameProb = {p: 0 for p in pairs}
+    for bitString in strings:
+        for p in pairs:
+            if bitString[pairs[p][0]]==bitString[pairs[p][1]]:
+                sameProb[p] += results[bitString]        
+                
     
     implementGate ( device, "finish", q, script )
     
-    return oneProb
+    return oneProb, sameProb, results
 
 
 def calculateEntanglement( oneProb ):
@@ -372,6 +416,8 @@ def calculateFrac ( oneProb ):
 
     # Prob(1) = sin(frac*pi/2)^2
     # therefore frac = asin(sqrt(oneProb)) *2 /pi
+    oneProb = max(0,oneProb)
+    oneProb = min(1,oneProb)
     frac = math.asin(math.sqrt( oneProb )) * 2 / math.pi
     
     return frac
@@ -397,6 +443,41 @@ def calculateFuzz ( oneProb, pairs, matchingPairs ):
  
     return fuzzAv
 
+def calculateEntropy ( probs ):
+    
+    H = 0
+    for prob in probs:
+        if prob>0:
+            H -= prob * math.log(prob,2)
+
+    return H
+
+def calculateExpect ( p0, p1, ps ):
+    
+    return [ 1-2*p0, 1-2*p1, 2*ps-1 ]
+
+def calculateMutual ( oneProb, sameProb, pairs ):
+    
+    I = {}
+    
+    for p in sameProb.keys():
+        
+        p0 = oneProb[pairs[p][0]]
+        p1 = oneProb[pairs[p][1]]
+        
+        expect = calculateExpect( p0, p1, sameProb[p] )
+            
+        prob = [0]*4
+        prob[0] = ( 1 + expect[0] + expect[1] + expect[2] )/4
+        prob[1] = ( 1 - expect[0] + expect[1] - expect[2] )/4
+        prob[2] = ( 1 + expect[0] - expect[1] - expect[2] )/4
+        prob[3] = ( 1 - expect[0] - expect[1] + expect[2] )/4
+                                          
+        I[p] = calculateEntropy( [ 1-p0, p0 ] ) + calculateEntropy( [ 1-p1, p1 ] ) - calculateEntropy( prob )
+        if I[p]>1e-3:
+            I[p] = I[p] / min( calculateEntropy( [ 1-p0, p0 ] ) , calculateEntropy( [ 1-p1, p1 ] ) )
+        
+    return I
 
 def printPuzzle ( device, oneProb, move ):
     
@@ -472,7 +553,7 @@ def calculateFracDifference (frac1, frac2):
     return delta  
         
 
-def getDisjointPairs ( pairs, oneProb = [] ):
+def getDisjointPairs ( pairs, oneProb = [], weight = {}):
 
     # Input:
     # * *pairs* - A dictionary with names of pairs as keys and lists of the two qubits of each pair as values
@@ -484,14 +565,13 @@ def getDisjointPairs ( pairs, oneProb = [] ):
     # Output:
     # * *matchingPairs* - A list of the names of a random set of disjoint pairs included in the matching.
     
-    # if a set of oneProbs is supplied, the weight for an edge is the difference between their fracs
-    weight = {}
-    for p in pairs.keys():
-        if oneProb:
-            weight[p] = -calculateFracDifference( calculateFrac( oneProb[ pairs[p][0] ] ) , calculateFrac( oneProb[ pairs[p][1] ] ) )
-        else:
-            weight[p] = random.randint(0,100)     
-    
+    if not weight:
+        for p in pairs.keys():
+            if oneProb:
+                weight[p] = -calculateFracDifference( calculateFrac( oneProb[ pairs[p][0] ] ) , calculateFrac( oneProb[ pairs[p][1] ] ) )
+            else:
+                weight[p] = random.randint(0,100)     
+
     edges = []
     for p in pairs.keys():
         edges.append( ( pairs[p][0], pairs[p][1], weight[p] ) )
@@ -505,7 +585,7 @@ def getDisjointPairs ( pairs, oneProb = [] ):
         for p in pairs.keys():
             if pairs[p]==[v,match[v]] and p[0:4]!='fake' :
                 matchingPairs.append(p)
-                
+    
     return matchingPairs
 
 
@@ -525,40 +605,37 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
     # * *score* - score reached by the player at game over
     # * *gates*
     # * *conjugates*
-    # * *totalFuzz* - the fuzz for each level (see calculateFuzz)
     
     num, area, entangleType, pairs, pos, example, sdk, runs = getLayout(device)
     
     gates = []
     conjugates = []
-    totalFuzz = []
     oneProbs = []
+    sameProbs = []
+    resultsDicts = []
     
     # if we are running off data, load up oneProbs for a move='C' run and see what the right answers are
     if dataNeeded==False:
-        # oneProbs
-        filename = 'move=C_shots=' + str(shots) + '_sim=' + str(sim) + '.txt'
-        saveFile = open('results_' + device + '/oneProbs_'+filename)
-        oneProbSamples = saveFile.readlines()
-        saveFile.close()
-        # gates
-        filename = 'move=C_shots=' + str(shots) + '_sim=' + str(sim) + '.txt'
-        saveFile = open('results_' + device + '/gates_'+filename)
-        gateSamples = saveFile.readlines()
-        saveFile.close()
+        
+        oneProbSamples = resultsLoad ( 'oneProbs', 'C', shots, sim, device )
+        sameProbSamples = resultsLoad ( 'sameProbs', 'C', shots, sim, device )
+        gateSamples = resultsLoad ( 'gates', 'C', shots, sim, device )
+        if sim==False:
+            cleaner = resultsLoad( 'cleaner', 'C', shots, sim, device )[0]
         
         samples = len(oneProbSamples) # find out how many samples there are
         
         if maxScore==0: # if a maxScore is not given, use the value from the first sample
-            maxScore = len( eval( oneProbSamples[ 0 ] ) )
+            maxScore = len( oneProbSamples[ 0 ] )
         
         # choose a game randomly, if a specific one was not requested
         if game==-1:
             game = random.randint( 0, samples-1 )
         # get the data for this game
-        oneProbs = eval( oneProbSamples[ game ] )
+        oneProbs = oneProbSamples[ game ]
+        sameProbs = sameProbSamples[ game ] 
         originalOneProbs = copy.deepcopy( oneProbs )
-        gates = eval( gateSamples[ game ] )
+        gates = gateSamples[ game ]
 
             
             
@@ -583,25 +660,32 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
             # and so are specified by a pair p=[j,k] and a random fraction frac
   
             # first we generate a random set of edges
-            matchingPairs = getDisjointPairs( pairs )
+            matchingPairs = getDisjointPairs( pairs, weight={} )
           
             # then we add gates these to the list of gates
             appliedGates = {}
             for p in matchingPairs:
-                frac = random.random() / 2 # this will correspond to a 0 \leq frac*pi \leq pi/2 rotation 
+                frac = ( 0.1+0.9*random.random() ) / 2 # this will correspond to a 0.05*pi \leq frac*pi \leq pi/2 rotation 
                 appliedGates[p] = frac
             gates.append(appliedGates)
           
             # all gates so far are then run
-            oneProb = entangle( device, move, shots, sim, gates, conjugates)
+            oneProb, sameProb, results = entangle( device, move, shots, sim, gates, conjugates)
           
         else:
             
             oneProb = oneProbs[score-1]
+            sameProb = sameProbs[score-1]
             matchingPairs = list(gates[ 2*(score-1) ].keys())
             
-            #rawOneProb = copy.copy( oneProb )
-            #onepProb = CleanData([0.9738415386108479, 0.17136714125145475, 0.6570613910686468, -0.4049062006204463, 0.8279469669214491, 0.06886165802725541, 0.5259991338702945, 0.1705404978526586, 1.1073117445006242, -0.1495970624698746, 0.8924091185860883, 0.01464239225931483, 1.0275477884441937, 0.17756205518906018, 0.9049031949729898, 0.280396190827653, 1.2514180812275613, -0.11943897690379385, 0.8361128832390184, 0.2723795879551341, 1.0740835372348418, 0.18770411873513015, 1.0433061367657521, 0.08620002219277448, 1.0700458928035512, 0.036695062474293084, 1.358823265090365, 0.2344385515227468, 1.0781565176136898, 0.1215383109298111, 1.1196610768179336, -0.02413677657431527, 0.5486294115960706, -0.08863255029559444, 0.8011715218602745, -0.1561339422399854, 0.9524787659612552, -0.22868678766470124, 1.018739461233587, -0.13198786838761742],oneProb) 
+            I = calculateMutual ( oneProb, sameProb, pairs )
+            correlatedPairs = getDisjointPairs( pairs, weight=I )
+            
+            rawOneProb = copy.deepcopy( oneProb )
+            if sim==False:
+                oneProb = CleanData(cleaner[score-1],rawOneProb,sameProb,pairs)
+            
+            results = []
         
         
         # Step 2: Get player to guess pairs
@@ -615,10 +699,10 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
             guessedPairs = matchingPairs
         # if choices are random, we generate a set of random pairs
         if (move=="R"):
-            guessedPairs = getDisjointPairs( pairs )
+            guessedPairs = getDisjointPairs( pairs, weight={} )
         # if choices are via MWPM, we do this
         if (move=="B"):
-            guessedPairs = getDisjointPairs( pairs, oneProb=oneProb )
+            guessedPairs = getDisjointPairs( pairs, oneProb=oneProb, weight={} )
         # if choices are manual, let's get choosing
         if (move=="M"):
             
@@ -630,7 +714,12 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
                 clear_output()
                 print("")
                 print("Round "+str(score))
+                if sim==False:
+                    printM("\nRaw puzzle",move)    
+                    printPuzzle( device, rawOneProb, move )
+                    printM("\nCleaned puzzle", move)
                 printPuzzle( device, displayedOneProb, move )
+                
                 
                 pairGuess = input("\nChoose a pair  (or type 'done' to skip to the next round, or 'restart' for a new game)\n")
                 if num<=26 : # if there are few enough qubits, we don't need to be case sensitive
@@ -659,10 +748,11 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
                     printM("That isn't a valid pair. Try again.\n(Note that input can be case sensitive)", move)
         
         
-        # get the fuzz for this level
-        totalFuzz.append( calculateFuzz( oneProb, pairs, matchingPairs ) )  
-        # store the oneProb
+        # store the oneProb and sameProb
         oneProbs.append( oneProb )
+        sameProbs.append( sameProb )
+        # store the raw data
+        #resultsDicts.append( results )
         
         # see whether the game over condition is satisfied
         gameOn = (score<maxScore) and restart==False
@@ -671,13 +761,19 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
         guessedGates = {}
 
         for p in guessedPairs:
+            
+            if (move=="C" and sim==False):
+                
+                guessedFrac = gates[ 2*(score-1) ][p] + 0.1/math.sqrt(shots)
+            
+            else:
 
-            guessedOneProb = 0
-            for j in range(2):
-                guessedOneProb += oneProb[ pairs[p][j] ] / 2
-            
-            guessedFrac = calculateFrac( guessedOneProb )
-            
+                guessedOneProb = 0
+                for j in range(2):
+                    guessedOneProb += oneProb[ pairs[p][j] ] / 2
+                    
+                guessedFrac = calculateFrac( guessedOneProb )
+
             # since the player wishes to apply the inverse gate, the opposite frac is stored
             guessedGates[p] = -guessedFrac
 
@@ -687,19 +783,26 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
         # finally randomly generate X or Z rotation for each active qubit to conjugate this round with
         newconjugates = []
         for n in range(num):
-            newconjugates.append( [ numpy.random.choice(['X','Z']) , random.random() ] )
+            newconjugates.append( [ numpy.random.choice(['X','Y']) , random.random() ] )
         conjugates.append(newconjugates)
              
-        clear_output()
-        #printPuzzle( device, rawOneProb, move )
-        printPuzzle( device, oneProb, move )
+        if move=='M':
+            clear_output()
+        
+        if sim==False:
+            printM("\nRaw puzzle",move)    
+            if move=="M":
+                printPuzzle( device, rawOneProb, move )
+            printM("\nCleaned puzzle", move )
+        if move=="M":
+            printPuzzle( device, oneProb, move )
         printM("", move)
         printM("Round "+str(score)+" complete", move)
         printM("", move)
         printM("Pairs you guessed for this round", move)
         printM(sorted(guessedPairs), move)
         printM("Pairs our bot would have guessed", move)
-        printM(sorted(getDisjointPairs( pairs, oneProb=oneProb )), move)
+        printM(sorted(getDisjointPairs( pairs, oneProb=oneProb, weight={} )), move )
         printM("Correct pairs for this round", move)
         printM(sorted(matchingPairs), move)
         correctGuesses = list( set(guessedPairs).intersection( set(matchingPairs) ) )
@@ -708,12 +811,11 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
         printM("", move)
         if move=="M" and restart==False:
             input(">Press Enter for the next round...\n")
-            print(" The next round is being prepared\n")
     
     if move=="M" and restart==False:
         input("> There is no more data on this game :( Press Enter to restart...\n")
     
-    return gates, conjugates, totalFuzz, oneProbs
+    return gates, conjugates, oneProbs, sameProbs, resultsDicts
 
 
 
@@ -740,7 +842,7 @@ def MakeGraph(X,Y,y,axisLabel,labels=[],verbose=False,log=False):
     # label the axes
     plt.xlabel(axisLabel[0])
     plt.ylabel(axisLabel[1])
-    
+        
     # make sure X axis is fully labelled
     plt.xticks(X)
 
@@ -771,7 +873,7 @@ def GetData ( device, move, shots, sim, samples, maxScore ):
 
         print("move="+move+", shots="+str(shots)+", sample=" + str(sample+1) )
 
-        gates, conjugates, totalFuzz, oneProbs = runGame( device, move, shots, sim, maxScore )
+        gates, conjugates, oneProbs, sameProbs, resultsDicts = runGame( device, move, shots, sim, maxScore )
 
         # make a directory for this device if it doesn't already exist
         if not os.path.exists('results_' + device):
@@ -779,12 +881,12 @@ def GetData ( device, move, shots, sim, samples, maxScore ):
 
         filename = 'move=' + move + '_shots=' + str(shots) + '_sim=' + str(sim) + '.txt'
 
-        saveFile = open('results_' + device + '/totalFuzz_'+filename, 'a')
-        saveFile.write( str(totalFuzz)+'\n' )
-        saveFile.close()
-
         saveFile = open('results_' + device + '/oneProbs_'+filename, 'a')
         saveFile.write( str(oneProbs)+'\n' )
+        saveFile.close()
+        
+        saveFile = open('results_' + device + '/sameProbs_'+filename, 'a')
+        saveFile.write( str(sameProbs)+'\n' )
         saveFile.close()
 
         saveFile = open('results_' + device + '/gates_'+filename, 'a')
@@ -795,88 +897,121 @@ def GetData ( device, move, shots, sim, samples, maxScore ):
         saveFile.write( str(conjugates)+'\n' )
         saveFile.close()
         
+        if sim==False:
+            saveFile = open('results_' + device + '/results_'+filename, 'a')
+            saveFile.write( str(resultsDicts)+'\n' )
+            saveFile.close()
         
-def CalculateQuality ( x, oneProbSamples, gateSamples, pairs, score, type='both') :
+        
+def CalculateQuality ( x, oneProbSamples, sameProbSamples, gateSamples, pairs, score, type='both') :
     
     # see what fraction of the matchings we have corrent
     
     fractionCorrect = 0
-    closenessToIdeal = 0
-    for oneProbs, gates in zip(oneProbSamples, gateSamples):
+    fracDifference = 0
+    for oneProbs, sameProbs, gates in zip(oneProbSamples, sameProbSamples, gateSamples):
         
-        oneProb = eval(oneProbs)[score-1]
+        oneProb = oneProbs[score-1]
+        sameProb = sameProbs[score-1]
         
         if x!=[]:
-            oneProb = CleanData ( x, oneProb )
+            rawOneProb = copy.deepcopy(oneProb)
+            oneProb = CleanData ( x, rawOneProb, sameProb, pairs )
 
-        gate = eval(gates)[ 2*(score-1) ]
+        gate = gates[ 2*(score-1) ]
         
         matchingPairs = list(gate.keys())
-        guessedPairs = getDisjointPairs( pairs, oneProb=oneProb )
+        guessedPairs = getDisjointPairs( pairs, oneProb=oneProb, weight={}  )
         correctGuesses = list( set(guessedPairs).intersection( set(matchingPairs) ) )
         fractionCorrect += len(correctGuesses) / len(matchingPairs)
-            
-        realFracs = [0]*len(oneProb)
+ 
         for p in gate.keys():
-            realFracs[pairs[p][0]] = gate[p]
-            realFracs[pairs[p][1]] = gate[p]
-        for prob,realFrac in zip(oneProb,realFracs):
-            closenessToIdeal += (calculateFrac(prob)-realFrac)**2 / len(oneProb)
+            
+            guessedOneProb = 0
+            for j in range(2):
+                guessedOneProb += oneProb[ pairs[p][j] ] / 2
+            
+            fracDifference += (calculateFrac(guessedOneProb)-gate[p])**2 / len(oneProb)
             
     
     fractionCorrect = fractionCorrect / len( oneProbSamples )
-    closenessToIdeal = 1-math.sqrt( closenessToIdeal / len( oneProbSamples ) )
+    fracDifference = math.sqrt( fracDifference / len( oneProbSamples ) )
             
-    return [fractionCorrect,closenessToIdeal]
+    return fractionCorrect, fracDifference
 
 
-def CleanData ( x, oneProb ):
-     
-    for n in range(len(oneProb)):
-        oneProb[n] = x[2*n] * oneProb[n] + x[2*n+1]
-        oneProb[n] = min(1,oneProb[n])
-        oneProb[n] = max(0,oneProb[n])
+def CleanData ( x, rawOneProb, sameProb, pairs ):
     
+    I = calculateMutual ( rawOneProb, sameProb, pairs )
+    correlatedPairs = getDisjointPairs( pairs, weight=I )
+        
+    matches = {}
+    for p in correlatedPairs:
+        matches[pairs[p][0]] = pairs[p][1]
+        matches[pairs[p][1]] = pairs[p][0]
+
+    oneProb = []
+        
+    for n in range(len(rawOneProb)):
+        
+        if n in matches.keys():
+            match = matches[n]
+        else:
+            match = n
+
+        newOneProb = x[3*n] * rawOneProb[n] + x[3*n+1] * rawOneProb[match] + x[3*n+2]
+        newOneProb = min(1,newOneProb)
+        newOneProb = max(0,newOneProb)
+
+        oneProb.append( newOneProb )
+
     return oneProb
 
 
-def Metropolis ( x, oneProbSamples, gateSamples, num, pairs, score, steps=1000, repetitions=10, delta=0.025, T=0.01 ):
+def Metropolis ( x, oneProbSamples, sameProbSamples, gateSamples, num, pairs, score, steps_per_num=500, delta=0.01 ):
 
     best_x = copy.deepcopy(x)
-    bestQuality = CalculateQuality ( x, oneProbSamples, gateSamples, pairs, score )
+    bestFractionCorrect , bestFracDifference = CalculateQuality ( x, oneProbSamples, sameProbSamples, gateSamples, pairs, score )
     bestDiff = 0
         
-    for rep in range(repetitions):
-        
-        print("\nrepetition = ", rep, "\nbest fraction = ", bestQuality[0], ", best closeness = ", bestQuality[1])
-        
+    if True:
+                
         x = copy.deepcopy(best_x)
-        quality = copy.deepcopy(bestQuality)
+        fractionCorrect = bestFractionCorrect
+        fracDifference = bestFracDifference
+        
+        steps = steps_per_num * num
         
         for step in range(steps):
 
-            n = random.randint(0,2*num-1)
+            n = random.randint(0,3*num-1)
             random_delta = random.uniform(+delta,-delta)
 
             x[n] += random_delta
 
-            proposedQuality = CalculateQuality ( x, oneProbSamples, gateSamples, pairs, score )
-
-            diff = 1*(proposedQuality[0]-quality[0]) + 2*(proposedQuality[1]-quality[1])
+            proposedFractionCorrect , proposedFracDifference = CalculateQuality ( x, oneProbSamples, sameProbSamples, gateSamples, pairs, score )
             
-            accept = ( random.random() < math.exp(diff/T) )
-
+            diff = fracDifference - proposedFracDifference
+            
+            accept = (proposedFractionCorrect>fractionCorrect)
+            accept = accept or (proposedFractionCorrect==fractionCorrect) and ( proposedFracDifference < bestFracDifference  )
+            
             if accept:
-                quality = copy.deepcopy(proposedQuality)
+                fractionCorrect = proposedFractionCorrect
+                fracDifference = proposedFracDifference
             else:
                 x[n] -= random_delta
 
-            if (quality[0]>bestQuality[0]):
-                bestDiff
+            if (proposedFractionCorrect>=bestFractionCorrect) and ( proposedFracDifference < bestFracDifference  ):
                 best_x = copy.deepcopy(x)
-                bestQuality = copy.deepcopy(quality)
-                print("\nstep = ",step,"\nbest fraction = ", bestQuality[0], ", best closeness = ", bestQuality[1], "\nbest x = ", best_x)
+                bestFractionCorrect = fractionCorrect
+                bestFracDifference = fracDifference
             
+            if (step%100==0):
+                print("step =", step, ", best fraction =", bestFractionCorrect, ", best difference =", bestFracDifference)
+    
+    print("\nbest fraction = ", bestFractionCorrect, ", best difference = ", bestFracDifference, "\nbest x = ", best_x)   
+        
     return best_x
 
 
@@ -884,24 +1019,18 @@ def CreateCleaningProfile ( device, move, shots, sim ) :
     
     num, area, entangleType, pairs, pos, example, sdk, runs = getLayout(device)
     
-    # oneProbs
-    filename = 'move=' + move + '_shots=' + str(shots) + '_sim=' + str(sim) + '.txt'
-    saveFile = open('results_' + device + '/oneProbs_'+filename)
-    oneProbSamples = saveFile.readlines()
-    saveFile.close()
-    # gates
-    filename = 'move=' + move + '_shots=' + str(shots) + '_sim=' + str(sim) + '.txt'
-    saveFile = open('results_' + device + '/gates_'+filename)
-    gateSamples = saveFile.readlines()
-    saveFile.close()
+    oneProbSamples = resultsLoad ( 'oneProbs', move, shots, sim, device )
+    sameProbSamples = resultsLoad ( 'sameProbs', move, shots, sim, device )
+    gateSamples = resultsLoad ( 'gates', move, shots, sim, device )
+    #cleaner = resultsLoad( 'cleaner', shots, sim, device )
         
-    maxScore = len( eval(oneProbSamples[0]) )
+    maxScore = len( oneProbSamples[0] )
     
     cleaner = []
     for score in range(1,maxScore+1):
-        x = [1,0]*num
-        print("score = ",score)
-        cleaner.append( Metropolis ( x, oneProbSamples, gateSamples, num, pairs, score ) )
+        x = [0.5,0.5,0]*num
+        print("\nscore = ",score)
+        cleaner.append( Metropolis ( x, oneProbSamples, sameProbSamples, gateSamples, num, pairs, score ) )
      
     filename = 'move=' + move + '_shots=' + str(shots) + '_sim=' + str(sim) + '.txt'
     saveFile = open('results_' + device + '/cleaner_'+filename, 'a')
@@ -909,27 +1038,28 @@ def CreateCleaningProfile ( device, move, shots, sim ) :
     saveFile.close()
 
 
-def ProcessData ( device, move, shots, sim ):
+def ProcessData ( device, move, shots, sim, cleanup):
     
     num, area, entangleType, pairs, pos, example, sdk, runs = getLayout(device)
     
     filename = 'move=' + move + '_shots=' + str(shots) + '_sim=' + str(sim) + '.txt'
     
-    # get fuzz data
-    saveFile = open('results_' + device + '/totalFuzz_'+filename)
-    fuzzSamples = saveFile.readlines()
-    saveFile.close()
     
-    # get oneprob data
-    saveFile = open('results_' + device + '/oneProbs_'+filename)
-    oneProbSamples = saveFile.readlines()
-    saveFile.close()
+    oneProbSamples = resultsLoad ( 'oneProbs', move, shots, sim, device )
+    sameProbSamples = resultsLoad ( 'sameProbs', move, shots, sim, device )
+    gateSamples = resultsLoad ( 'gates', move, shots, sim, device )
+    if cleanup:
+        try:
+            cleaner = resultsLoad( 'cleaner', move, shots, sim, device )[0]
+        except:
+            cleaner = []
+    else:
+        cleaner = []
     
     # for each round, get mean of all Es
     # note, variable names make it sound like we are averaging oneProb, but we aren't: hacky mess :(
     meanOneProbSamples = []
     for sample in oneProbSamples:
-        sample = eval(sample)
         meanOneProbs = []
         for roundOneProbs in sample:
             mean = 0
@@ -938,42 +1068,85 @@ def ProcessData ( device, move, shots, sim ):
             meanOneProbs.append( mean )
         meanOneProbSamples.append( meanOneProbs )
     
-    # find number of samples
-    samples = len(fuzzSamples)
     
-    # note: from here on, score means something that starts at 0, rather than starting at 1 as it does elsewhere
+    # find number of samples
+    samples = len(oneProbSamples)
     
     # find number of round in samples (assume same for all)
-    maxScore = len(eval(fuzzSamples[0]))
+    maxScore = len(oneProbSamples[0])
     
-    fuzzAv = [[0]*maxScore for _ in range(2)]
-    for totalFuzz in fuzzSamples:
-        totalFuzz = eval(totalFuzz)
-        for score in range(maxScore):
-            fuzzAv[0][score] += totalFuzz[score]/samples
-            fuzzAv[1][score] += totalFuzz[score]**2/samples
-    for score in range(maxScore):
-        fuzzAv[1][score] -= fuzzAv[0][score]**2
+    fuzzAvs = [[0]*2 for _ in range(maxScore)]
+    
+    for oneProbSample, sameProbSample, gateSample in zip(oneProbSamples, sameProbSamples, gateSamples):
+        for score in range(len(oneProbSample)):
+            if cleaner:
+                oneProb = CleanData ( cleaner[score], oneProbSample[score], sameProbSample[score], pairs )
+            else:
+                oneProb = oneProbSample[score]
+            fuzz = calculateFuzz ( oneProb, pairs, gateSample[2*score].keys() )
+            fuzzAvs[score][0] += fuzz/samples
+            fuzzAvs[score][1] += fuzz**2/samples
+    for fuzzAv in fuzzAvs:
+        fuzzAv[1] -= fuzzAv[0]**2
         
-    entangleAv = [[0]*maxScore for _ in range(2)]
-    for meanOneProbs in meanOneProbSamples:
-        for score in range(maxScore):
-            entangleAv[0][score] += meanOneProbs[score]/samples
-            entangleAv[1][score] += meanOneProbs[score]**2/samples
-    for score in range(maxScore):
-        entangleAv[1][score] -= entangleAv[0][score]**2
+    # note: from here on, score means something that starts at 0, rather than starting at 1 as it does elsewhere
         
-    # get gate data
-    saveFile = open('results_' + device + '/gates_'+filename)
-    gateSamples = saveFile.readlines()
-    saveFile.close() 
-        
-    quality = []
-    for score in range(maxScore):
-        quality.append( CalculateQuality ( [], oneProbSamples, gateSamples, pairs, score+1 ) )
-        
-    return fuzzAv, entangleAv, quality
+    correctFracs = []
+    differenceFracs = []
+    for score in range(1,maxScore+1):
+        if cleaner:
+            x = cleaner[score-1]
+        else:
+            x = []
+        fractionCorrect, fracDifference = CalculateQuality( x, oneProbSamples, sameProbSamples, gateSamples, pairs, score )
+        correctFracs.append(fractionCorrect)
+        differenceFracs.append(fracDifference)
 
+    return fuzzAvs, correctFracs, differenceFracs
+
+def PlotGraphSet ( device, sims_to_use ):
+    
+    num, area, entangleType, pairs, pos, example, sdk, runs = getLayout(device)
+
+    maxMaxScore = 0
+    for sim in sims_to_use:
+        maxMaxScore = max( maxMaxScore, runs[sim]['maxScore'] )
+
+    for cleanup in [True,False]:
+        
+        X = range(1,maxMaxScore+1)
+        Yf = []
+        yf = []
+        Yc = []
+        Yd = []
+        y = []
+        labels = []
+
+        for sim in sims_to_use:
+            for move in runs[sim]['move']:
+                for shots in runs[sim]['shots']:
+
+                    maxScore = runs[sim]['maxScore']
+                    fuzzAvs, correctFracs, differenceFracs = ProcessData( device, move, shots, sim, cleanup )
+
+                    Yf.append( [fuzzAvs[j][0] for j in range(maxScore) ] + [math.nan]*(maxMaxScore-maxScore) )
+                    yf.append( [fuzzAvs[j][1] for j in range(maxScore) ] + [math.nan]*(maxMaxScore-maxScore) )
+                    Yc.append( correctFracs  + [math.nan]*(maxMaxScore-maxScore) )
+                    Yd.append( differenceFracs  + [math.nan]*(maxMaxScore-maxScore) )
+                    y.append( [math.nan]*maxMaxScore )
+
+
+                    labels.append( device*(sim==False) + 'simulator'*sim + ' with ' + 'correct'*(move=='C') + 'random'*(move=='R') + ' moves \nshots = ' + str(shots)  )
+
+        
+        if cleanup:
+            print("\nPlots using data with error mitigation\n")
+        else:
+            print("\nPlots using raw data\n")
+            
+        MakeGraph(X,Yf,yf,["Game round","Average Fuzz"],labels=labels)
+        MakeGraph(X,Yc,y,["Game round","Average correctness for MWPM"],labels=labels)
+        MakeGraph(X,Yd,y,["Game round","Average difference from correct values"],labels=labels)
 
 def PlayGame():
     
@@ -1050,7 +1223,7 @@ def PlayGame():
         input("> The following game data will be from a simulated run...\n")
     
     shots = min( runs[sim]['shots'] )
-    runGame ( device, 'M', shots, sim, 0, dataNeeded=False )
+
     try:
         runGame ( device, 'M', shots, sim, 0, dataNeeded=False )
     except:

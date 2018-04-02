@@ -2,7 +2,7 @@ def supportedDevices ():
 
 	# Returns the list of all supported devices
 
-	return ["ibmqx2","ibmqx4","ibmqx5","19Q-Acorn"]
+	return ["ibmqx5","19Q-Acorn"]
 
 def getLayout (device):
 
@@ -46,7 +46,7 @@ def getLayout (device):
                8: [7,1], 9: [7,0], 10: [6,0],  11: [5,0],  12: [4,0],  13: [3,0],  14: [2,0],  15: [1,0] }
         example = [0.11, 0.09, 0.49, 0.52, 0.31, 0.89, 0.15, 0.18, 0.47, 0.43, 0.67, 0.62, 0.93, 0.29, 0.77, 0.73]
         sdk = "QISKit"
-        runs = {True:{'shots':[100,1000,10000],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[8192],'move':['C'],'maxScore':10,'samples':20}}
+        runs = {True:{'shots':[100,8192],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[8192],'move':['C'],'maxScore':10,'samples':20}}
 
     
     elif device=="ibmqx2": #
@@ -71,7 +71,7 @@ def getLayout (device):
         pos = { 0: [1,1], 1: [1,0],  2: [0.5,0.5],  3: [0,0],  4: [0,1] }
         example = [0.11,0.09,0.49,0.52,0.31]
         sdk = "QISKit"
-        runs = {True:{'shots':[100,1000,10000],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[8192],'move':['C'],'maxScore':10,'samples':20}}
+        runs = {True:{'shots':[100,8192],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[8192],'move':['C'],'maxScore':10,'samples':20}}
        
     elif device=="ibmqx4":
         # A 5 qubit device by IBM
@@ -95,7 +95,7 @@ def getLayout (device):
         pos = { 0: [1,1], 1: [1,0],  2: [0.5,0.5],  3: [0,0],  4: [0,1] }
         example = [0.11,0.09,0.49,0.52,0.31]
         sdk = "QISKit"
-        runs = {True:{'shots':[100,1000,10000],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[8192],'move':['C'],'maxScore':10,'samples':20}}
+        runs = {True:{'shots':[100,8192],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[8192],'move':['C'],'maxScore':10,'samples':20}}
 
     elif device=="QS1_1":
         # A 20 qubit device by IBM
@@ -118,7 +118,7 @@ def getLayout (device):
         example = [.32, .33, .92, .82, .11, .16, .15, .91, .12, .84, .52, .43, .78, .19, .47, .52, .78, .42, .48, .18]
         #          0    1    2    3    4    5     6   7    8    9    10   11   12   13   14   15   16   17   18   19
         sdk = "QISKit"
-        runs = {True:{'shots':[100,1000,10000],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[8192],'move':['C'],'maxScore':10,'samples':20}}
+        runs = {True:{'shots':[100,8192],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[8192],'move':['C'],'maxScore':10,'samples':20}}
         
     elif device=="19Q-Acorn":
         # A device by Rigetti with 20 qubits, but since one is isolated it is effectively 19
@@ -138,8 +138,21 @@ def getLayout (device):
         example = [.32, .48, .58, None,.15, .52, .33, .47, .59, .17, .51, .76, .89, .23, .65, .02, .78, .91, .25, .64]
         #          0    1    2    3    4    5     6   7    8    9    10   11   12   13   14   15   16   17   18   19
         sdk = "Forest"
-        runs = {True:{'shots':[100,1000,10000],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[10000],'move':['C','R'],'maxScore':5,'samples':20}}
+        runs = {True:{'shots':[100,10000],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[10000],'move':['C'],'maxScore':10,'samples':1000}}
 
+    elif device=="11Q-Alibaba":
+        # 11 qubit superconducting device from Chinese Academy of Sciences Innovative Center in Quantum Information and Quantum Physics (Shanghai)
+        # http://quantumcomputer.ac.cn
+    
+        num = 12 # actually there are 11. But they number from 1, so 0 is unused
+        area = [11,1]
+        entangleType = "CZ"
+        pairs = { 'A': [1,2], 'B': [2,3], 'C': [3,4], 'D': [4,5], 'E': [5,6], 'F': [6,7], 'G': [7,8], 'H': [8,9], 'I': [9,10],  'J': [10,11] }
+        pos = { 1: [0,1], 2: [1,1], 3: [2,1], 4: [3,1], 5: [4,1], 6: [5,1], 7: [6,1], 8: [7,1], 9: [8,1], 10: [9,1], 11: [10,1] }
+        example = [None, .48, .50, .12, .15, .35, .33, .47, .45, 0.02, 0.24, 0.28]
+        sdk = "ManualQISKit"
+        runs = {True:{'shots':[100,9000],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[9000],'move':['C','R'],'maxScore':5,'samples':20}}
+        
     elif device=="8Q-Wallraff":
         # A device from the group of A. Wallraff at ETH
         # https://arxiv.org/abs/1801.07904
@@ -153,7 +166,7 @@ def getLayout (device):
                 8: [0,0], 7: [1,0], 6: [2,0], 5: [3,0] }
         example = [None, .48, .50, .12, .15, .35, .33, .47, .45]
         sdk = "ProjectQ"
-        runs = {True:{'shots':[100],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[10000],'move':['C','R'],'maxScore':5,'samples':20}}
+        runs = {True:{'shots':[100,10000],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[10000],'move':['C'],'maxScore':5,'samples':20}}
         
     else:
         

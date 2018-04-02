@@ -3,11 +3,11 @@
 # access token. Replace "None" below with the quoted token string.
 # Uncomment the APItoken variable, and you will be ready to go.
 
-#APItoken = "PUT_YOUR_API_TOKEN_HERE"
+APItoken = ""
 
 config = {
   "url": 'https://quantumexperience.ng.bluemix.net/api'
 }
 
 if 'APItoken' not in locals():
-      raise Exception("Please set up your access token. See Qconfig.py.")
+  raise Exception("Please set up your access token. See Qconfig.py.")
