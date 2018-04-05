@@ -11,7 +11,7 @@ The game consists of a series of rounds. Each has a puzzle like the one above, a
 
 Puzzles from higher rounds require higher depth circuits, and so build-up of noise contributes to an increase in difficulty. The number of rounds that the game remains playable for therefore depends on the noise levels of the device. Also, the complexity of the puzzles depends on the size and connectivity of the device that runs them. These properties mean that the game gives the player direct experience of the most important factors affecting the current generation of prototype quantum computers.
 
-For more on the gritty details, see [here](https://medium.com/@decodoku/benchmarking-quantum-computers-with-a-game-806503b2c983).
+For more on the gritty details, see [here](https://medium.com/@decodoku/understanding-quantum-computers-through-a-simple-puzzle-game-a290dde89fb2).
 
 ### Running the game
 
