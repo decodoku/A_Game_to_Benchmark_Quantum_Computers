@@ -519,7 +519,7 @@ def printPuzzle ( device, oneProb, move ):
                 else: # otherwise it is on the spectrum between red and blue
                     # E = min(1, 2*calculateFrac( oneProb[node] ) ) # colour is determine by the guessed frac
                     E = calculateEntanglement( oneProb[node] ) # colour is determined by entanglement
-                    colors.append( (E,0,1-E) )
+                    colors.append( (1-E,0,E) )
                 sizes.append( 3000 )
                 if oneProb[node]>1:
                     labels[node] = ""
@@ -678,7 +678,8 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
             
             rawOneProb = copy.deepcopy( oneProb )
             if sim==False:
-                oneProb = CleanData(cleaner[score-1],rawOneProb,sameProb,pairs)
+                #oneProb = CleanData(cleaner[score-1],rawOneProb,sameProb,pairs)
+                oneProb = CleanData([0.55,0.45,0]*num,rawOneProb,sameProb,pairs)
             
             results = []
         
