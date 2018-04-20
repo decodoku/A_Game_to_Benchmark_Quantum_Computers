@@ -74,11 +74,6 @@ def initializeQuantumProgram ( device, sim ):
         c = None
         script = None
     elif sdk=="Forest":
-        
-        from pyquil.quil import Program
-        import pyquil.api as api
-        from pyquil.gates import I, H, CNOT, CZ, RX, RY
-        
         if sim:
             engine = api.QVMConnection(use_queue=True)
         else:
@@ -943,12 +938,16 @@ def CalculateQuality ( x, oneProbSamples, sameProbSamples, gateSamples, pairs, s
 def CleanData ( x, rawOneProb, sameProb, pairs ):
     
     I = calculateMutual ( rawOneProb, sameProb, pairs )
-    correlatedPairs = getDisjointPairs( pairs, weight=I )
-        
+    
     matches = {}
-    for p in correlatedPairs:
-        matches[pairs[p][0]] = pairs[p][1]
-        matches[pairs[p][1]] = pairs[p][0]
+    for n in range(len(rawOneProb)):
+        maxI = 0
+        for p in pairs:
+            for j in range(2):
+                if n==pairs[p][j]:
+                    if I[p]>maxI:
+                        maxI = I[p]
+                        matches[n] = pairs[p][(j+1)%2]
 
     oneProb = []
         
