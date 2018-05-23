@@ -248,8 +248,13 @@ def getResults ( device, sim, shots, q, c, engine, script ):
         qasm = engine.get_qasm("script")
         input("\nYou'll now be given the QASM representation of the circuit. Find a way to run it, and then copy the results in the input box...\n")
         input("The results you provide should be in the form of a dictionary, with bit strings as keys and the fraction of times these occurred as a result as values...")
-        input("Well, actually you should find some way to do this programatically. The function 'getResults' is what you need to look at. But copy and paste will do for now....\n")
-        resultsRaw = eval(input(qasm+"\n"))
+        input("You could instead input an ID for the job, and supply the results later...")
+        input("But best if all is to do it all programatically. The function 'getResults' is what you need to look at...\n")
+        input_data = input(qasm+"\n")
+        try: # if the input successfully evaluates, we treat it as data
+            resultsRaw = eval(input_data)
+        except: # otherwise we treat it as a job ID
+            resultsRaw = input_data
     
     elif sdk=="ProjectQ":
         engine.flush()
@@ -291,6 +296,45 @@ def getResults ( device, sim, shots, q, c, engine, script ):
             resultsRaw[bitString] += 1/shots 
     
     return resultsRaw
+
+def processResults ( resultsRaw, num, pairs, shots ):
+    
+    oneProb = [0]*num
+    sameProb = {p: 0 for p in pairs}
+    
+    if resultsRaw is dict: # try to process only if it is a dict (and so not if a job id)
+    
+        strings = list(resultsRaw.keys())
+
+        if sim==True:
+            # sample from this prob dist shots times to get results
+            results = {}
+            for string in strings:
+                results[string] = 0
+            for shot in range(shots):
+                j = numpy.random.choice( len(strings), p=list(resultsRaw.values()) )
+                results[strings[j]] += 1/shots
+        else:
+            results = resultsRaw
+
+        # determine the fraction of results that came out as 1 (instead of 0) for each qubit
+        
+        for bitString in strings:
+            for v in range(num):
+                if (bitString[v]=="1"):
+                    oneProb[v] += results[bitString]
+
+
+        
+        for bitString in strings:
+            for p in pairs:
+                if bitString[pairs[p][0]]==bitString[pairs[p][1]]:
+                    sameProb[p] += results[bitString]
+                    
+    else:
+        results = resultsRaw
+                
+    return oneProb, sameProb, results
 
 
 def printM ( string, move ):
@@ -365,33 +409,7 @@ def entangle( device, move, shots, sim, gates, conjugates ):
     
     resultsRaw = getResults( device, sim, shots, q, c, engine, script )
     
-    strings = list(resultsRaw.keys())
-    
-    if sim==True:
-        # sample from this prob dist shots times to get results
-        results = {}
-        for string in strings:
-            results[string] = 0
-        for shot in range(shots):
-            j = numpy.random.choice( len(strings), p=list(resultsRaw.values()) )
-            results[strings[j]] += 1/shots
-    else:
-        results = resultsRaw
-        
-    # determine the fraction of results that came out as 1 (instead of 0) for each qubit
-    oneProb = [0]*num
-    for bitString in strings:
-        for v in range(num):
-            if (bitString[v]=="1"):
-                oneProb[v] += results[bitString]
-                
-                
-    sameProb = {p: 0 for p in pairs}
-    for bitString in strings:
-        for p in pairs:
-            if bitString[pairs[p][0]]==bitString[pairs[p][1]]:
-                sameProb[p] += results[bitString]        
-                
+    oneProb, sameProb, results = processResults ( resultsRaw, num, pairs, shots )
     
     implementGate ( device, "finish", q, script )
     
@@ -747,8 +765,9 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
         # store the oneProb and sameProb
         oneProbs.append( oneProb )
         sameProbs.append( sameProb )
-        # store the raw data
-        #resultsDicts.append( results )
+        # store the raw data (if it is not too big
+        if len(str(results)) < 10000:
+            resultsDicts.append( results )
         
         # see whether the game over condition is satisfied
         gameOn = (score<maxScore) and restart==False
