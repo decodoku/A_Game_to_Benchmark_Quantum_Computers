@@ -1,0 +1,76 @@
+\documentclass[aps,prl,twocolumn,showpacs,preprintnumbers]{revtex4-1}
+
+% Package(s) to include
+\usepackage{psfrag,graphicx}
+\usepackage{dcolumn}
+\usepackage{amsmath,amssymb}
+\usepackage{bm}
+\usepackage{amsfonts,amssymb,amsmath}        % for math symbols.
+\usepackage{epstopdf}
+\usepackage{mathtools}
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+
+\newcommand{\be}{\begin{equation}}
+\newcommand{\ee}{\end{equation}}
+\newcommand{\bq}{\begin{eqnarray}}
+\newcommand{\eq}{\end{eqnarray}}
+
+\newcommand{\twoDEG}{\textsc{2deg}}
+\newcommand{\SOI}{\textsc{soi}}
+
+\newcommand{\ket}[1]{\left | \, #1 \right\rangle}
+\newcommand{\bra}[1]{\left \langle #1 \, \right |}
+
+\bibliographystyle{apsrev}
+
+\begin{document}
+\title{Benchmarking of quantum processors with random circuits}
+\author{James R. Wootton}
+\affiliation{Department of Physics, University of Basel, Klingelbergstrasse 82, CH-4056 Basel, Switzerland}
+
+
+\begin{abstract}
+
+
+
+
+
+
+
+
+\end{abstract}
+
+
+\pacs{}
+
+\maketitle
+
+
+\section{Introduction}
+
+
+
+
+
+\begin{figure}[t]
+\begin{center}
+{\includegraphics[width=\columnwidth]{device.png}}
+\caption{\label{device} The layout of the \emph{ibmqx3} device, with the numbering of qubits used in this study. Lines connect pairs of qubits for which a CNOT can be performed. Thick black lines are show for the CNOTs used in our implementation of the repetition code.
+}
+\end{center}
+\end{figure}
+
+
+
+
+\section{Acknowledgements}
+
+This work was supported by the Swiss National Science Foundation and the NCCR QSIT.
+
+The IBM Quantum Experience was used to produce results for this work. The views expressed are those of the authors and do not reflect the official policy or position of IBM or the IBM Quantum Experience team.
+
+
+\bibliography{refs}
+
+
+\end{document}
