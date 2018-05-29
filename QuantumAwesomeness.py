@@ -19,9 +19,15 @@ def importSDK ( device ):
     num, area, entangleType, pairs, pos, example, sdk, runs = getLayout(device)
 
     if sdk in ["QISKit","ManualQISKit"]:
-        global QuantumProgram, Qconfig
-        from qiskit import QuantumProgram
-        import Qconfig 
+        global ClassicalRegister, QuantumRegister, QuantumCircuit, execute, register, available_backends, get_backend
+        from qiskit import ClassicalRegister, QuantumRegister
+        from qiskit import QuantumCircuit, execute
+        from qiskit import register, available_backends, get_backend
+        import Qconfig
+        qx_config = {
+            "APItoken": Qconfig.APItoken,
+            "url": Qconfig.config['url']}
+        register(qx_config['APItoken'], qx_config['url'])
     elif sdk=="ProjectQ":
         global projectq, H, Measure, CNOT, C, Z, Rx, Ry
         import projectq
@@ -32,15 +38,6 @@ def importSDK ( device ):
         import pyquil.api as api
         from pyquil.gates import I, H, CNOT, CZ, RX, RY
 
-
-def make_layout ( num_qubits ):
-    # from https://qiskit.slack.com/archives/C7SJ0PJ5A/p1519912149000214
-    # Create a mapping fixing qubit q0 to q0, q1 to q1, etc.
-    # Input is number of qubits for the map
-    layout = {}
-    for i in range(num_qubits):
-        layout[('q', i)] = ('q', i)
-    return layout
 
 def initializeQuantumProgram ( device, sim ):
     
@@ -55,7 +52,7 @@ def initializeQuantumProgram ( device, sim ):
     # Output:
     # * *q* - Register of qubits (needed by both QISKit and ProjectQ).
     # * *c* - Register of classical bits (needed by QISKit only).
-    # * *engine* - Class required to create programs in QISKit, ProjectQ and Forest.
+    # * *engine* - Class required to create programs in ProjectQ and Forest.
     # * *script* - The quantum program, needed by QISKit and Forest.
 
     num, area, entangleType, pairs, pos, example, sdk, runs = getLayout(device)
@@ -63,11 +60,10 @@ def initializeQuantumProgram ( device, sim ):
     importSDK ( device )
     
     if sdk in ["QISKit","ManualQISKit"]:
-        engine = QuantumProgram()
-        engine.set_api(Qconfig.APItoken, Qconfig.config["url"]) # set the APIToken and API url
-        q = engine.create_quantum_register("q", num)
-        c = engine.create_classical_register("c", num)
-        script = engine.create_circuit("script", [q], [c]) 
+        engine = None
+        q = QuantumRegister(num)
+        c = ClassicalRegister(num)
+        script = QuantumCircuit(q, c)
     elif sdk=="ProjectQ":
         engine = projectq.MainEngine()
         q = engine.allocate_qureg( num )
@@ -204,9 +200,9 @@ def getResults ( device, sim, shots, q, c, engine, script ):
     if sdk=="QISKit":
         # pick the right backend
         if sim:
-            backend = 'local_qasm_simulator'
+            backend = get_backend('local_qasm_simulator')
         else:
-            backend = device
+            backend = get_backend(device)
         # add measurement for all qubits
         for n in range(num):
             script.measure( q[n], c[n] )
@@ -216,22 +212,12 @@ def getResults ( device, sim, shots, q, c, engine, script ):
         while noResults:
             try: # try to run, and wait if it fails
                 
-                print("Now sending job")
-                executedJob = engine.execute(["script"], backend=backend, shots=shots, max_credits = 5, wait=30, timeout=3600,initial_layout=make_layout(num))
+                print('Status of device:',backend.status)
+                job = execute(script, backend, shots=shots, skip_translation=True)
+                resultsVeryRaw = job.result().get_counts()
                 
-                # get ran
-                #print("Qasm that was executed")
-                #print(executedJob.get_ran_qasm("script"))
-                
-                # get results
-                resultsVeryRaw = executedJob.get_counts("script")
-                if ('status' not in resultsVeryRaw.keys()): # see if it actually is data, and wai for 5 mins if not
-                    noResults = False
-                else:
-                    print(resultsVeryRaw)
-                    print("This is not data, so we'll wait and try again")
-                    time.sleep(300)
-            except:
+            except Exception as e:
+                print(e)
                 print("Job failed. We'll wait and try again")
                 time.sleep(600)
                 
@@ -246,11 +232,8 @@ def getResults ( device, sim, shots, q, c, engine, script ):
         for n in range(num):
             script.measure( q[n], c[n] )
         qasm = engine.get_qasm("script")
-        input("\nYou'll now be given the QASM representation of the circuit. Find a way to run it, and then copy the results in the input box...\n")
-        input("The results you provide should be in the form of a dictionary, with bit strings as keys and the fraction of times these occurred as a result as values...")
-        input("You could instead input an ID for the job, and supply the results later...")
-        input("But best if all is to do it all programatically. The function 'getResults' is what you need to look at...\n")
-        input_data = input(qasm+"\n")
+        input("\nYou'll now be given the QASM representation of the circuit. Find a way to run it, and then either copy the results or write a job ID in the input box...\n")
+        input_data = input(qasm+"Either copy the results dictionary or write a job ID in the box below\n")
         try: # if the input successfully evaluates, we treat it as data
             resultsRaw = eval(input_data)
         except: # otherwise we treat it as a job ID
@@ -276,7 +259,8 @@ def getResults ( device, sim, shots, q, c, engine, script ):
             try: # try to run, and wait for 10 mins if it fails
                 resultsVeryRaw = engine.run_and_measure(script, qubits_active, trials=shots)
                 noResults = False
-            except:
+            except Exception as e:
+                print(e)
                 print("Job failed. We'll wait and try again.")
                 time.sleep(1800)
                 

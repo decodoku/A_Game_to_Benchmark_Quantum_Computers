@@ -46,7 +46,7 @@ def getLayout (device):
                8: [7,1], 9: [7,0], 10: [6,0],  11: [5,0],  12: [4,0],  13: [3,0],  14: [2,0],  15: [1,0] }
         example = [0.11, 0.09, 0.49, 0.52, 0.31, 0.89, 0.15, 0.18, 0.47, 0.43, 0.67, 0.62, 0.93, 0.29, 0.77, 0.73]
         sdk = "QISKit"
-        runs = {True:{'shots':[100,8192],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[8192],'move':['C'],'maxScore':10,'samples':20}}
+        runs = {True:{'shots':[100,8192],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[8192],'move':['C'],'maxScore':10,'samples':53}}
 
     
     elif device=="ibmqx2": #
@@ -95,7 +95,7 @@ def getLayout (device):
         pos = { 0: [1,1], 1: [1,0],  2: [0.5,0.5],  3: [0,0],  4: [0,1] }
         example = [0.11,0.09,0.49,0.52,0.31]
         sdk = "QISKit"
-        runs = {True:{'shots':[100,8192],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[8192],'move':['C'],'maxScore':10,'samples':20}}
+        runs = {True:{'shots':[100,8192],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[8192],'move':['C'],'maxScore':10,'samples':100}}
 
     elif device=="QS1_1":
         # A 20 qubit device by IBM
@@ -151,7 +151,7 @@ def getLayout (device):
         pos = { 1: [0,1], 2: [1,1], 3: [2,1], 4: [3,1], 5: [4,1], 6: [5,1], 7: [6,1], 8: [7,1], 9: [8,1], 10: [9,1], 11: [10,1] }
         example = [None, .48, .50, .12, .15, .35, .33, .47, .45, 0.02, 0.24, 0.28]
         sdk = "ManualQISKit"
-        runs = {True:{'shots':[100,9000],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[9000],'move':['C','R'],'maxScore':5,'samples':20}}
+        runs = {True:{'shots':[100,9000],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[9000],'move':['C'],'maxScore':2,'samples':20}}
         
     elif device=="8Q-Wallraff":
         # A device from the group of A. Wallraff at ETH
