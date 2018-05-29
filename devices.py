@@ -1,3 +1,5 @@
+import math
+
 def supportedDevices ():
 
 	# Returns the list of all supported devices
@@ -24,6 +26,11 @@ def getLayout (device):
 	# * *example* - An example set of noisy entanglement results for use in the tutorial.
 	# * *sdk* - The SDK to be used when running jobs on this device.
     # * *runs* - Data that has been obtained. As a dictionary with values of *sim* as keys.
+    
+    
+    
+    ######## IBM DEVICES ########
+    
     
     if device=="ibmqx5":
         # A 16 qubit device by IBM
@@ -119,7 +126,12 @@ def getLayout (device):
         #          0    1    2    3    4    5     6   7    8    9    10   11   12   13   14   15   16   17   18   19
         sdk = "QISKit"
         runs = {True:{'shots':[100,8192],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[8192],'move':['C'],'maxScore':10,'samples':20}}
-        
+    
+    
+    
+    ######## RIGETTI DEVICES ########
+    
+    
     elif device=="19Q-Acorn":
         # A device by Rigetti with 20 qubits, but since one is isolated it is effectively 19
         # https://arxiv.org/abs/1712.05771
@@ -139,7 +151,12 @@ def getLayout (device):
         #          0    1    2    3    4    5     6   7    8    9    10   11   12   13   14   15   16   17   18   19
         sdk = "Forest"
         runs = {True:{'shots':[100,10000],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[10000],'move':['C'],'maxScore':10,'samples':1000}}
-
+    
+    
+    
+    ######## ALIBABA DEVICES ########
+    
+    
     elif device=="11Q-Alibaba":
         # 11 qubit superconducting device from Chinese Academy of Sciences Innovative Center in Quantum Information and Quantum Physics (Shanghai)
         # http://quantumcomputer.ac.cn
@@ -152,7 +169,12 @@ def getLayout (device):
         example = [None, .48, .50, .12, .15, .35, .33, .47, .45, 0.02, 0.24, 0.28]
         sdk = "ManualQISKit"
         runs = {True:{'shots':[100,9000],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[9000],'move':['C'],'maxScore':2,'samples':20}}
-        
+    
+    
+    
+    ######## DEVICES NOT ON THE CLOUD ########
+    
+    
     elif device=="8Q-Wallraff":
         # A device from the group of A. Wallraff at ETH
         # https://arxiv.org/abs/1801.07904
@@ -167,9 +189,49 @@ def getLayout (device):
         example = [None, .48, .50, .12, .15, .35, .33, .47, .45]
         sdk = "ProjectQ"
         runs = {True:{'shots':[100,10000],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[10000],'move':['C'],'maxScore':5,'samples':20}}
+    
+    
+    
+    ######## EXAMPLE DEVICES (FOR SIMULATION ONLY) ########
+    
+    elif device[0:4]=="line":
         
+        num = int(device[4])
+        
+        if (num%2)==1: # we can continue only num is odd
+            area = [num,1]
+            entangleType = "CZ"
+            pairs = {}
+            for qubit in range(num-1):
+                pairs[chr(65+qubit)] = [qubit,qubit+1]
+            pos = {}
+            for qubit in range(num):
+                pos[qubit] = [qubit,0]
+            example = [0.5]*num
+            sdk = "QISKit"
+            runs = {True:{'shots':[100,10000],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[],'move':[],'maxScore':0,'samples':0}}
+        
+    elif device[0:6]=="ladder":
+        
+        num = int(device[6])
+        
+        
+    elif device[0:6]=="square":
+        
+        num = int(device[6])
+        
+
+    elif device[0:3]=="web":
+        
+        num = int(device[3])
+    
+    
+    ######## NO MORE DEVICES ########
+    
+    
     else:
         
         print("\nWarning: This is not a known device.\n")
+    
     
     return num, area, entangleType, pairs, pos, example, sdk, runs

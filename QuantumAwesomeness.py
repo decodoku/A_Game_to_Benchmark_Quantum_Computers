@@ -215,6 +215,7 @@ def getResults ( device, sim, shots, q, c, engine, script ):
                 print('Status of device:',backend.status)
                 job = execute(script, backend, shots=shots, skip_translation=True)
                 resultsVeryRaw = job.result().get_counts()
+                noResults = False
                 
             except Exception as e:
                 print(e)
@@ -281,12 +282,12 @@ def getResults ( device, sim, shots, q, c, engine, script ):
     
     return resultsRaw
 
-def processResults ( resultsRaw, num, pairs, shots ):
+def processResults ( resultsRaw, num, pairs, sim, shots ):
     
     oneProb = [0]*num
     sameProb = {p: 0 for p in pairs}
     
-    if resultsRaw is dict: # try to process only if it is a dict (and so not if a job id)
+    if type(resultsRaw) is dict: # try to process only if it is a dict (and so not if a job id)
     
         strings = list(resultsRaw.keys())
 
@@ -393,8 +394,8 @@ def entangle( device, move, shots, sim, gates, conjugates ):
     
     resultsRaw = getResults( device, sim, shots, q, c, engine, script )
     
-    oneProb, sameProb, results = processResults ( resultsRaw, num, pairs, shots )
-    
+    oneProb, sameProb, results = processResults ( resultsRaw, num, pairs, sim, shots )
+
     implementGate ( device, "finish", q, script )
     
     return oneProb, sameProb, results
@@ -587,7 +588,7 @@ def getDisjointPairs ( pairs, oneProb = [], weight = {}):
 
 
 def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, game=None):
-    
+        
     # Input:
     # * *device* - String specifying the device on which the game is played.
     #              Details about the device will be obtained using getLayout.
@@ -618,7 +619,7 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
         sameProbSamples = resultsLoad ( 'sameProbs', 'C', shots, sim, device )
         gateSamples = resultsLoad ( 'gates', 'C', shots, sim, device )
         
-        if maxScore==0: # if a maxScore is not given, use the value from the first sample
+        if maxScore is None: # if a maxScore is not given, use the value from the first sample
             maxScore = len( oneProbSamples[ 0 ] )
         
         if clean:
@@ -721,8 +722,7 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
                     printM("\nRaw puzzle",move)    
                     printPuzzle( device, rawOneProb, move )
                     printM("\nCleaned puzzle", move)
-                printPuzzle( device, displayedOneProb, move )
-                
+                printPuzzle( device, displayedOneProb, move )                
                 
                 pairGuess = input("\nChoose a pair  (or type 'done' to skip to the next round, or 'restart' for a new game)\n")
                 if num<=26 : # if there are few enough qubits, we don't need to be case sensitive
