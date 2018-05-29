@@ -196,7 +196,7 @@ def getLayout (device):
     
     elif device[0:4]=="line":
         
-        num = int(device[4])
+        num = int(device[4:])
         
         if (num%2)==1: # we can continue only num is odd
             area = [num,1]
@@ -213,17 +213,38 @@ def getLayout (device):
         
     elif device[0:6]=="ladder":
         
-        num = int(device[6])
+        num = int(device[6:])
+        l = int(num/2)
         
+        if (num%2)==0: # we can continue only num is even
+            area = [num/2,2]
+            entangleType = "CZ"
+            pairs = {}
+            char = 65
+            for row in range(2): # the pairs for the rows
+                for qubit in range(l-1):
+                    q = qubit + row*l
+                    pairs[chr(char)] = [q,q+1]
+                    char+=1
+            for qubit in range(l): # the pairs for the rungs
+                pairs[chr(char)] = [qubit,qubit+l]
+                char+=1
+            pos = {}
+            for qubit in range(l):
+                pos[qubit] = [qubit,0]
+                pos[l+qubit] = [qubit,1]
+            example = [0.5]*num
+            sdk = "QISKit"
+            runs = {True:{'shots':[100,10000],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[],'move':[],'maxScore':0,'samples':0}}
         
     elif device[0:6]=="square":
         
-        num = int(device[6])
+        num = int(device[6:])
         
 
     elif device[0:3]=="web":
         
-        num = int(device[3])
+        num = int(device[3:])
     
     
     ######## NO MORE DEVICES ########
