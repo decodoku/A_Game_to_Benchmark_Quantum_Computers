@@ -586,7 +586,7 @@ def getDisjointPairs ( pairs, oneProb = [], weight = {}):
     return matchingPairs
 
 
-def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, game=-1):
+def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, game=None):
     
     # Input:
     # * *device* - String specifying the device on which the game is played.
@@ -621,7 +621,7 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
         if maxScore==0: # if a maxScore is not given, use the value from the first sample
             maxScore = len( oneProbSamples[ 0 ] )
         
-        if sim==False:
+        if clean:
             try:
                 cleaner = resultsLoad( 'cleaner', 'C', shots, sim, device )[0]
             except:
@@ -632,7 +632,7 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
 
         
         # choose a game randomly, if a specific one was not requested
-        if game==-1:
+        if game is None:
             game = random.randint( 0, samples-1 )
         # get the data for this game
         oneProbs = oneProbSamples[ game ]
@@ -685,7 +685,7 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
             correlatedPairs = getDisjointPairs( pairs, weight=I )
             
             rawOneProb = copy.deepcopy( oneProb )
-            if sim==False:
+            if clean:
                 oneProb = CleanData(cleaner[score-1],rawOneProb,sameProb,pairs)
             
             results = []
@@ -717,7 +717,7 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
                 clear_output()
                 print("")
                 print("Round "+str(score))
-                if sim==False:
+                if clean==True:
                     printM("\nRaw puzzle",move)    
                     printPuzzle( device, rawOneProb, move )
                     printM("\nCleaned puzzle", move)
@@ -793,7 +793,7 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
         if move=='M':
             clear_output()
         
-        if sim==False:
+        if clean==True:
             printM("\nRaw puzzle",move)    
             if move=="M":
                 printPuzzle( device, rawOneProb, move )
