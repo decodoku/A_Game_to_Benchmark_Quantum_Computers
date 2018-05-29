@@ -212,7 +212,8 @@ def getResults ( device, sim, shots, q, c, engine, script ):
         while noResults:
             try: # try to run, and wait if it fails
                 
-                print('Status of device:',backend.status)
+                if not sim:
+                    print('Status of device:',backend.status)
                 job = execute(script, backend, shots=shots, skip_translation=True)
                 resultsVeryRaw = job.result().get_counts()
                 noResults = False

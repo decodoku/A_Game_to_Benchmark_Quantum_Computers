@@ -209,42 +209,71 @@ def getLayout (device):
                 pos[qubit] = [qubit,0]
             example = [0.5]*num
             sdk = "QISKit"
-            runs = {True:{'shots':[100,10000],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[],'move':[],'maxScore':0,'samples':0}}
+            runs = {True:{'shots':[100],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[],'move':[],'maxScore':0,'samples':0}}
+        else:
+            print("Try again with a valid number of qubits for this configuration")
         
-    elif device[0:6]=="ladder":
+    elif device[0:6] in ["ladder","square"]:
         
         num = int(device[6:])
-        l = int(num/2)
         
-        if (num%2)==0: # we can continue only num is even
-            area = [num/2,2]
+        if device[0:6]=="ladder":
+            Lx = int(num/2)
+            Ly = 2
+            good_num = ((num%2)==0) # we can continue only num is even
+        else:
+            Lx = int(math.sqrt(num))
+            Ly = Lx
+            good_num = (type(Lx) is int) # we can continue only num is square
+        
+        if good_num: 
+            
+            area = [Lx,Ly]
             entangleType = "CZ"
             pairs = {}
-            char = 65
-            for row in range(2): # the pairs for the rows
-                for qubit in range(l-1):
-                    q = qubit + row*l
-                    pairs[chr(char)] = [q,q+1]
-                    char+=1
-            for qubit in range(l): # the pairs for the rungs
-                pairs[chr(char)] = [qubit,qubit+l]
-                char+=1
             pos = {}
-            for qubit in range(l):
-                pos[qubit] = [qubit,0]
-                pos[l+qubit] = [qubit,1]
             example = [0.5]*num
             sdk = "QISKit"
-            runs = {True:{'shots':[100,10000],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[],'move':[],'maxScore':0,'samples':0}}
-        
-    elif device[0:6]=="square":
-        
-        num = int(device[6:])
-        
-
+            runs = {True:{'shots':[100],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[],'move':[],'maxScore':0,'samples':0}}
+            
+            char = 65
+            for y in range(Ly):
+                for x in range(Lx):
+                    q = y*Lx+x
+                    if x<(Lx-1): # pair for (x,y) and (x+1,y)
+                        pairs[chr(char)] = [q,q+1]
+                        char+=1
+                    if y<(Ly-1): # pair for (x,y) and (x,y+Lx)
+                        pairs[chr(char)] = [q,q+Lx]
+                        char+=1
+                    pos[q] = [x,y]
+                    
+        else:
+            print("Try again with a valid number of qubits for this configuration")
+            
     elif device[0:3]=="web":
         
         num = int(device[3:])
+        
+        L = int(math.sqrt(num))
+            
+        area = [L,L]
+        entangleType = "CZ"
+        pairs = {}
+        pos = {}
+        example = [0.5]*num
+        sdk = "QISKit"
+        runs = {True:{'shots':[100],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[],'move':[],'maxScore':0,'samples':0}}
+            
+        char = 65
+        for q0 in range(num-1):
+            for q1 in range(q0+1,num):
+                pairs[chr(char)] = [q0,q1]
+                char+=1
+        
+        for q0 in range(num):
+            pos[q0] = [L*math.cos(q0*(2*math.pi)/num),L*math.sin(q0*(2*math.pi)/num)]
+
     
     
     ######## NO MORE DEVICES ########
