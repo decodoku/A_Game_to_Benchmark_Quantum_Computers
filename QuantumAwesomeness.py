@@ -617,13 +617,19 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
         oneProbSamples = resultsLoad ( 'oneProbs', 'C', shots, sim, device )
         sameProbSamples = resultsLoad ( 'sameProbs', 'C', shots, sim, device )
         gateSamples = resultsLoad ( 'gates', 'C', shots, sim, device )
-        if sim==False:
-            cleaner = resultsLoad( 'cleaner', 'C', shots, sim, device )[0]
-        
-        samples = len(oneProbSamples) # find out how many samples there are
         
         if maxScore==0: # if a maxScore is not given, use the value from the first sample
             maxScore = len( oneProbSamples[ 0 ] )
+        
+        if sim==False:
+            try:
+                cleaner = resultsLoad( 'cleaner', 'C', shots, sim, device )[0]
+            except:
+                cleaner = [[0.55,0.45,0]*num]*maxScore # default cleaner when no other is available
+        
+        samples = len(oneProbSamples) # find out how many samples there are
+        
+
         
         # choose a game randomly, if a specific one was not requested
         if game==-1:
@@ -680,8 +686,7 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
             
             rawOneProb = copy.deepcopy( oneProb )
             if sim==False:
-                #oneProb = CleanData(cleaner[score-1],rawOneProb,sameProb,pairs)
-                oneProb = CleanData([0.55,0.45,0]*num,rawOneProb,sameProb,pairs)
+                oneProb = CleanData(cleaner[score-1],rawOneProb,sameProb,pairs)
             
             results = []
         
