@@ -14,6 +14,9 @@ from itertools import product
 import warnings
 warnings.filterwarnings('ignore')
 
+path = os.path.dirname(os.path.abspath(__file__))
+
+
 def importSDK ( device ):
     
     num, area, entangleType, pairs, pos, example, sdk, runs = getLayout(device)
@@ -173,7 +176,7 @@ def implementGate (device, gate, qubit, script, frac = 0 ):
 def resultsLoad ( fileType, move, shots, sim, device ) :
     
     filename = 'move='+move+'_shots=' + str(shots) + '_sim=' + str(sim) + '.txt'
-    saveFile = open('results/' + device + '/'+fileType+'_'+filename)
+    saveFile = open(path+'/results/' + device + '/'+fileType+'_'+filename)
     sampleStrings = saveFile.readlines()
     saveFile.close()
     
@@ -834,7 +837,10 @@ def MakeGraph(X,Y,y,axisLabel,labels=[],verbose=False,log=False):
     # convert the variances of varY into widths of error bars
     for j in range(len(y)):
         for k in range(len(y[j])):
-            y[j][k] = math.sqrt(y[j][k]/2)
+            if y[j][k]>0: # avoiding domaning error for negative values (though they should only occur for numerical innacuracies anyway)
+                y[j][k] = math.sqrt(y[j][k]/2)
+            else:
+                y[j][k] = 0
     
     plt.figure(figsize=(20,10))
     
@@ -884,39 +890,39 @@ def GetData ( device, move, shots, sim, samples, maxScore ):
         gates, conjugates, oneProbs, sameProbs, resultsDicts = runGame( device, move, shots, sim, maxScore )
 
         # make a directory for this device if it doesn't already exist
-        if not os.path.exists('results/' + device):
-            os.makedirs('results/' + device)
+        if not os.path.exists(path+'/results/' + device):
+            os.makedirs(path+'/results/' + device)
 
         filename = 'move=' + move + '_shots=' + str(shots) + '_sim=' + str(sim) + '.txt'
 
-        saveFile = open('results/' + device + '/oneProbs_'+filename, 'a')
+        saveFile = open(path+'/results/' + device + '/oneProbs_'+filename, 'a')
         saveFile.write( str(oneProbs)+'\n' )
         saveFile.close()
         
-        saveFile = open('results/' + device + '/sameProbs_'+filename, 'a')
+        saveFile = open(path+'/results/' + device + '/sameProbs_'+filename, 'a')
         saveFile.write( str(sameProbs)+'\n' )
         saveFile.close()
 
-        saveFile = open('results/' + device + '/gates_'+filename, 'a')
+        saveFile = open(path+'/results/' + device + '/gates_'+filename, 'a')
         saveFile.write( str(gates)+'\n' )
         saveFile.close()
 
-        saveFile = open('results/' + device + '/conjugates_'+filename, 'a')
+        saveFile = open(path+'/results/' + device + '/conjugates_'+filename, 'a')
         saveFile.write( str(conjugates)+'\n' )
         saveFile.close()
         
         if sim==False:
-            saveFile = open('results/' + device + '/results/'+filename, 'a')
+            saveFile = open(path+'/results/' + device + '/results/'+filename, 'a')
             saveFile.write( str(resultsDicts)+'\n' )
             saveFile.close()
         
         
 def CalculateQuality ( x, oneProbSamples, sameProbSamples, gateSamples, pairs, score, type='both') :
     
-    # see what fraction of the matchings we have corrent
+    # see what fraction of the matchings we have correCt
     
-    fractionCorrect = 0
-    fracDifference = 0
+    fractionCorrect = [0]*2
+    fracDifference = [0]*2
     for oneProbs, sameProbs, gates in zip(oneProbSamples, sameProbSamples, gateSamples):
         
         oneProb = oneProbs[score-1]
@@ -931,7 +937,9 @@ def CalculateQuality ( x, oneProbSamples, sameProbSamples, gateSamples, pairs, s
         matchingPairs = list(gate.keys())
         guessedPairs = getDisjointPairs( pairs, oneProb=oneProb, weight={}  )
         correctGuesses = list( set(guessedPairs).intersection( set(matchingPairs) ) )
-        fractionCorrect += len(correctGuesses) / len(matchingPairs)
+        dC = len(correctGuesses) / len(matchingPairs)
+        fractionCorrect[0] += dC # for mean
+        fractionCorrect[1] += ( dC )**2 # for variance
  
         for p in gate.keys():
             
@@ -939,11 +947,18 @@ def CalculateQuality ( x, oneProbSamples, sameProbSamples, gateSamples, pairs, s
             for j in range(2):
                 guessedOneProb += oneProb[ pairs[p][j] ] / 2
             
-            fracDifference += (calculateFrac(guessedOneProb)-gate[p])**2 / len(oneProb)
+            dD = (calculateFrac(guessedOneProb)-gate[p])**2 / len(oneProb)
+            fracDifference[0] += dD # for mean
+            fracDifference[1] += ( dD )**2 # for variance
             
     
-    fractionCorrect = fractionCorrect / len( oneProbSamples )
-    fracDifference = math.sqrt( fracDifference / len( oneProbSamples ) )
+    fractionCorrect[0] = fractionCorrect[0] / len( oneProbSamples )
+    fractionCorrect[1] = fractionCorrect[1] / len( oneProbSamples )
+    fractionCorrect[1] -= fractionCorrect[0]**2
+    
+    fracDifference[0] = fracDifference[0] / len( oneProbSamples )
+    fracDifference[1] = fracDifference[1] / len( oneProbSamples )
+    fracDifference[1] -= fracDifference[0]**2
             
     return fractionCorrect, fracDifference
 
@@ -983,7 +998,7 @@ def CleanData ( x, rawOneProb, sameProb, pairs ):
 def Metropolis ( x, oneProbSamples, sameProbSamples, gateSamples, num, pairs, score, steps_per_num=500, delta=0.01 ):
 
     best_x = copy.deepcopy(x)
-    bestFractionCorrect , bestFracDifference = CalculateQuality ( x, oneProbSamples, sameProbSamples, gateSamples, pairs, score )
+    [bestFractionCorrect,_] , [bestFracDifference,_] = CalculateQuality ( x, oneProbSamples, sameProbSamples, gateSamples, pairs, score )
     bestDiff = 0
         
     if True:
@@ -1001,7 +1016,7 @@ def Metropolis ( x, oneProbSamples, sameProbSamples, gateSamples, num, pairs, sc
 
             x[n] += random_delta
 
-            proposedFractionCorrect , proposedFracDifference = CalculateQuality ( x, oneProbSamples, sameProbSamples, gateSamples, pairs, score )
+            [proposedFractionCorrect,_] , [proposedFracDifference,_] = CalculateQuality ( x, oneProbSamples, sameProbSamples, gateSamples, pairs, score )
             
             diff = fracDifference - proposedFracDifference
             
@@ -1045,7 +1060,7 @@ def CreateCleaningProfile ( device, move, shots, sim ) :
         cleaner.append( Metropolis ( x, oneProbSamples, sameProbSamples, gateSamples, num, pairs, score ) )
      
     filename = 'move=' + move + '_shots=' + str(shots) + '_sim=' + str(sim) + '.txt'
-    saveFile = open('results/' + device + '/cleaner_'+filename, 'a')
+    saveFile = open(path+'/results/' + device + '/cleaner_'+filename, 'a')
     saveFile.write( str(cleaner)+'\n' )
     saveFile.close()
 
@@ -1060,32 +1075,20 @@ def ProcessData ( device, move, shots, sim, cleanup):
     oneProbSamples = resultsLoad ( 'oneProbs', move, shots, sim, device )
     sameProbSamples = resultsLoad ( 'sameProbs', move, shots, sim, device )
     gateSamples = resultsLoad ( 'gates', move, shots, sim, device )
+    
+    # find number of round in samples (assume same for all)
+    maxScore = len(oneProbSamples[0])
+    
     if cleanup:
         try:
             cleaner = resultsLoad( 'cleaner', move, shots, sim, device )[0]
         except:
-            cleaner = []
+            cleaner = [[0.5,0.5,0]*num]*maxScore
     else:
         cleaner = []
     
-    # for each round, get mean of all Es
-    # note, variable names make it sound like we are averaging oneProb, but we aren't: hacky mess :(
-    meanOneProbSamples = []
-    for sample in oneProbSamples:
-        meanOneProbs = []
-        for roundOneProbs in sample:
-            mean = 0
-            for oneProb in roundOneProbs:
-                mean += calculateEntanglement(oneProb)/num
-            meanOneProbs.append( mean )
-        meanOneProbSamples.append( meanOneProbs )
-    
-    
     # find number of samples
     samples = len(oneProbSamples)
-    
-    # find number of round in samples (assume same for all)
-    maxScore = len(oneProbSamples[0])
     
     fuzzAvs = [[0]*2 for _ in range(maxScore)]
     
@@ -1124,17 +1127,19 @@ def PlotGraphSet ( device, sims_to_use ):
     for sim in sims_to_use:
         maxMaxScore = max( maxMaxScore, runs[sim]['maxScore'] )
 
-    for cleanup in [True,False]:
         
-        X = range(1,maxMaxScore+1)
-        Yf = []
-        yf = []
-        Yc = []
-        Yd = []
-        y = []
-        labels = []
+    X = range(1,maxMaxScore+1)
+    Yf = []
+    yf = []
+    Yc = []
+    yc = []
+    Yd = []
+    yd = []
+    labels = []
 
-        for sim in sims_to_use:
+    cleanup_for_sim = {True:[False],False:[False,True]}
+    for sim in sims_to_use:
+        for cleanup in cleanup_for_sim[sim]:
             for move in runs[sim]['move']:
                 for shots in runs[sim]['shots']:
 
@@ -1143,22 +1148,17 @@ def PlotGraphSet ( device, sims_to_use ):
 
                     Yf.append( [fuzzAvs[j][0] for j in range(maxScore) ] + [math.nan]*(maxMaxScore-maxScore) )
                     yf.append( [fuzzAvs[j][1] for j in range(maxScore) ] + [math.nan]*(maxMaxScore-maxScore) )
-                    Yc.append( correctFracs  + [math.nan]*(maxMaxScore-maxScore) )
-                    Yd.append( differenceFracs  + [math.nan]*(maxMaxScore-maxScore) )
-                    y.append( [math.nan]*maxMaxScore )
+                    Yc.append( [correctFracs[j][0] for j in range(maxScore) ] + [math.nan]*(maxMaxScore-maxScore) )
+                    yc.append( [correctFracs[j][1] for j in range(maxScore) ] + [math.nan]*(maxMaxScore-maxScore) )
+                    Yd.append( [differenceFracs[j][0] for j in range(maxScore) ] + [math.nan]*(maxMaxScore-maxScore) )
+                    yd.append( [differenceFracs[j][1] for j in range(maxScore) ] + [math.nan]*(maxMaxScore-maxScore) )
 
 
-                    labels.append( device*(sim==False) + 'simulator'*sim + ' with ' + 'correct'*(move=='C') + 'random'*(move=='R') + ' moves \nshots = ' + str(shots)  )
-
-        
-        if cleanup:
-            print("\nPlots using data with error mitigation\n")
-        else:
-            print("\nPlots using raw data\n")
+                    labels.append( device*(sim==False) + 'simulator'*sim + ' with ' + 'correct'*(move=='C') + 'random'*(move=='R') + ' moves \nshots = ' + str(shots) + ' (mitigated)'*cleanup  )
             
-        MakeGraph(X,Yf,yf,["Game round","Average Fuzz"],labels=labels)
-        MakeGraph(X,Yc,y,["Game round","Average correctness for MWPM"],labels=labels)
-        MakeGraph(X,Yd,y,["Game round","Average difference from correct values"],labels=labels)
+    MakeGraph(X,Yf,yf,["Game round","Average Fuzz"],labels=labels)
+    MakeGraph(X,Yc,yc,["Game round","Average correctness for MWPM"],labels=labels)
+    MakeGraph(X,Yd,yd,["Game round","Average difference from correct values"],labels=labels)
 
 def PlayGame():
     
