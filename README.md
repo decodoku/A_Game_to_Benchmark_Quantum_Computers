@@ -5,7 +5,7 @@
 
 This game is designed to run on any and all prototype devices capable of universal quantum computation. The better the device, the better the game will run. This therefore allows a simple and accessible way to assess and compare these prototypes.
 
-![alt text](https://github.com/decodoku/A_Game_to_Benchmark_Quantum_Computers/blob/master/example_ibmqx5.png)
+![''](images/example_ibmqx5.png)
 
 The game consists of a series of rounds. Each has a puzzle like the one above, and each is a bit harder than the last.
 
@@ -17,7 +17,7 @@ For more on the gritty details, see [here](https://medium.com/@decodoku/understa
 
 The easiest way to play is to use the browser version [here](https://mybinder.org/v2/gh/decodoku/A_Game_to_Benchmark_Quantum_Computers/master?filepath=Play_Quantum_Awesomeness.ipynb) (though it might take a few attempts before it actually loads). Just press the run button, as highlighted in red in the image below.
 
-![alt text](example.png)
+![''](images/example.png)
 
 This version either simulates a game on the chosen device, or creates one using data that has already been extracted from the real quantum computer.
 
