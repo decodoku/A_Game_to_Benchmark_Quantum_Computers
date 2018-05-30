@@ -23,11 +23,14 @@ def importSDK ( device ):
         from qiskit import ClassicalRegister, QuantumRegister
         from qiskit import QuantumCircuit, execute
         from qiskit import register, available_backends, get_backend
-        import Qconfig
-        qx_config = {
-            "APItoken": Qconfig.APItoken,
-            "url": Qconfig.config['url']}
-        register(qx_config['APItoken'], qx_config['url'])
+        try:
+            import Qconfig
+            qx_config = {
+                "APItoken": Qconfig.APItoken,
+                "url": Qconfig.config['url']}
+            register(qx_config['APItoken'], qx_config['url'])
+        except:
+            pass
     elif sdk=="ProjectQ":
         global projectq, H, Measure, CNOT, C, Z, Rx, Ry
         import projectq
@@ -170,7 +173,7 @@ def implementGate (device, gate, qubit, script, frac = 0 ):
 def resultsLoad ( fileType, move, shots, sim, device ) :
     
     filename = 'move='+move+'_shots=' + str(shots) + '_sim=' + str(sim) + '.txt'
-    saveFile = open('results_' + device + '/'+fileType+'_'+filename)
+    saveFile = open('results/' + device + '/'+fileType+'_'+filename)
     sampleStrings = saveFile.readlines()
     saveFile.close()
     
@@ -881,29 +884,29 @@ def GetData ( device, move, shots, sim, samples, maxScore ):
         gates, conjugates, oneProbs, sameProbs, resultsDicts = runGame( device, move, shots, sim, maxScore )
 
         # make a directory for this device if it doesn't already exist
-        if not os.path.exists('results_' + device):
-            os.makedirs('results_' + device)
+        if not os.path.exists('results/' + device):
+            os.makedirs('results/' + device)
 
         filename = 'move=' + move + '_shots=' + str(shots) + '_sim=' + str(sim) + '.txt'
 
-        saveFile = open('results_' + device + '/oneProbs_'+filename, 'a')
+        saveFile = open('results/' + device + '/oneProbs_'+filename, 'a')
         saveFile.write( str(oneProbs)+'\n' )
         saveFile.close()
         
-        saveFile = open('results_' + device + '/sameProbs_'+filename, 'a')
+        saveFile = open('results/' + device + '/sameProbs_'+filename, 'a')
         saveFile.write( str(sameProbs)+'\n' )
         saveFile.close()
 
-        saveFile = open('results_' + device + '/gates_'+filename, 'a')
+        saveFile = open('results/' + device + '/gates_'+filename, 'a')
         saveFile.write( str(gates)+'\n' )
         saveFile.close()
 
-        saveFile = open('results_' + device + '/conjugates_'+filename, 'a')
+        saveFile = open('results/' + device + '/conjugates_'+filename, 'a')
         saveFile.write( str(conjugates)+'\n' )
         saveFile.close()
         
         if sim==False:
-            saveFile = open('results_' + device + '/results_'+filename, 'a')
+            saveFile = open('results/' + device + '/results/'+filename, 'a')
             saveFile.write( str(resultsDicts)+'\n' )
             saveFile.close()
         
@@ -1042,7 +1045,7 @@ def CreateCleaningProfile ( device, move, shots, sim ) :
         cleaner.append( Metropolis ( x, oneProbSamples, sameProbSamples, gateSamples, num, pairs, score ) )
      
     filename = 'move=' + move + '_shots=' + str(shots) + '_sim=' + str(sim) + '.txt'
-    saveFile = open('results_' + device + '/cleaner_'+filename, 'a')
+    saveFile = open('results/' + device + '/cleaner_'+filename, 'a')
     saveFile.write( str(cleaner)+'\n' )
     saveFile.close()
 
