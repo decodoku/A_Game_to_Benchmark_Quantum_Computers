@@ -912,7 +912,7 @@ def GetData ( device, move, shots, sim, samples, maxScore ):
         saveFile.close()
         
         if sim==False:
-            saveFile = open(path+'/results/' + device + '/results/'+filename, 'a')
+            saveFile = open(path+'/results/' + device + '/results_'+filename, 'a')
             saveFile.write( str(resultsDicts)+'\n' )
             saveFile.close()
         
@@ -947,7 +947,7 @@ def CalculateQuality ( x, oneProbSamples, sameProbSamples, gateSamples, pairs, s
             for j in range(2):
                 guessedOneProb += oneProb[ pairs[p][j] ] / 2
             
-            dD = (calculateFrac(guessedOneProb)-gate[p])**2 / len(oneProb)
+            dD = abs(calculateFrac(guessedOneProb)-gate[p]) / len(oneProb)
             fracDifference[0] += dD # for mean
             fracDifference[1] += ( dD )**2 # for variance
             
