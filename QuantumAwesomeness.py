@@ -830,9 +830,23 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
 
 
 
-def MakeGraph(X,Y,y,axisLabel,labels=[],verbose=False,log=False):
+def MakeGraph(X,Y,y,axisLabel,labels=[],legendPos='upper right',verbose=False,log=False,tall=False):
     
+    from matplotlib import pyplot as plt
     plt.rcParams.update({'font.size': 30})
+    
+    markers = ["o","^","h","D","*"]
+    
+    # if verbose, print the numbers to screen
+    if verbose==True:
+        print("\nX values")
+        print(X)
+        for j in range(len(Y)):
+            print("\nY values for "+labels[j])
+            print(Y[j])
+            print("\nError bars")
+            print(y[j])
+            print("")
     
     # convert the variances of varY into widths of error bars
     for j in range(len(y)):
@@ -841,25 +855,31 @@ def MakeGraph(X,Y,y,axisLabel,labels=[],verbose=False,log=False):
                 y[j][k] = math.sqrt(y[j][k]/2)
             else:
                 y[j][k] = 0
+            
+    if tall:
+        plt.figure(figsize=(20,20))
+    else:
+        plt.figure(figsize=(20,10))
     
-    plt.figure(figsize=(20,10))
     
     # add in the series
     for j in range(len(Y)):
+        marker = markers[j%len(markers)]
         if labels==[]:
-            plt.errorbar(X, Y[j], marker = "x", markersize=20, yerr = y[j], linewidth=5)
+            plt.errorbar(X, Y[j], marker = marker, markersize=20, yerr = y[j], linewidth=5)
         else:
-            plt.errorbar(X, Y[j], label=labels[j], marker = "x", markersize=20, yerr = y[j], linewidth=5)
-    
-    plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+            plt.errorbar(X, Y[j], label=labels[j], marker = marker, markersize=20, yerr = y[j], linewidth=5)
+            plt.legend(loc=legendPos)
+
     
     # label the axes
     plt.xlabel(axisLabel[0])
     plt.ylabel(axisLabel[1])
-        
+    
     # make sure X axis is fully labelled
     plt.xticks(X)
-
+    
+    
     # logarithms if required
     if log==True:
         plt.yscale('log')
@@ -868,17 +888,6 @@ def MakeGraph(X,Y,y,axisLabel,labels=[],verbose=False,log=False):
     plt.show()
     
     plt.rcParams.update(plt.rcParamsDefault)
-    
-    # if verbose, print the numbers to screen
-    if verbose==True:
-        print("\nX values")
-        print(X)
-        for j in range(len(Y)):
-            print("\nY values for series "+str(j))
-            print(Y[j])
-            print("\nError bars")
-            print(y[j])
-            print("")
 
 
 def GetData ( device, move, shots, sim, samples, maxScore ):
@@ -917,12 +926,14 @@ def GetData ( device, move, shots, sim, samples, maxScore ):
             saveFile.close()
         
         
-def CalculateQuality ( x, oneProbSamples, sameProbSamples, gateSamples, pairs, score, type='both') :
+def CalculateQuality ( x, oneProbSamples, sameProbSamples, gateSamples, pairs, score ) :
+    
+    #print("\n\n")
     
     # see what fraction of the matchings we have correCt
     
-    fractionCorrect = [0]*2
-    fracDifference = [0]*2
+    fractionCorrect = [0 for _ in range(2)]
+    fracDifference = [0 for _ in range(2)]
     for oneProbs, sameProbs, gates in zip(oneProbSamples, sameProbSamples, gateSamples):
         
         oneProb = oneProbs[score-1]
@@ -941,24 +952,33 @@ def CalculateQuality ( x, oneProbSamples, sameProbSamples, gateSamples, pairs, s
         fractionCorrect[0] += dC # for mean
         fractionCorrect[1] += ( dC )**2 # for variance
  
+        dD = 0
         for p in gate.keys():
             
             guessedOneProb = 0
             for j in range(2):
-                guessedOneProb += oneProb[ pairs[p][j] ] / 2
+                guessedOneProb += oneProb[ pairs[p][j] ]/2
             
-            dD = abs(calculateFrac(guessedOneProb)-gate[p]) / len(oneProb)
-            fracDifference[0] += dD # for mean
-            fracDifference[1] += ( dD )**2 # for variance
+            dD += abs( calculateFrac(guessedOneProb)-gate[p] ) / len(gate)
+        
+        #print(dD)
+        
+        fracDifference[0] += dD # for mean
+        fracDifference[1] += ( dD )**2 # for variance
             
+    sample_num = len( oneProbSamples )
     
-    fractionCorrect[0] = fractionCorrect[0] / len( oneProbSamples )
-    fractionCorrect[1] = fractionCorrect[1] / len( oneProbSamples )
+    fractionCorrect[0] = fractionCorrect[0] / sample_num
+    fractionCorrect[1] = fractionCorrect[1] / sample_num
     fractionCorrect[1] -= fractionCorrect[0]**2
     
-    fracDifference[0] = fracDifference[0] / len( oneProbSamples )
-    fracDifference[1] = fracDifference[1] / len( oneProbSamples )
+    #print(fracDifference[0]**2,fracDifference[1])
+    
+    fracDifference[0] = fracDifference[0] / sample_num
+    fracDifference[1] = fracDifference[1] / sample_num
     fracDifference[1] -= fracDifference[0]**2
+    
+    #print(fracDifference[0]**2,fracDifference[1])
             
     return fractionCorrect, fracDifference
 
@@ -1103,9 +1123,7 @@ def ProcessData ( device, move, shots, sim, cleanup):
             fuzzAvs[score][1] += fuzz**2/samples
     for fuzzAv in fuzzAvs:
         fuzzAv[1] -= fuzzAv[0]**2
-        
-    # note: from here on, score means something that starts at 0, rather than starting at 1 as it does elsewhere
-        
+                
     correctFracs = []
     differenceFracs = []
     for score in range(1,maxScore+1):
@@ -1119,15 +1137,19 @@ def ProcessData ( device, move, shots, sim, cleanup):
 
     return fuzzAvs, correctFracs, differenceFracs
 
-def PlotGraphSet ( device, sims_to_use ):
+def PlotGraphSet ( devices, sims_to_use ):
     
-    num, area, entangleType, pairs, pos, example, sdk, runs = getLayout(device)
+    # what follows assumes that 'devices' is a list, so ensure this is true
+    if type(devices) is not list:
+        devices = [devices]
+    
+    # we'll set up the x axis according to the first listed device
+    num, area, entangleType, pairs, pos, example, sdk, runs = getLayout(devices[0])
 
     maxMaxScore = 0
     for sim in sims_to_use:
         maxMaxScore = max( maxMaxScore, runs[sim]['maxScore'] )
-
-        
+    
     X = range(1,maxMaxScore+1)
     Yf = []
     yf = []
@@ -1136,25 +1158,28 @@ def PlotGraphSet ( device, sims_to_use ):
     Yd = []
     yd = []
     labels = []
-
+    
     cleanup_for_sim = {True:[False],False:[False,True]}
-    for sim in sims_to_use:
-        for cleanup in cleanup_for_sim[sim]:
-            for move in runs[sim]['move']:
-                for shots in runs[sim]['shots']:
 
-                    maxScore = runs[sim]['maxScore']
-                    fuzzAvs, correctFracs, differenceFracs = ProcessData( device, move, shots, sim, cleanup )
+    for device in devices:
+        num, area, entangleType, pairs, pos, example, sdk, runs = getLayout(devices[0])
+        for sim in sims_to_use:
+            for cleanup in cleanup_for_sim[sim]:
+                for move in runs[sim]['move']:
+                    for shots in runs[sim]['shots']:
 
-                    Yf.append( [fuzzAvs[j][0] for j in range(maxScore) ] + [math.nan]*(maxMaxScore-maxScore) )
-                    yf.append( [fuzzAvs[j][1] for j in range(maxScore) ] + [math.nan]*(maxMaxScore-maxScore) )
-                    Yc.append( [correctFracs[j][0] for j in range(maxScore) ] + [math.nan]*(maxMaxScore-maxScore) )
-                    yc.append( [correctFracs[j][1] for j in range(maxScore) ] + [math.nan]*(maxMaxScore-maxScore) )
-                    Yd.append( [differenceFracs[j][0] for j in range(maxScore) ] + [math.nan]*(maxMaxScore-maxScore) )
-                    yd.append( [differenceFracs[j][1] for j in range(maxScore) ] + [math.nan]*(maxMaxScore-maxScore) )
+                        maxScore = runs[sim]['maxScore']
+                        fuzzAvs, correctFracs, differenceFracs = ProcessData( device, move, shots, sim, cleanup )
+
+                        Yf.append( [fuzzAvs[j][0] for j in range(maxScore) ] + [math.nan]*(maxMaxScore-maxScore) )
+                        yf.append( [fuzzAvs[j][1] for j in range(maxScore) ] + [math.nan]*(maxMaxScore-maxScore) )
+                        Yc.append( [correctFracs[j][0] for j in range(maxScore) ] + [math.nan]*(maxMaxScore-maxScore) )
+                        yc.append( [correctFracs[j][1] for j in range(maxScore) ] + [math.nan]*(maxMaxScore-maxScore) )
+                        Yd.append( [differenceFracs[j][0] for j in range(maxScore) ] + [math.nan]*(maxMaxScore-maxScore) )
+                        yd.append( [differenceFracs[j][1] for j in range(maxScore) ] + [math.nan]*(maxMaxScore-maxScore) )
 
 
-                    labels.append( device*(sim==False) + 'simulator'*sim + ' with ' + 'correct'*(move=='C') + 'random'*(move=='R') + ' moves \nshots = ' + str(shots) + ' (mitigated)'*cleanup  )
+                        labels.append( device*(sim==False) + 'simulator'*sim + ' with ' + 'correct'*(move=='C') + 'random'*(move=='R') + ' moves \nshots = ' + str(shots) + ' (mitigated)'*cleanup  )
             
     MakeGraph(X,Yf,yf,["Game round","Average Fuzz"],labels=labels)
     MakeGraph(X,Yc,yc,["Game round","Average correctness for MWPM"],labels=labels)
