@@ -4,7 +4,7 @@ def supportedDevices ():
 
 	# Returns the list of all supported devices
 
-	return ["ibmqx5","19Q-Acorn"]
+	return ["ibmqx4","ibmqx5","19Q-Acorn"]
 
 def getLayout (device):
 
@@ -98,7 +98,7 @@ def getLayout (device):
         num = 5
         area = [3,3]
         entangleType = "CX"
-        pairs = { 'A': [1,0], 'B': [2,0], 'C': [2,1], 'D': [2,4], 'E': [3,2], 'F': [3,4] }
+        pairs = { 'A': [1,0], 'B': [2,0], 'C': [2,1], 'D': [4,2], 'E': [3,2], 'F': [3,4] }
         pos = { 0: [1,1], 1: [1,0],  2: [0.5,0.5],  3: [0,0],  4: [0,1] }
         example = [0.11,0.09,0.49,0.52,0.31]
         sdk = "QISKit"
@@ -281,7 +281,7 @@ def getLayout (device):
     
     else:
         
-        print("\nWarning: This is not a known device.\n")
+        print("\nWarning: " + str(device) + " is not a known device.\n")
     
     
     return num, area, entangleType, pairs, pos, example, sdk, runs
