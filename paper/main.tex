@@ -10,6 +10,8 @@
 \usepackage{mathtools}
 \DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
 
+\usepackage{subcaption} 
+
 \newcommand{\be}{\begin{equation}}
 \newcommand{\ee}{\end{equation}}
 \newcommand{\bq}{\begin{eqnarray}}
@@ -162,24 +164,20 @@ For cases in which two qubits are each most correlated with the other (i.e. $c(j
 
 \subsection{Example devices}
 
+
+
 \subsection{5 and 16 qubit IBM devices}
 
 \subsection{19 qubit Rigetti device}
 
-%I\subsection{11 qubit Alibaba device}
+%\subsection{11 qubit Alibaba device}
 
 
 
 \section{Conclusions}
 
 
-%\begin{figure}[t]
-%\begin{center}
-%{\includegraphics[width=\columnwidth]{device.png}}
-%\caption{\label{device} The layout of the \emph{ibmqx3} device, with the numbering of qubits used in this study. Lines connect pairs of qubits for which a CNOT can be performed. Thick black lines are show for the CNOTs used in our implementation of the repetition code.
-%}
-%\end{center}
-%\end{figure}
+
 
 
 
@@ -192,6 +190,61 @@ Results for this work were generated using hardware from IBM Q and Rigetti, and 
 
 
 \bibliography{refs}
+
+\appendix
+
+\section{Figures for results}
+
+\begin{figure*}
+    \centering
+    \begin{subfigure}[b]{\textwidth}
+        \includegraphics[width=0.9\textwidth]{figures/line_fuzz.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{\textwidth}
+        \includegraphics[width=0.9\textwidth]{figures/ladder_fuzz.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{\textwidth}
+        \includegraphics[width=0.9\textwidth]{figures/square_fuzz.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{\textwidth}
+        \includegraphics[width=0.9\textwidth]{figures/web_fuzz.png}
+    \end{subfigure}
+    \caption{The average fuzz for all example devices. Each point is the average of 100 samples, with error bars given by the standard deviation.}\label{fig:example_fuzz}
+\end{figure*}
+
+\begin{figure*}
+    \centering
+    \begin{subfigure}[b]{\textwidth}
+        \includegraphics[width=0.9\textwidth]{figures/line_mwpm.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{\textwidth}
+        \includegraphics[width=0.9\textwidth]{figures/ladder_mwpm.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{\textwidth}
+        \includegraphics[width=0.9\textwidth]{figures/square_mwpm.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{\textwidth}
+        \includegraphics[width=0.9\textwidth]{figures/web_mwpm.png}
+    \end{subfigure}
+    \caption{The average correctness of pairing via minimum weight perfect matching for all example devices. Each point is the average of 100 samples, with error bars given by the standard deviation.}\label{fig:example_mwpm}
+\end{figure*}
+
+\begin{figure*}
+    \centering
+    \begin{subfigure}[b]{\textwidth}
+        \includegraphics[width=0.9\textwidth]{figures/line_diff.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{\textwidth}
+        \includegraphics[width=0.9\textwidth]{figures/ladder_diff.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{\textwidth}
+        \includegraphics[width=0.9\textwidth]{figures/square_diff.png}
+    \end{subfigure}
+    \begin{subfigure}[b]{\textwidth}
+        \includegraphics[width=0.9\textwidth]{figures/web_diff.png}
+    \end{subfigure}
+    \caption{The average difference between inferred and correct values for the $\theta_{jk}$ for all example devices. Each point is the average of 100 samples, with error bars given by the standard deviation.}\label{fig:example_fuzz}
+\end{figure*}
 
 
 \end{document}
