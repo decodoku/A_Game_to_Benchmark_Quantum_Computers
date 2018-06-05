@@ -730,7 +730,7 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
                     printPuzzle( device, rawOneProb, move )
                     printM("\nCleaned puzzle", move)
                 printPuzzle( device, displayedOneProb, move )                
-                
+
                 pairGuess = input("\nChoose a pair  (or type 'done' to skip to the next round, or 'restart' for a new game)\n")
                 if num<=26 : # if there are few enough qubits, we don't need to be case sensitive
                     pairGuess = str.upper(pairGuess)
@@ -830,7 +830,7 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
 
 
 
-def MakeGraph(X,Y,y,axisLabel,labels=[],legendPos='upper right',verbose=False,log=False,tall=False):
+def MakeGraph(X,Y,y,axisLabel,labels=[],verbose=False,log=False,tall=False):
     
     from matplotlib import pyplot as plt
     plt.rcParams.update({'font.size': 30})
@@ -869,7 +869,7 @@ def MakeGraph(X,Y,y,axisLabel,labels=[],legendPos='upper right',verbose=False,lo
             plt.errorbar(X, Y[j], marker = marker, markersize=20, yerr = y[j], linewidth=5)
         else:
             plt.errorbar(X, Y[j], label=labels[j], marker = marker, markersize=20, yerr = y[j], linewidth=5)
-            plt.legend(loc=legendPos)
+            plt.legend(loc="upper left", bbox_to_anchor=(1,1))
 
     
     # label the axes
@@ -1090,8 +1090,7 @@ def ProcessData ( device, move, shots, sim, cleanup):
     num, area, entangleType, pairs, pos, example, sdk, runs = getLayout(device)
     
     filename = 'move=' + move + '_shots=' + str(shots) + '_sim=' + str(sim) + '.txt'
-    
-    
+        
     oneProbSamples = resultsLoad ( 'oneProbs', move, shots, sim, device )
     sameProbSamples = resultsLoad ( 'sameProbs', move, shots, sim, device )
     gateSamples = resultsLoad ( 'gates', move, shots, sim, device )
@@ -1162,7 +1161,9 @@ def PlotGraphSet ( devices, sims_to_use ):
     cleanup_for_sim = {True:[False],False:[False,True]}
 
     for device in devices:
-        num, area, entangleType, pairs, pos, example, sdk, runs = getLayout(devices[0])
+        
+        num, area, entangleType, pairs, pos, example, sdk, runs = getLayout(device)
+
         for sim in sims_to_use:
             for cleanup in cleanup_for_sim[sim]:
                 for move in runs[sim]['move']:
@@ -1179,7 +1180,7 @@ def PlotGraphSet ( devices, sims_to_use ):
                         yd.append( [differenceFracs[j][1] for j in range(maxScore) ] + [math.nan]*(maxMaxScore-maxScore) )
 
 
-                        labels.append( device*(sim==False) + 'simulator'*sim + ' with ' + 'correct'*(move=='C') + 'random'*(move=='R') + ' moves \nshots = ' + str(shots) + ' (mitigated)'*cleanup  )
+                        labels.append( device*(sim==False) + ('simulated '+str(device))*sim + ', ' + 'correct'*(move=='C') + 'random'*(move=='R') + ' pairing,\nshots = ' + str(shots) + ' (mitigated)'*cleanup  )
             
     MakeGraph(X,Yf,yf,["Game round","Average Fuzz"],labels=labels)
     MakeGraph(X,Yc,yc,["Game round","Average correctness for MWPM"],labels=labels)
@@ -1262,7 +1263,7 @@ def PlayGame():
     shots = min( runs[sim]['shots'] )
 
     try:
-        runGame ( device, 'M', shots, sim, 0, dataNeeded=False )
+        runGame ( device, 'M', shots, sim, None, dataNeeded=False )
     except:
         input("> Something went wrong. This probably means there is no saved data to play the game you requested.\n> Try choosing a different device...\n")
 
