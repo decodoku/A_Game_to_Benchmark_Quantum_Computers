@@ -110,18 +110,18 @@ def implementGate (device, gate, qubit, script, frac = 0 ):
     
     if sdk in ["QISKit","ManualQISKit"]:
         if gate=='X':
-            script.u3(frac * math.pi, -math.pi/2,math.pi/2, qubit )
+            script.u3(frac * math.pi, -math.pi/2, math.pi/2, qubit )
         elif gate=='Y': # a Y axis rotation
             script.u3(frac * math.pi, 0,0, qubit )
         elif gate=='XX':
             if entangleType=='CX':
                 script.cx( qubit[0], qubit[1] )
-                script.u3(frac * math.pi, -math.pi/2,math.pi/2, qubit[0] )
+                script.u3(frac * math.pi, -math.pi/2, math.pi/2, qubit[0] )
                 script.cx( qubit[0], qubit[1] )
             elif entangleType=='CZ':
                 script.h( qubit[1] )
                 script.cz( qubit[0], qubit[1] )
-                script.u3(frac * math.pi, -math.pi/2,math.pi/2, qubit[0] )
+                script.u3(frac * math.pi, -math.pi/2, math.pi/2, qubit[0] )
                 script.cz( qubit[0], qubit[1] )
                 script.h( qubit[1] )
             else:
@@ -676,7 +676,7 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
             # then we add gates these to the list of gates
             appliedGates = {}
             for p in matchingPairs:
-                frac = ( 0.1+0.9*random.random() ) / 2 # this will correspond to a 0.05*pi \leq frac*pi \leq pi/2 rotation 
+                frac = ( 0.1+0.9*random.random() ) / 2 # this will correspond to a e^(i theta \sigma_x) rotation with pi/20 \leq frac * pi/2 \leq pi/4
                 appliedGates[p] = frac
             gates.append(appliedGates)
           
