@@ -1263,7 +1263,7 @@ def PlayGame():
     shots = min( runs[sim]['shots'] )
 
     try:
-        runGame ( device, 'M', shots, sim, None, dataNeeded=False )
+        runGame ( device, 'M', shots, sim, None, clean=True, dataNeeded=False )
     except:
         input("> Something went wrong. This probably means there is no saved data to play the game you requested.\n> Try choosing a different device...\n")
 
