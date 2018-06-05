@@ -1,0 +1,766 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.3.31)  5 JUN 2018 17:25
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**paper.tex
+(./paper.tex
+LaTeX2e <2015/01/01>
+Babel <3.9l> and hyphenation patterns for 79 languages loaded.
+(/usr/local/texlive/2015/texmf-dist/tex/latex/revtex/revtex4-1.cls
+Document Class: revtex4-1 2010/07/25/20:33:00 4.1r (http://publish.aps.org/revt
+ex4/ for documentation)
+ Copyright (c) 2009 The American Physical Society.
+ mailto:revtex@aps.org
+ Licensed under the LPPL:
+http://www.ctan.org/tex-archive/macros/latex/base/lppl.txt
+ Arthur Ogawa <arthur_ogawa at sbcglobal dot net>
+ Based on work by David Carlisle <david at dcarlisle.demon.co.uk>.
+ltxutil[2010/07/25/20:33:00 4.1r utilities package (portions licensed from W. E
+. Baxter web at superscript.com)]
+LaTeX Info: Redefining \@centercr on input line 308.
+Class revtex4-1 Info: Repairing broken LaTeX eqnarray on input line 358.
+\eqncolsep=\skip41
+Class revtex4-1 Info: Repairing hyperref-unfriendly LaTeX definition of \mpfoot
+note on input line 433.
+Class revtex4-1 Info: Repairing broken LateX \@sect on input line 755.
+\intertabularlinepenalty=\count79
+\@tbpen=\count80
+\@arstrutbox@hline=\box26
+Class revtex4-1 Info: Repairing broken LaTeX \@xbitor on input line 1786.
+Class revtex4-1 Info: Making \typeout \long on input line 2046.
+ltxfront[2010/07/25/20:33:00 4.1r frontmatter package (AO,DPC)]
+\c@affil=\count81
+\c@collab=\count82
+\absbox=\box27
+ltxgrid[2010/07/25/20:33:00 4.1r page grid package (portions licensed from W. E
+. Baxter web at superscript.com)]
+\c@linecount=\count83
+\output@latex=\toks14
+\box@size@1=\box28
+\box@size@2=\box29
+\@protection@box=\box30
+\@topmark@saved=\toks15
+\footins@saved=\box31
+\footins@recovered=\box32
+\column@recovered=\box33
+\pagesofar=\box34
+\footsofar=\box35
+\pagegrid@col=\count84
+Class revtex4-1 Info: Overriding \@vspace, \@vspacer, \@no@pgbk, \@newline, and
+ \\  on input line 5578.
+\c@part=\count85
+\c@section=\count86
+\c@subsection=\count87
+\c@subsubsection=\count88
+\c@paragraph=\count89
+\c@subparagraph=\count90
+\abovecaptionskip=\skip42
+\belowcaptionskip=\skip43
+\c@figure=\count91
+\fbox@1=\box36
+\c@table=\count92
+\fbox@2=\box37
+\c@video=\count93
+\fbox@4=\box38
+\@bibdataout=\write3
+\widetext@top=\box39
+\widetext@bot=\box40
+Class revtex4-1 Info: Selecting society aps on input line 7542.
+(/usr/local/texlive/2015/texmf-dist/tex/latex/revtex/aps4-1.rtx
+File: aps4-1 2010/07/25/20:33:00 4.1r (http://publish.aps.org/revtex4/ for docu
+mentation)
+Class revtex4-1 Info: RevTeX society APS selected on input line 31.
+)
+Class revtex4-1 Info: Selecting journal prl on input line 7544.
+Class revtex4-1 Info: APS journal PRL selected on input line 7545.
+
+
+Class revtex4-1 Warning: No type size specified, using default 10.
+
+(/usr/local/texlive/2015/texmf-dist/tex/latex/revtex/aps10pt4-1.rtx
+File: aps10pt4-1 2010/07/25/20:33:00 4.1r (http://publish.aps.org/revtex4/ for 
+documentation)
+Class revtex4-1 Info: RevTeX pointsize 10pt selected on input line 30.
+)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/textcase/textcase.sty
+Package: textcase 2004/10/07 v0.07 Text only upper/lower case changing (DPC)
+)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/url/url.sty
+\Urlmuskip=\muskip10
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/natbib/natbib.sty
+Package: natbib 2010/09/13 8.31b (PWD, AO)
+\bibhang=\skip44
+\bibsep=\skip45
+LaTeX Info: Redefining \cite on input line 694.
+\c@NAT@ctr=\count94
+)
+Class revtex4-1 Info: Repairing natbib's \BibitemShut on input line 7549.
+
+(/usr/local/texlive/2015/texmf-dist/tex/latex/revtex/revsymb4-1.sty
+Package: revsymb4-1 2010/07/25/20:33:00 4.1r (http://publish.aps.org/revtex4/ f
+or documentation)
+LaTeX Info: Redefining \REV@mathfrak on input line 119.
+))
+(/usr/local/texlive/2015/texmf-dist/tex/latex/psfrag/psfrag.sty
+Package: psfrag 1998/04/11 v3.04 PSfrag (MCG)
+
+(/usr/local/texlive/2015/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2014/10/28 v1.0p Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/local/texlive/2015/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/latexconfig/graphics.cfg
+File: graphics.cfg 2010/04/23 v1.9 graphics configuration of TeX Live
+)
+Package graphics Info: Driver file: pdftex.def on input line 94.
+
+(/usr/local/texlive/2015/texmf-dist/tex/latex/pdftex-def/pdftex.def
+File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
+
+(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/infwarerr.sty
+Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
+)
+(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
+Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
+)
+\Gread@gobject=\count95
+))
+\pfg@pcount=\count96
+\pfg@scount=\count97
+\pfg@temp=\write4
+)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2014/10/28 v1.0g Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/local/texlive/2015/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks16
+)
+\Gin@req@height=\dimen102
+\Gin@req@width=\dimen103
+)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/tools/dcolumn.sty
+Package: dcolumn 2014/10/28 v1.06 decimal alignment package (DPC)
+
+(/usr/local/texlive/2015/texmf-dist/tex/latex/tools/array.sty
+Package: array 2014/10/28 v2.4c Tabular extension package (FMi)
+\col@sep=\dimen104
+\extrarowheight=\dimen105
+\NC@list=\toks17
+\extratabsurround=\skip46
+\backup@length=\skip47
+))
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2013/01/14 v2.14 AMS math features
+\@mathmargin=\skip48
+
+For additional information on amsmath, use the `?' option.
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amstext.sty
+Package: amstext 2000/06/29 v2.01
+
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0
+\@emptytoks=\toks18
+\ex@=\dimen106
+)
+LaTeX Info: Redefining \text on input line 39.
+)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d
+\pmbraise@=\dimen107
+)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsopn.sty
+Package: amsopn 1999/12/14 v2.01 operator names
+)
+\inf@bad=\count98
+LaTeX Info: Redefining \frac on input line 210.
+\uproot@=\count99
+\leftroot@=\count100
+LaTeX Info: Redefining \overline on input line 306.
+\classnum@=\count101
+\DOTSCASE@=\count102
+LaTeX Info: Redefining \ldots on input line 378.
+LaTeX Info: Redefining \dots on input line 381.
+LaTeX Info: Redefining \cdots on input line 466.
+\Mathstrutbox@=\box41
+\strutbox@=\box42
+\big@size=\dimen108
+LaTeX Font Info:    Redeclaring font encoding OML on input line 566.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 567.
+\macc@depth=\count103
+\c@MaxMatrixCols=\count104
+\dotsspace@=\muskip11
+\c@parentequation=\count105
+\dspbrk@lvl=\count106
+\tag@help=\toks19
+\row@=\count107
+\column@=\count108
+\maxfields@=\count109
+\andhelp@=\toks20
+\eqnshift@=\dimen109
+\alignsep@=\dimen110
+\tagshift@=\dimen111
+\tagwidth@=\dimen112
+\totwidth@=\dimen113
+\lineht@=\dimen114
+\@envbody=\toks21
+\multlinegap=\skip49
+\multlinetaggap=\skip50
+\mathdisplay@stack=\toks22
+LaTeX Info: Redefining \[ on input line 2665.
+LaTeX Info: Redefining \] on input line 2666.
+)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/amssymb.sty
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+LaTeX Info: Redefining \frak on input line 111.
+LaTeX Info: Redefining \Bbb on input line 113.
+))
+(/usr/local/texlive/2015/texmf-dist/tex/latex/tools/bm.sty
+Package: bm 2014/10/28 v1.1c Bold Symbol Support (DPC/FMi)
+\symboldoperators=\mathgroup6
+\symboldletters=\mathgroup7
+\symboldsymbols=\mathgroup8
+LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 141.
+LaTeX Info: Redefining \bm on input line 207.
+)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/epstopdf.sty
+Package: epstopdf 2010/02/09 v2.5 Conversion with epstopdf on the fly (HO)
+
+(/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
+
+(/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/grfext.sty
+Package: grfext 2010/08/19 v1.1 Manage graphics extensions (HO)
+
+(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty
+Package: kvdefinekeys 2011/04/07 v1.3 Define keys (HO)
+))
+(/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+Package: kvoptions 2011/06/30 v3.11 Key value format for package options (HO)
+
+(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
+Package: kvsetkeys 2012/04/25 v1.16 Key value parser (HO)
+
+(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/etexcmds.sty
+Package: etexcmds 2011/02/16 v1.5 Avoid name clashes with e-TeX commands (HO)
+
+(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/ifluatex.sty
+Package: ifluatex 2010/03/01 v1.3 Provides the ifluatex switch (HO)
+Package ifluatex Info: LuaTeX not detected.
+)
+Package etexcmds Info: Could not find \expanded.
+(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
+(etexcmds)             that some package has redefined \expanded.
+(etexcmds)             In the latter case, load this package earlier.
+)))
+(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
+Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
+)
+
+(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/ifpdf.sty
+Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
+Package ifpdf Info: pdfTeX in PDF mode is detected.
+)
+Package pdftexcmds Info: LuaTeX not detected.
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+)
+Package grfext Info: Graphics extension search list:
+(grfext)             [.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPE
+G,.JBIG2,.JB2,.eps]
+(grfext)             \AppendGraphicsExtensions on input line 452.
+
+(/usr/local/texlive/2015/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
+)))
+(/usr/local/texlive/2015/texmf-dist/tex/latex/mathtools/mathtools.sty
+Package: mathtools 2015/05/11 v1.16 mathematical typesetting tools
+
+(/usr/local/texlive/2015/texmf-dist/tex/latex/tools/calc.sty
+Package: calc 2014/10/28 v4.3 Infix arithmetic (KKT,FJ)
+\calc@Acount=\count110
+\calc@Bcount=\count111
+\calc@Adimen=\dimen115
+\calc@Bdimen=\dimen116
+\calc@Askip=\skip51
+\calc@Bskip=\skip52
+LaTeX Info: Redefining \setlength on input line 80.
+LaTeX Info: Redefining \addtolength on input line 81.
+\calc@Ccount=\count112
+\calc@Cskip=\skip53
+)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/mathtools/mhsetup.sty
+Package: mhsetup 2010/01/21 v1.2a programming setup (MH)
+)
+LaTeX Info: Thecontrolsequence`\('isalreadyrobust on input line 129.
+LaTeX Info: Thecontrolsequence`\)'isalreadyrobust on input line 129.
+LaTeX Info: Thecontrolsequence`\['isalreadyrobust on input line 129.
+LaTeX Info: Thecontrolsequence`\]'isalreadyrobust on input line 129.
+\g_MT_multlinerow_int=\count113
+\l_MT_multwidth_dim=\dimen117
+\origjot=\skip54
+\l_MT_shortvdotswithinadjustabove_dim=\dimen118
+\l_MT_shortvdotswithinadjustbelow_dim=\dimen119
+\l_MT_above_intertext_sep=\dimen120
+\l_MT_below_intertext_sep=\dimen121
+\l_MT_above_shortintertext_sep=\dimen122
+\l_MT_below_shortintertext_sep=\dimen123
+)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/caption/subcaption.sty
+Package: subcaption 2013/02/03 v1.1-62 Sub-captions (AR)
+
+(/usr/local/texlive/2015/texmf-dist/tex/latex/caption/caption.sty
+Package: caption 2013/05/02 v3.3-89 Customizing captions (AR)
+
+(/usr/local/texlive/2015/texmf-dist/tex/latex/caption/caption3.sty
+Package: caption3 2013/05/02 v1.6-88 caption3 kernel (AR)
+Package caption3 Info: TeX engine: e-TeX on input line 57.
+\captionmargin=\dimen124
+\captionmargin@=\dimen125
+\captionwidth=\dimen126
+\caption@tempdima=\dimen127
+\caption@indent=\dimen128
+\caption@parindent=\dimen129
+\caption@hangindent=\dimen130
+Package caption Info: Unknown document class (or package),
+(caption)             standard defaults will be used.
+)
+
+Package caption Warning: Unsupported document class (or package) detected,
+(caption)                usage of the caption package is not recommended.
+See the caption package documentation for explanation.
+
+Package caption Info: \@makecaption = \long macro:#1#2->\par \vskip \abovecapti
+onskip \begingroup \small \rmfamily \sbox \@tempboxa {\let \\\heading@cr \@make
+@capt@title {#1}{#2}}\@ifdim {\wd \@tempboxa >\hsize }{\begingroup \samepage \f
+lushing \let \footnote \@footnotemark@gobble \@make@capt@title {#1}{#2}\par \en
+dgroup }{\global \@minipagefalse \hb@xt@ \hsize {\hfil \unhbox \@tempboxa \hfil
+ }}\endgroup \vskip \belowcaptionskip .
+\c@ContinuedFloat=\count114
+)
+\c@subfigure=\count115
+\c@subtable=\count116
+)
+Class revtex4-1 Info: Patching array package. on input line 29.
+Class revtex4-1 Info: Robustifying \LaTeX's \boldmath command on input line 29.
+
+Class revtex4-1 Info: cite was not loaded (OK!) on input line 29.
+Class revtex4-1 Info: mcite was not loaded (OK!) on input line 29.
+Class revtex4-1 Info: multicol was not loaded (OK!) on input line 29.
+ (./paper.aux)
+\openout1 = `paper.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+
+(/usr/local/texlive/2015/texmf-dist/tex/context/base/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count117
+\scratchdimen=\dimen131
+\scratchbox=\box43
+\nofMPsegments=\count118
+\nofMParguments=\count119
+\everyMPshowfont=\toks23
+\MPscratchCnt=\count120
+\MPscratchDim=\dimen132
+\MPnumerator=\count121
+\makeMPintoPDFobject=\count122
+\everyMPtoPDFconversion=\toks24
+)
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: End \AtBeginDocument code.
+\openout3 = `paperNotes.bib'.
+
+LaTeX Font Info:    Try loading font information for U+msa on input line 50.
+ (/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 50.
+
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+
+Package natbib Warning: Citation `boixo:18' on page 1 undefined on input line 5
+8.
+
+
+Package natbib Warning: Citation `boixo:18' on page 1 undefined on input line 5
+8.
+
+<figures/ibmqx4.png, id=1, 473.77pt x 305.14pt>
+File: figures/ibmqx4.png Graphic file (type png)
+ <use figures/ibmqx4.png>
+Package pdftex.def Info: figures/ibmqx4.png used on input line 70.
+(pdftex.def)             Requested size: 123.0pt x 79.21811pt.
+
+<figures/ibmqx5.png, id=3, 1205.50375pt x 214.8025pt>
+File: figures/ibmqx5.png Graphic file (type png)
+ <use figures/ibmqx5.png>
+Package pdftex.def Info: figures/ibmqx5.png used on input line 74.
+(pdftex.def)             Requested size: 246.0pt x 43.83157pt.
+
+<figures/acorn.png, id=4, 1485.55pt x 395.4775pt>
+File: figures/acorn.png Graphic file (type png)
+ <use figures/acorn.png>
+Package pdftex.def Info: figures/acorn.png used on input line 78.
+(pdftex.def)             Requested size: 246.0pt x 65.48631pt.
+
+
+Package natbib Warning: Citation `boixo:18' on page 1 undefined on input line 8
+4.
+
+[1
+Non-PDF special ignored!{/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/upd
+map/pdftex.map}]
+
+LaTeX Warning: A float is stuck (cannot be placed); try class option [floatfix]
+ on input line 85.
+
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 114.
+
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/omscmr.fd
+File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 114.
+
+
+LaTeX Warning: Reference `prob' on page 2 undefined on input line 117.
+
+[2 <./figures/ibmqx4.png> <./figures/ibmqx5.png> <./figures/acorn.png>]
+
+LaTeX Warning: Reference `prob' on page 3 undefined on input line 126.
+
+
+LaTeX Warning: Reference `prob' on page 3 undefined on input line 134.
+
+
+LaTeX Warning: Reference `prob' on page 3 undefined on input line 134.
+
+
+LaTeX Warning: Reference `prob' on page 3 undefined on input line 140.
+
+
+LaTeX Warning: Reference `prob' on page 3 undefined on input line 144.
+
+[3]
+Missing character: There is no â in font cmr10!
+Missing character: There is no € in font cmr10!
+Missing character: There is no ™ in font cmr10!
+Missing character: There is no â in font cmr10!
+Missing character: There is no € in font cmr10!
+Missing character: There is no ™ in font cmr10!
+
+
+LaTeX Warning: Reference `prob' on page 4 undefined on input line 173.
+
+Missing character: There is no â in font cmr10!
+Missing character: There is no € in font cmr10!
+Missing character: There is no ™ in font cmr10!
+[4]
+
+Package natbib Warning: Citation `awesomeness' on page 5 undefined on input lin
+e 189.
+
+
+LaTeX Warning: Reference `fig:example_fuzz' on page 5 undefined on input line 2
+03.
+
+
+Package natbib Warning: Citation `boixo:18' on page 5 undefined on input line 2
+05.
+
+
+LaTeX Warning: Reference `fig:example_mwpm' on page 5 undefined on input line 2
+09.
+
+
+LaTeX Warning: Reference `fig:example_diff' on page 5 undefined on input line 2
+11.
+
+
+LaTeX Warning: Reference `fig:ibmqx4' on page 5 undefined on input line 215.
+
+! You can't use `macro parameter character #' in horizontal mode.
+l.216 #
+       $0.4$
+? 
+
+LaTeX Warning: Reference `fig:ibmqx5' on page 5 undefined on input line 218.
+
+[5]
+
+LaTeX Warning: Reference `fig:acorn' on page 6 undefined on input line 229.
+
+No file paper.bbl.
+[6] <figures/line_fuzz.png, id=44, 1878.01625pt x 664.4825pt>
+File: figures/line_fuzz.png Graphic file (type png)
+
+<use figures/line_fuzz.png>
+Package pdftex.def Info: figures/line_fuzz.png used on input line 274.
+(pdftex.def)             Requested size: 458.99689pt x 162.39914pt.
+
+<figures/ladder_fuzz.png, id=45, 1918.0458pt x 685.1196pt>
+File: figures/ladder_fuzz.png Graphic file (type png)
+
+<use figures/ladder_fuzz.png>
+Package pdftex.def Info: figures/ladder_fuzz.png used on input line 277.
+(pdftex.def)             Requested size: 458.99689pt x 163.95117pt.
+
+<figures/square_fuzz.png, id=46, 1925.2728pt x 644.6484pt>
+File: figures/square_fuzz.png Graphic file (type png)
+
+<use figures/square_fuzz.png>
+Package pdftex.def Info: figures/square_fuzz.png used on input line 280.
+(pdftex.def)             Requested size: 458.99689pt x 153.68594pt.
+
+<figures/web_fuzz.png, id=47, 1884.0789pt x 685.1196pt>
+File: figures/web_fuzz.png Graphic file (type png)
+
+<use figures/web_fuzz.png>
+Package pdftex.def Info: figures/web_fuzz.png used on input line 283.
+(pdftex.def)             Requested size: 458.99689pt x 166.89922pt.
+
+
+LaTeX Warning: Reference `subsec:example' on page 7 undefined on input line 285
+.
+
+
+LaTeX Warning: Reference `subsec:example' on page 7 undefined on input line 285
+.
+
+
+LaTeX Warning: Float too large for page by 13.93547pt on input line 286.
+
+<figures/line_mwpm.png, id=48, 1857.339pt x 685.1196pt>
+File: figures/line_mwpm.png Graphic file (type png)
+
+<use figures/line_mwpm.png>
+Package pdftex.def Info: figures/line_mwpm.png used on input line 292.
+(pdftex.def)             Requested size: 458.99689pt x 169.30365pt.
+
+<figures/ladder_mwpm.png, id=49, 1898.5329pt x 685.1196pt>
+File: figures/ladder_mwpm.png Graphic file (type png)
+
+<use figures/ladder_mwpm.png>
+Package pdftex.def Info: figures/ladder_mwpm.png used on input line 295.
+(pdftex.def)             Requested size: 458.99689pt x 165.63428pt.
+
+<figures/square_mwpm.png, id=50, 1905.7599pt x 644.6484pt>
+File: figures/square_mwpm.png Graphic file (type png)
+
+<use figures/square_mwpm.png>
+Package pdftex.def Info: figures/square_mwpm.png used on input line 298.
+(pdftex.def)             Requested size: 458.99689pt x 155.25978pt.
+
+<figures/web_mwpm.png, id=51, 1865.2887pt x 685.1196pt>
+File: figures/web_mwpm.png Graphic file (type png)
+
+<use figures/web_mwpm.png>
+Package pdftex.def Info: figures/web_mwpm.png used on input line 301.
+(pdftex.def)             Requested size: 458.99689pt x 168.58232pt.
+
+
+LaTeX Warning: Reference `subsec:example' on page 7 undefined on input line 303
+.
+
+
+LaTeX Warning: Reference `subsec:example' on page 7 undefined on input line 303
+.
+
+
+LaTeX Warning: Float too large for page by 37.78003pt on input line 304.
+
+<figures/line_diff.png, id=52, 1876.1292pt x 699.5736pt>
+File: figures/line_diff.png Graphic file (type png)
+
+<use figures/line_diff.png>
+Package pdftex.def Info: figures/line_diff.png used on input line 310.
+(pdftex.def)             Requested size: 458.99689pt x 171.14618pt.
+
+<figures/ladder_diff.png, id=53, 1918.0458pt x 699.5736pt>
+File: figures/ladder_diff.png Graphic file (type png)
+
+<use figures/ladder_diff.png>
+Package pdftex.def Info: figures/ladder_diff.png used on input line 313.
+(pdftex.def)             Requested size: 458.99689pt x 167.41005pt.
+
+<figures/square_diff.png, id=54, 1925.2728pt x 659.8251pt>
+File: figures/square_diff.png Graphic file (type png)
+
+<use figures/square_diff.png>
+Package pdftex.def Info: figures/square_diff.png used on input line 316.
+(pdftex.def)             Requested size: 458.99689pt x 157.30411pt.
+
+<figures/web_diff.png, id=55, 1884.0789pt x 699.5736pt>
+File: figures/web_diff.png Graphic file (type png)
+
+<use figures/web_diff.png>
+Package pdftex.def Info: figures/web_diff.png used on input line 319.
+(pdftex.def)             Requested size: 458.99689pt x 170.4203pt.
+
+
+LaTeX Warning: Reference `subsec:example' on page 7 undefined on input line 321
+.
+
+
+LaTeX Warning: Reference `subsec:example' on page 7 undefined on input line 321
+.
+
+
+LaTeX Warning: Float too large for page by 45.28064pt on input line 322.
+
+<figures/ibmqx4_fuzz.png, id=56, 1898.09125pt x 632.3625pt>
+File: figures/ibmqx4_fuzz.png Graphic file (type png)
+
+<use figures/ibmqx4_fuzz.png>
+Package pdftex.def Info: figures/ibmqx4_fuzz.png used on input line 329.
+(pdftex.def)             Requested size: 510.0pt x 169.91034pt.
+
+<figures/ibmqx4_mwpm.png, id=57, 1877.5746pt x 644.6484pt>
+File: figures/ibmqx4_mwpm.png Graphic file (type png)
+
+<use figures/ibmqx4_mwpm.png>
+Package pdftex.def Info: figures/ibmqx4_mwpm.png used on input line 332.
+(pdftex.def)             Requested size: 510.0pt x 175.10007pt.
+
+<figures/ibmqx4_diff.png, id=58, 1896.3648pt x 659.8251pt>
+File: figures/ibmqx4_diff.png Graphic file (type png)
+
+<use figures/ibmqx4_diff.png>
+Package pdftex.def Info: figures/ibmqx4_diff.png used on input line 335.
+(pdftex.def)             Requested size: 510.0pt x 177.45038pt.
+
+
+LaTeX Warning: Reference `subsec:ibm' on page 7 undefined on input line 337.
+
+
+LaTeX Warning: Reference `subsec:ibm' on page 7 undefined on input line 337.
+
+<figures/ibmqx5_fuzz.png, id=59, 1917.1625pt x 632.3625pt>
+File: figures/ibmqx5_fuzz.png Graphic file (type png)
+
+<use figures/ibmqx5_fuzz.png>
+Package pdftex.def Info: figures/ibmqx5_fuzz.png used on input line 344.
+(pdftex.def)             Requested size: 510.0pt x 168.2121pt.
+
+<figures/ibmqx5_mwpm.png, id=60, 1877.5746pt x 644.6484pt>
+File: figures/ibmqx5_mwpm.png Graphic file (type png)
+
+<use figures/ibmqx5_mwpm.png>
+Package pdftex.def Info: figures/ibmqx5_mwpm.png used on input line 347.
+(pdftex.def)             Requested size: 510.0pt x 175.10007pt.
+
+<figures/ibmqx5_diff.png, id=61, 1896.3648pt x 659.8251pt>
+File: figures/ibmqx5_diff.png Graphic file (type png)
+
+<use figures/ibmqx5_diff.png>
+Package pdftex.def Info: figures/ibmqx5_diff.png used on input line 350.
+(pdftex.def)             Requested size: 510.0pt x 177.45038pt.
+
+
+LaTeX Warning: Reference `subsec:ibm' on page 7 undefined on input line 352.
+
+
+LaTeX Warning: Reference `subsec:ibm' on page 7 undefined on input line 352.
+
+<figures/acorn_fuzz.png, id=62, 1944.26375pt x 632.3625pt>
+File: figures/acorn_fuzz.png Graphic file (type png)
+
+<use figures/acorn_fuzz.png>
+Package pdftex.def Info: figures/acorn_fuzz.png used on input line 359.
+(pdftex.def)             Requested size: 510.0pt x 165.86737pt.
+
+<figures/acorn_mwpm.png, id=63, 1924.5501pt x 644.6484pt>
+File: figures/acorn_mwpm.png Graphic file (type png)
+
+<use figures/acorn_mwpm.png>
+Package pdftex.def Info: figures/acorn_mwpm.png used on input line 362.
+(pdftex.def)             Requested size: 510.0pt x 170.83101pt.
+
+<figures/acorn_diff.png, id=64, 1962.8532pt x 659.8251pt>
+File: figures/acorn_diff.png Graphic file (type png)
+
+<use figures/acorn_diff.png>
+Package pdftex.def Info: figures/acorn_diff.png used on input line 365.
+(pdftex.def)             Requested size: 510.0pt x 171.43973pt.
+
+
+LaTeX Warning: Reference `subsec:ibm' on page 7 undefined on input line 367.
+
+
+LaTeX Warning: Reference `subsec:ibm' on page 7 undefined on input line 367.
+
+
+Package natbib Warning: There were undefined citations.
+
+[7 <./figures/line_fuzz.png> <./figures/ladder_fuzz.png> <./figures/square_fuzz
+.png> <./figures/web_fuzz.png>] [8 <./figures/line_mwpm.png> <./figures/ladder_
+mwpm.png> <./figures/square_mwpm.png> <./figures/web_mwpm.png>] [9 <./figures/l
+ine_diff.png> <./figures/ladder_diff.png> <./figures/square_diff.png> <./figure
+s/web_diff.png>] [10 <./figures/ibmqx4_fuzz.png> <./figures/ibmqx4_mwpm.png> <.
+/figures/ibmqx4_diff.png>] [11 <./figures/ibmqx5_fuzz.png> <./figures/ibmqx5_mw
+pm.png> <./figures/ibmqx5_diff.png>] [12 <./figures/acorn_fuzz.png> <./figures/
+acorn_mwpm.png> <./figures/acorn_diff.png>] (./paper.aux)
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right .
+
+
+ ) 
+Here is how much of TeX's memory you used:
+ 6349 strings out of 493089
+ 92526 string characters out of 6134842
+ 182130 words of memory out of 5000000
+ 9705 multiletter control sequences out of 15000+600000
+ 15179 words of font info for 58 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 42i,7n,40p,1097b,539s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
+></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb>
+</usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></
+usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></u
+sr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></us
+r/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/
+local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/lo
+cal/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local
+/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/te
+xlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/tex
+live/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texli
+ve/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/local/texlive
+/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/
+2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb></usr/local/texlive/20
+15/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/201
+5/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb>
+Output written on paper.pdf (12 pages, 4602534 bytes).
+PDF statistics:
+ 156 PDF objects out of 1000 (max. 8388607)
+ 77 compressed objects within 1 object stream
+ 0 named destinations out of 1000 (max. 500000)
+ 121 words of extra memory for PDF output out of 10000 (max. 10000000)
+
