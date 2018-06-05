@@ -13,7 +13,7 @@ Puzzles from higher rounds require higher depth circuits, and so build-up of noi
 
 For more on the gritty details, see [here](https://medium.com/@decodoku/understanding-quantum-computers-through-a-simple-puzzle-game-a290dde89fb2).
 
-### Running the game
+### How to play
 
 The easiest way to play is to use the browser version [here](https://mybinder.org/v2/gh/decodoku/A_Game_to_Benchmark_Quantum_Computers/master?filepath=Play_Quantum_Awesomeness.ipynb) (though it might take a few attempts before it actually loads). Just press the run button, as highlighted in red in the image below.
 
