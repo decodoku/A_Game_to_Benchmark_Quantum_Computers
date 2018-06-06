@@ -34,7 +34,7 @@
 
 \begin{abstract}
 
-Quantum processors with sizes in the 10-100 qubit range are now increasingly common. However, with increased size comes increased complexity for benchmarking. The effectiveness of a given device may vary greatly between different tasks, and will not always be  easy to predict from single and two qubit gate fidelities. For this reason, it is important to assess processor quality for a range of important tasks. In this work we propose and implement tests based on random quantum circuits. These are used to evaluate multiple different superconducting qubit devices, with sizes from 5 to 19 qubits, from multiple hardware manufacturers: IBM Research and Rigetti. The data is analyzed to give a quantitive description of how the devices perform.  We also describe how it can be used for a qualititive description accessible to the layperson, by being played as a game.
+Quantum processors with sizes in the 10-100 qubit range are now increasingly common. However, with increased size comes increased complexity for benchmarking. The effectiveness of a given device may vary greatly between different tasks, and will not always be  easy to predict from single and two qubit gate fidelities. For this reason, it is important to assess processor quality for a range of important tasks. In this work we propose and implement tests based on random quantum circuits. These are used to evaluate multiple different superconducting qubit devices, with sizes from 5 to 19 qubits, from two hardware manufacturers: IBM Research and Rigetti. The data is analyzed to give a quantitive description of how the devices perform.  We also describe how it can be used for a qualititive description accessible to the layperson, by being played as a game.
 
 
 \end{abstract}
@@ -51,18 +51,22 @@ The state of $n$ bits resides within a space of $2^n$ bit strings. By charting a
 
 The state of $n$ qubits is described by a $2^n$ dimensional Hilbert space. This more general structure allows a new and more subtle ways to move around the space, giving us new and more efficient routes from input to output. The fact that this will allow us to solve certain problems much faster is the primary motivation behind quantum computation.
 
-To determine whether any given quantum processors can live up to this promise, they need to be benchmarked. This could be done using techniques specifically designed for the task, such as randomized benchmarking \cite{}. It could also be done by performing test instances of important quantum algorithms \cite{} or error correction \cite{}. The results of such tests will depend both on the noise levels of the device and also its size and connectivity. The insights gained will therefore be highly dependent on the details of implementation, with the results from a given instance of a given algorithm not providing an unambigous predictor for the results of others.
+To determine whether any given quantum processors can live up to this promise, they need to be benchmarked. This could be done using techniques specifically designed for the task, such as randomized benchmarking \cite{emerson:05,magesan:11} or the quantum volume \cite{moll:17}. It could also be done by performing test instances of important quantum algorithms \cite{coles:18} or quantum error correction~\cite{wootton:18,naveh:18}. The results of such tests will depend both on the noise levels of the device and also its size and connectivity. The insights gained will therefore be highly dependent on the details of implementation, with the results from a given instance of a given algorithm not providing an unambigous predictor for the results of others.
 
-To supplement such results, we can seek a task which is more universal in scope. One that can be implemented on devices of any size and connectivity, and which directly tests the most important primitive for quantum computing: the ability to fully explore the multiqubit Hilbert space.
+To supplement such results, we can seek a task which is more universal in scope. One that can be implemented on devices of any size and connectivity, which takes up the whole of the device, and which directly tests the most important primitive for quantum computing: the ability to fully explore the multiqubit Hilbert space.
 
-This can be done using random quantum circuits~\cite{boixo:18}. By implementing random progams, the resulting output states are random samples from the Hilbert space of the device. For short depth random circuits, this sampling will be of states with short range entanglement that are close to the product states. But for sufficiently long circuits, which allow for the build-up of entanglement across the device, the states will be sampled uniformly from across the entire Hilbert space. Measuring the qubits will then generate bit strings according to a Porter-Thomas distribution, which provides an observable signature of this quantum chaotic regime~\cite{boixo:18}.
+Here we propose such a task based on random quantum circuits~\cite{boixo:18}. By implementing random progams, the resulting output states are random samples from the Hilbert space of the device. For short depth random circuits, this sampling will be of states with short range entanglement that are close to the product states. But for sufficiently long circuits, which allow for the build-up of entanglement across the device, the states will be sampled uniformly from across the entire Hilbert space. Measuring the qubits will then generate bit strings according to a Porter-Thomas distribution, which provides an observable signature of this quantum chaotic regime.
 
-The main application of such sampling will be to act as a test of computational power. Entering into the Porter-Thomas regime for a sufficiently large quantum device would allow a demonstration of quantum computers outperforming classical computers: a milestone known as \textit{quantum computational supremacy}. The size of devices needed to acheive this will be relatively large \cite{}, and will be well beyond the devices considered in this study. Nevertheless, analysis of random circuits for smaller devices will help benchmark our progress towards this milestone, as well as towards the longer term and more important goal of scalable and fault-tolerant quantum computation.
+The main application of such sampling will be to act as a test of computational power. Entering into the Porter-Thomas regime for a sufficiently large quantum device would allow a demonstration of quantum computers outperforming classical computers: a milestone known as \textit{quantum computational supremacy}~\cite{preskill:12}. The size of devices needed to acheive this will be relatively large \cite{chen:18}, and will be well beyond the devices considered in this study. Nevertheless, analysis of random circuits for smaller devices will help benchmark our progress towards this milestone, as well as towards the longer term and more important goal of scalable and fault-tolerant quantum computation.
+
+In this paper we perform benchmarking based on random circuits to protype quantum devices available on the cloud. Specifically, we use the 5 and 16 qubit devices of IBM \cite{ibm:backends} and the 19 qubit device of Rigetti \cite{rigetti:acorn}.
 
 
 \section{Generation of random circuits}
 
-For any given device, we will have a set of native gates to work with. These will include arbitrary single qubit rotations, and entangling gates. The latter are typically two qubit controlled operations, such as the controlled-NOT or controlled-$Z$. In general, it will not be possible to directly implement these between any given pair of qubits on the device. Instead we will have a connectivity graph, in which qubits are nodes that are connected only by an edge when direct coupling is possible. For most physical implementations of qubits, the most straightforward connectivity to realize is a line, for which qubits can couple directly only to their two neighbours. The most powerful and flexible connectivity would be a complete graph, in which each qubit can couple with any other. A good compromize between these extremes would be a planar lattice, such as a square lattice, as required for the implementation of the most prominent error correcting codes \cite{}. The connectivity graphs for the real devices used in this study are shown in Fig. \ref{fig:graphs}.
+For any given device, we will have a set of native gates to work with. These will include arbitrary single qubit rotations, and entangling gates. The latter are typically two qubit controlled operations, such as the controlled-NOT or controlled-$Z$. In general, it will not be possible to directly implement these between any given pair of qubits on the device. Instead we will have a connectivity graph, in which qubits are nodes that are connected only by an edge when direct coupling is possible. For most physical implementations of qubits, the most straightforward connectivity to realize is a line, for which qubits can couple directly only to their two neighbours. The most powerful and flexible connectivity would be a complete graph, in which each qubit can couple with any other. A good compromize between these extremes would be a planar lattice, such as a square lattice, as required for the implementation of the most prominent error correcting codes \cite{dennis,lidar:13}.
+
+The competition between what can be implemented and what is required will lead to a range of different connectivity graphs for near-term devices. As such, our benchmarking must be tailored to the connectivity graph of each device. The graphs for the devices used in this study are shown in Fig. \ref{fig:graphs}.
 
 \begin{figure}
     \centering
@@ -78,18 +82,16 @@ For any given device, we will have a set of native gates to work with. These wil
         \includegraphics[width=\textwidth]{figures/acorn.png}
         \caption{19 qubit Rigetti device $\mathtt{19Q-Acorn}$}
     \end{subfigure}
-    \caption{Coupling graphs for devices studied in this work. Coloured circles denote qubits. The lines between them (labelled with letters) denote pairs for which entangling gates can be performed. The numbers within the coloured lines show an example set of results for the circuit, with each representing $\tilde{\theta_j} \ (\pi/2)$ (as defined in Eq. (\ref{angle})) expressed as a percentage.}\label{fig:graphs}
+    \caption{Coupling graphs for devices studied in this work. Coloured circles denote qubits. The lines between them (labelled with letters) denote pairs for which entangling gates can be performed. The numbers within the coloured lines show an example set of results for the circuit, with each representing $\tilde{\theta_j} / (\pi/2)$ (as defined in Eq. (\ref{angle})) expressed as a percentage.}\label{fig:graphs}
 \end{figure}
 
-Random circuits are generated by sampling gates from this gate set. The exact form of this sampling will be designed for specific requirements, such as ease of implementation and the acheiving the fastest possible build-up of long range entanglement ~\cite{boixo:18}. The better the connectivity of a device, the less restrictions will be provided by the former consraint, allowing the latter to be done more effectively.
+Random circuits are generated by sampling gates from the available gate set. In this work, we the method proposed to do this is designed such that: (i) the rate at which entanglement builds up can be make as slow as desired, and (ii) the output possesses easily recongnizable structure for states with only simple entangled states. This allows us to gain insights by comparing runs with different rates of entanglement generation, and use the loss of the structure in the output to assess how the entanglement build-up occurs.
 
-In this work, we introduce a novel method of sampling random circuits. This is done such that: (i) the rate at which entanglement builds up can be make as slow as desired, and (ii) the output possesses easily recongnizable structure for states with only simple entangled states. This allows us to gain insights by comparing runs with different rates of entanglement generation, and use the loss of the structure in the output to assess how the entanglement build-up occurs.
+To do this, we build up circuits as a series of \textit{rounds}. Each of these is composed of a pair of \textit{slices}, known as the entangling slice and the inverse slice. The former is a randomly generated set of gates that entangle disjoint pairs of qubits, while the latter is an attempt to invert this. The quality of these attempted inversions determine how fast the entanglement builds up. In the extreme the inversions are perfect, the state will always maintain only short-range entanglement. In the extreme the inversions are generated without reference to the gates they are supposed to be inverting, they will help accelarate the build-up of long range entanglement.
 
-To do this, we build up circuits as a series of \textit{rounds}. Each of these is composed of a pair of \textit{slices}, known as the entangling slice and the inverse slice. The former is a randomly generated set of gates that entangle disjoint pairs of qubits, while the latter is an attempt to invert this. The quality of these attempted inversions determine how fast the entanglement builds up. In the extreme the inversions are perfect, the state will always maintain only short-range entanglement. In the extreme the inversions are also randomly generated, they will provide extra random entangling gates to accelarate the build-up of long range entanglement.
+Typically, we consider the inversion gates to be chosen based on output data from an implementation of the circuit so far. Specifically, the first run of the circuit uses only the entangling slice of the first round. The results are then used infer the form of the entangling slice and propose an inverse. The next run then implements the whole of the first round, followed by the entangling slice of the second. The results are used to define the inverse slice of the second round, and so on.
 
-Typically, we consider the inversion gates to be chosen based on output data from an implementation of the circuit so far. Specifically, the first run of the circuit uses only the first slice of the first round. The results are then used to define the second slice of the first round. The next run then implements the whole of the first round, followed by the first slice of the second. The results are used to define the second slice of the second round, and so on.
-
-The random generation of gates in each entangling slice is done by first randomly choosing a set of disjoint pairs of qubits. This pairing should be based on the connectivity of the device used: it should be possible to directly implement a controlled gate between the two qubits of each pair. In the case that the device has an odd number of qubits, or if the connectivity requires it, some qubits can be left unpaired.
+The random generation of gates in each entangling slice is done by first randomly choosing a set of disjoint pairs of qubits. This pairing should be based on the connectivity of the device used: it should be possible to directly implement a controlled gate between the two qubits of each pair. The pairing is therefore a matching of the connectivity graph. In the case that the device has an odd number of qubits, or if the connectivity requires it, some qubits can be left unpaired.
 
 Next, a random entangling gate is generated for each pair of qubits $(j,k)$. This will take the form
 
@@ -107,56 +109,59 @@ p_j = p_k = \sin^2 (\theta_{jk}).
 \ee
 Since the $\theta_{jk}$ are restricted to the range $\pi/40 \leq \theta_{jk} \leq \pi/4$, the values of $p_j$ will yield values of $p$ between $0.006$ and $0.5$. The lower bound was chosen to ensure a degree of distinction between qubits involved in pairs (and therefore an entangling gate) and those left unpaired (and therefore with no gate applied).
 
-Given this structure in the output, it should be possible to deduce the random gates applied using only the values of $p_j$ for each qubit. These can be used to deduce the pairing using the fact that $p_j=p_k$ for each pair $(j,k)$. The value of $\theta_{jk}$ can then be deduced by inverting Eq. \ref{eq:prob}. Since this completely specifies the gates of the entangling slice, it can be used to construct the corresponding inverse slice.
+Given this structure in the output, it should be possible to deduce the random gates applied using only the values of $p_j$ for each qubit. These can first be used to deduce the pairing, using the fact that $p_j=p_k$ for each pair $(j,k)$. The value of $\theta_{jk}$ can then be deduced by inverting Eq. (\ref{eq:prob}). Since this completely specifies the gates of the entangling slice, it can be used to construct the corresponding inverse slice.
 
 It is important to note the deduced inverse will not be a true inverse in general. Reasons for this include:
 \begin{itemize}
 \item Noise in the implementation, such as imperfect gates and decoherence, will perturb the measured $p_j$ from their ideal values;
 \item The finite number of samples used to estimate the $p_j$ will lead to statistical noise;
-\item The use of a faulty method to construct the inverses;
-\item Failures in the inverses of previous rounds will result in the entangling slice not being applied to the all $\ket{0}$ state, and so Eq. \ref{prob} applies only approximately.
+\item Failures in the inverses of previous rounds will result in the entangling slice not being applied to the all $\ket{0}$ state, and so Eq. (\ref{eq:prob}) applies only approximately;
+\item The use of a faulty method to construct the inverses.
 \end{itemize}
-In preventing the first slice of each round from being fully inverted, these effects allow randomness to build up in the circuits. By choosing how strong these effects are, we can tune the rate at which entanglement builds up throughout the circuit.
+When the entangling slice of each round is not fully inverted, randomness will build up in the circuits. By choosing how strong these effects are, we can tune the rate at which long range entanglement is generated.
 
-Note that each round, as defined thus far, is completely diagonal in the $\sigma_x$ basis of all qubits. Using oly such gates will not allow us to fully explore the Hilbert space of the device. The finishing touch for each round will therefore be to conjugate completed rounds with random single qubit gates. Each of these is randomly chosen to be either an $x$ or $y$ axis rotation, and with a randomly chosen angle $0\leq\phi\leq\pi$.
+Note that each round, as defined thus far, is completely diagonal in the $\sigma_x$ basis of all qubits. Using only such gates will not allow us to fully explore the Hilbert space of the device. The finishing touch for each round will therefore be to conjugate completed rounds with random single qubit gates. Each of these is randomly chosen to be either an $x$ or $y$ axis rotation, and with a randomly chosen angle $0\leq\phi\leq\pi/2$.
 
 
 \section{Figures of merit}
 
-With the results from running the circuit for each round we can assess the build-up of entanglement in a device. This will primarily be done by looking at how well the output can be used to deduce the inverse of the most recent slice of randomly chosen entangling gates. Highly successful construction of the inverse implies that long range entanglement is negligible, and that the state immeditaley prior to the most recent slice was close to the all $\ket{0}$ state. The relation of Eq. \ref{prob}, and all conclusions derived from it, will then hold to good approximation.
+With the results from running the circuit for each round we can assess the build-up of entanglement in a device. This will primarily be done by looking at how well the output can be used to deduce the inverse of the most recent slice of randomly chosen entangling gates. Highly successful construction of the inverse implies that long range entanglement is negligible, and that the state immediately prior to the most recent slice was close to the all $\ket{0}$ state. The relation of Eq. (\ref{eq:prob}), and all conclusions derived from it, will then hold to good approximation.
 
 On the other hand, highly unsuccessful construction of the inverse implies that final output is dominated by other effects. In the best case, this will be long range entanglement built up by the random circuit. In the worst case, it will be noise. By comparison of random circuits for which entanglement is generated at different rates, we can attempt to distinguish these to possibilities.
 
-Note that we will use $\tilde{p_j}$ to denote the measured probability of qubit $j$ to output the result $\ket{1}$. This is distinct from $p_j$ in general, because of the effects of the imperfections listed in the previous section.
+Note that we will use $\tilde{p_j}$ to denote the measured probability of qubit $j$ to output the result $\ket{1}$. As the \textit{measured} value, this is distinct from the true value $p_j$ in general, because of the effects of the imperfections listed in the previous section.
 
 \subsection{Fuzz}
 
-The first way we will quantify an ouput is to compare the calculated values of $\tilde{p_j}$ and $\tilde{p_k}$ for each pair in the most recent slice. If Eq. \ref{prob} holds, we will have $\tilde{p_j}=\tilde{p_k}$ in each case. However, as Eq. \ref{prob} becomes an increasingly worse approximation, these numbers will begin to drift away from each other. We refer to this as \textit{fuzz}, and quantify it as follows over the whole device
+The first way we will quantify an ouput is to compare the calculated values of $\tilde{p_j}$ and $\tilde{p_k}$ for each pair in the most recent slice. If Eq. (\ref{eq:prob}) holds, we will have $\tilde{p_j}=\tilde{p_k}$ in each case. However, as Eq. (\ref{eq:prob}) becomes an increasingly worse approximation, these numbers will begin to drift away from each other. We refer to this as \textit{fuzz}, and quantify it as follows over the whole device
 \be
-\mathtt{fuzz} = \sum_{(j,k)} | \tilde{p_j} - \tilde{p_k} | / n.
+\mathtt{fuzz} = \frac{ \sum_{(j,k)} | \tilde{p_j} - \tilde{p_k} | }{ n }.
 \ee
 Here $n$ is the number of pairs of qubits on the device (and so half the total number of qubits when this is even and the connectivity allows).
 
-Note that, for the first round, the fuzz will be at or close to zero. It will then begin to rise as Eq. \ref{prob} becomes more approximate. At the other extreme, after an arbitrarily large number of rounds, all $\tilde{p_j}$ will converge at close to $1/2$. This will ideally be due to the random circuit causing the final state to be a typical sample drawn uniformly from the multiqubit Hilbert space. However, it could also be due to the build up of noise. In either case, the fact that all $\tilde{p_j}$ have converged to the same value will also cause a low value of the fuzz.
+Note that, for the first round, the fuzz will be at or close to zero. It will then begin to rise as Eq. (\ref{eq:prob}) becomes more approximate. At the other extreme, after an arbitrarily large number of rounds, all $\tilde{p_j}$ will converge at close to $1/2$. This will ideally be due to the random circuit causing the final state to be a typical sample drawn uniformly from the multiqubit Hilbert space. However, it could also be due to the build up of noise. In either case, the fact that all $\tilde{p_j}$ have converged to the same value will also cause a low value of the fuzz.
 
 Given this behaviour, a graph of fuzz against round number will neccesarily feature a peak. This will be the most noticable feature in our results. It essentially marks the start of the inevitable march towards a completely random output without the structure required for inverses to be successfully deduced.
 
-We will look at the build-up of fuzz for each device in two different cases: (i) inverses constructed when the assumed pairing of the qubits is completely correct, and the deduced angles are correct up to effects caused by statistical noise and the build-up of entanglement, and (ii) inverses constructed when the assumed pairing is chosen completely randomly and without reference to the results. When case (i) is run on a real device the $\tilde{p_j}$ cannot be used to deduce the $\theta_{jk}$ since additional noise effects would also be present. The effects of statistical noise alone is therefore emulated by taking the correct values and adding $0.1/\sqrt{\mathtt{shots}}$, where $\mathtt{shots}$ is the number of samples used for $\tilde{p_j}$. For simulated instances of case (i), and for case (ii), the assumed $\theta_{jk}$ are calulated from Eq. \ref{prob} using $(\tilde{p_j}+\tilde{p_k})/2$.
+We will look at the build-up of fuzz for each device in two different cases:
+\begin{enumerate}
+\item Inverses constructed when the assumed pairing of the qubits is completely correct, and the deduced angles are correct up to effects caused by statistical noise and the build-up of entanglement;
+\item Inverses constructed when the assumed pairing is chosen completely randomly and without reference to the results.
+\end{enumerate}
 
-In the absence of noise, the inverses for case (i) are perfect up to statistical noise. This can be suppressed arbitrarily by increasing the number of samples used to calculate the $\tilde{p_j}$. For case (ii), however, the fuzz will rise sharply and peak early. This is because the second slice of each round is essentially as much a source of random gates as the first, and has little effect as an inverse.
+For simulated instances of case 1, and for case 2, the assumed $\theta_{jk}$ are calulated from Eq. (\ref{eq:prob}) using $(\tilde{p_j}+\tilde{p_k})/2$. This not done when we consider case 1 to be run on a real device, since the presence of noise would lead to low quality inverse slices. The effects of statistical noise alone is therefore emulated by taking the correct values and adding $0.1/\sqrt{\mathtt{shots}}$, where $\mathtt{shots}$ is the number of samples used for $\tilde{p_j}$. 
 
-By looking at the fuzz for these two cases, we can assess how well a device a device might be able to uniformly sample states from its multiqubit Hilbert space. Let us consider this to be done by using case (ii) (the inverse slices with randomly chosen pairs), since this would provide the fastest buil-up of entanglement.
+In the absence of noise, the inverses for case 1 are perfect up to statistical noise. This can be suppressed arbitrarily by increasing the number of samples used to calculate the $\tilde{p_j}$. For case 2, however, the fuzz will rise sharply and peak early. This is because the second slice of each round is essentially as much a source of random gates as the first, and has little effect as an inverse.
 
-The creation of the desired states requires the fuzz to first peak, and then subsequently vanish. However, this same behaviour will also be seen for devices dominated by noise. To determine which of these two possibilities occurred, we can run the process again over the same number of rounds, but instead use case (i) (the inverse slices with correctly chosen pairs). If the noise is dominant, the fuzz will again be seen to peak and vanish. If noise is neglible, however, and a large value of $\mathtt{shots}$ is used, the increase in fuzz will be only very slight.
+Building up random circuits able to uniformly sample states from the multiqubit Hilbert space requires the fuzz to first peak, and then subsequently vanish. However, this same behaviour will also be seen for devices dominated by noise. It is therefore important to determine which of these two possibilities occurred when such a peak is oberseved. To do this, we can run the process again over the same number of rounds, but instead use an instance of the random circuits for which entanglement builds up much more slowly. So if we are considering the peak resulting from case 2 (inverse slices with randomly chosen pairs), we can additionally study case 1 (inverse slices with correctly chosen pairs). If the noise is dominant, the fuzz will again be seen to peak and vanish. If noise is neglible, however, and a large value of $\mathtt{shots}$ is used, the increase in fuzz will be only very slight.
 
-Ideally, we would like to see the fuzz remain at a low and pre-peak value for case (i) for as many rounds as it takes for the fuzz of case (ii) to first peak and then subsequently vanish. This is because the fuzz of case (i) is primarily caused by noise, and so low values imply that noise remains at low levels. This provides strong evidence that the vanishing fuzz for case (ii) is primarily due to the build up of entanglement.
+Ideally, we would like to see the fuzz remain at a low and pre-peak value for case 1 for as many rounds as it takes for the fuzz of case 2 to first peak and then subsequently vanish. This is because the fuzz of case 1 is primarily caused by noise, and so low values imply that noise remains at low levels. Satisfying this condition would then provide strong evidence that the vanishing fuzz for case 2 is primarily due to the build up of entanglement and not noise.
 
-For devices unable to acheive this condition, we can also define a weaker goal. This is simply that the fuzz should peak for case (i) at a higher round than for case (ii). We will specifically require this for runs on the real device in the former case (when fuzz is likely dominated by noise), and for a simulated run in the latter case (noiseless, and so fuzz built-up is dominated by the random inverse slices). If this condition is not satisfied, it means that the strength of noise in the former case is stronger than the incompetence of the inverses in the latter case. By demonstrating that the effects of noise in a device are not at such a high level, we could say that it has acheived \textit{quantum competence}. This milestone must obviously be passed significant before that of quantum supremacy.
-
+For devices unable to acheive this condition, we can also define a weaker goal. This is simply that the fuzz should peak for case 1 at a higher round than for case 2. We will specifically require this for runs on the real device in the former case (when fuzz is likely dominated by noise), and for a simulated run in the latter case (noiseless, and so fuzz built-up is dominated by the random inverse slices). If this condition is not satisfied, it means that the strength of noise in the former case is stronger than the incompetence of the inverses in the latter case. By demonstrating that the effects of noise in a device are not at such a high level, we could say that it has acheived \textit{quantum competence}.
 
 \subsection{Success rate for pairing}
 
-We will now consider how well the pairing can be deduced for a given output. We will do this using minimum weight perfect matching (MWPM)~\cite{} on the connectivity graph of the device. For each pair of qubits we assign a weight that depends on the measured values of $\tilde{p_j}$,
+We will now consider how well the pairing can be deduced for a given output. We will do this using minimum weight perfect matching (MWPM)~\cite{edmonds:65,rantwijk} on the connectivity graph of the device. For each pair of qubits we assign a weight that depends on the measured values of $\tilde{p_j}$,
 \be \label{angle}
 W_{j,k} = | \tilde{\theta_j} - \tilde{\theta_k} |, \,\, \tilde{\theta_j} = \sin^{-1}( \sqrt{\tilde{p_j}} ).
 \ee
@@ -164,15 +169,19 @@ The minimum weight matching will find the pairing that minimizes this weight, an
 
 \subsection{Difference with ideal values}
 
-The main result taken from the output is the measured probabilities $\tilde{p_j}$. It therefore makes sense to compare these directly to their ideal values $p_j$. Specifically, we will calculate the difference between the corresponding $\tilde{\theta_j}$ and the actual angle $\theta_{jk}$ used for the pair that qubit $j$ is a part of. This will also be averaged over the entire device to give a measure of how well the qubits correspond to the values they would take if only the most recent entangling slice was implemented, and implemented perfectly.
+The main result taken from the output is the set of measured probabilities $\tilde{p_j}$. It therefore makes sense to compare these values directly to the ideal values $p_j$. Specifically, we will calculate the difference between the corresponding $\tilde{\theta_j}$ and the actual angle $\theta_{jk}$ used for the pair that qubit $j$ is a part of. This will be averaged over the entire device to give a measure of how well the ouputs of the qubits correspond to what would be expected from the most recent entangling slice alone.
+
+\be
+\mathtt{diff} = \frac{ \sum_{(j,k)} | \tilde{\theta_j} - \theta_{jk} | + | \tilde{\theta_j} - \theta_{jk} | }{ 2 n }.
+\ee
 
 \subsection{Error mitigation}
 
-Thus far we have used only one of the properties of the states described in Eq. \ref{state}: the fact that $p_j=p_k$. However, it is further true that the results for paired qubits $j$ and $k$ should be perfectly correlated. This provides a further means by which pairs can be identified from the data. Specifically, the mutual information $I(j;k)$ for measurement outcomes will be non-zero if and only if the qubits are paired. For a given qubit $j$, the most likely qubit $k’$ for it to be paired with is therefore that with the highest value of $I(j;k’)$. Let us refer to this as qubit $c(j)$.
+Thus far we have used only one of the properties of the states described in Eq. (\ref{state}): the fact that $p_j=p_k$. However, it is further true that the results for paired qubits $j$ and $k$ should be perfectly correlated. This provides a further means by which pairs can be identified from the data. Specifically, the mutual information $I(j;k)$ for measurement outcomes will be non-zero if and only if the qubits are paired. For a given qubit $j$, the value $k’$ with which we can expect it to be paired is therefore that with the highest value of $I(j;k’)$. Let us refer to this as qubit $c(j)$.
 
-This information could then be used mitigate for effects that cause violations of Eq. \ref{prob}. Specifcially, instead of using the measured values of the $\tilde{p_j}$, we instead use
+This information could then be used mitigate for effects that cause violations of Eq. (\ref{eq:prob}). Specifcially, instead of using the measured values of the $\tilde{p_j}$, we can instead use
 \be
-\bar{p_j} = \frac{ \tilde{p_j} + \tilde{p_k} }{2}
+\bar{p_j} = \frac{ \tilde{p_j} + \tilde{p_{c(j)}} }{2}
 \ee
 For cases in which two qubits are each most correlated with the other (i.e. $c(j)=k$ and $c(k)=j$), the resulting values of $\bar{p_j}$ and $\bar{p_k}$ will be equal. Assuming that the mutual informations can be used to correctly deduce pairings in most cases, this will result in significant improvements to results.
 
@@ -184,7 +193,7 @@ If played directly on a device (real or simulated) the pairing supplied by a pla
 
 The game can also be played using saved data, such as that from a run in which the pairs of the inverse slice are always chosen correctly. In this case, the main purpose of the game is to serve as a qualitative way of benchmarking devices. Greater size and more complex connectivity will allow more challenging puzzles, whereas greater noise will cause an infuriating degree of difficulty. The quality of a given device will therefore correlate well to how enjoyable the game is when played on it. This allows a high-level means of comparing devices that is accessible by the interested lay person.
 
-Examples of what is game would look like for the devices considered in this work are shown in Fig. \ref{fig:graphs}. In these, the number shown on each qubit is the corresponding $\tilde{\theta_j} \ (\pi/2)$ (as defined in Eq. (\ref{angle})) expressed as a percentage. These numbers also determine the colour used for each qubit, ranging from blue for $0\%$ to red for $100\%$. The aim is therefore to identify the correct pairs (which are labelled by letters) by matching qubits with similar numbers and colours.
+Examples of what is game would look like for the devices considered in this work are shown in Fig. \ref{fig:graphs}. In these, the number shown on each qubit is the corresponding $\tilde{\theta_j} / (\pi/2)$ expressed as a percentage. These numbers also determine the colour used for each qubit, ranging from blue for $0\%$ to red for $100\%$. The aim is therefore to identify the correct pairs (which are labelled by letters) by matching qubits with similar numbers and colours.
 
 This game, which is called \textit{Quantum Awesomeness}, can be played with the data presented in this paper at~\cite{awesomeness}.
 
@@ -202,11 +211,11 @@ The quantitative benchmarks of the previous section were applied to a set of exa
 
 Results for the fuzz are shown in Fig. \ref{fig:example_fuzz}. For each connectivity, the fuzz for the smallest case was found to behave very differently than the others. This is due to the fact that the fuzz will converge to a value that decays exponentially with qubit number as the state fully explores the Hilbert space. So though it can be said to vanish for large devices, it will not for small ones. The peak for the fuzz is therefore less visible for such small sizes.
 
-For the larger devices, the graphs show little variation for different sizes over the range considered. This is despite the fact that the build-up of long range entanglement will scale with system size~\cite{boixo:18}. This shows that our figures of merit benchmark the entanglement moving beyond the simple pairing provided by the entangling slices, rather than it becoming truly long range. This means that the vanishing of the fuzz, for example, is a neccessary condition for long range entanglement rather than a witness that it has occurred.
+For the larger devices, the graphs show little variation for different sizes over the range considered. This is despite the fact that the build-up of long range entanglement will scale with system size~\cite{boixo:18}. This shows that our figures of merit document the process of the entanglement moving beyond the simple pairing provided by the entangling slices, rather than it becoming truly long range. The vanishing of the fuzz, for example, is therefore not a witness of the build up of long range entanglement, but is is a neccessary condition.
 
-The peak and subsequent decay of the fuzz is found to depend strongly on connectivity. These processes are slowest for the least connected devices (the lines) and fastest for the most connected devcies (fully connected). The ladders and square lattices show similar behaviour, which lies between the two extremes.
+The peak and subsequent decay of the fuzz is found to depend strongly on connectivity. These processes are slowest for the least connected devices (the lines) and fastest for the most connected devices (fully connected). The ladders and square lattices show similar behaviour, which lies between the two extremes.
 
-Results for the fraction of correct pairings for MWPM are shown in Fig. \ref{fig:example_mwpm}. In each case, this fraction is found to decrease sharply for the first few rounds, before converging at a value which reflects the fraction of pairs that would be correct for a random guess. The round at which this occurs appears to correspond well to that at which the fuzz peaks.
+Results for the success rate of MWPM are shown in Fig. \ref{fig:example_mwpm}. In each case, this fraction is found to decrease sharply for the first few rounds, before converging at a value which reflects the fraction of pairs that would be correct for a random guess. The round at which this occurs appears to correspond well to that at which the fuzz peaks. This further shows that this is a significant point at which the entanglement moves beyond the short range correlations created directly by single entangling slices.
 
 Similar behaviour is found for the difference between the $\tilde{\theta_j}$ and their ideal values, as shown in Fig. \ref{fig:example_diff}. It first rises sharply before showing signs of convergence. The peak of the fuzz is again found to be a good rule of thumb for the point at which this occurs.
 
@@ -226,45 +235,33 @@ The average difference between the $\tilde{\theta_j}$ and their ideal values is 
 
 \subsection{19 qubit Rigetti device}  \label{subsec:acorn}
 
-Results for the the 19 qubit Rigetti device $\mathtt{19Q-Acorn}$ are shown in Fig. \ref{fig:acorn}. Here we find that the fuzz starts of at a peak at round 1, and decays thereafter. Error mitigation greatly reduces the values of the fuzz, though it also makes it difficult to distinguish the point at which the peak occurs. Nevertheless, it does seem to be delayed until at least round 3 by the mitigation. In either case, it is earlier than the peak for randomly chosen pairs for the inverse slices, which occurs at around round 8.
+Results for the the 19 qubit Rigetti device $\mathtt{19Q-Acorn}$ are shown in Fig. \ref{fig:acorn}. Here we find that the fuzz starts off at a peak at round 1, and decays thereafter. Error mitigation greatly reduces the values of the fuzz, though it is still difficult to distinguish the point at which the peak occurs. This is partly due to the connectivity of the device, which causes a smooth curve similar to that for a line graph. Nevertheless, it does seem to be delayed until at least round 3 by the mitigation. In either case, it is earlier than the peak for randomly chosen pairs for the inverse slices, which occurs at around round 8.
 
-The success rate for MWPM remains at around $0.6$, which is the success rate for random guessing, for all rounds studied. For mitigated data, however, the success rate starts as high as round $0.9$ and decays rapidly over the first four rounds. These success rates are found to be very similar to those of the simulation for randomly chosen pairs for the inverse slices.
+The success rate for MWPM instantly converges at around $0.6$, which is the success rate for random guessing. For mitigated data, however, the success rate starts as high as round $0.9$ and decays rapidly over the first four rounds. These success values very similar to those for the simulation of randomly chosen pairs for the inverse slices.
 
 The average difference between the $\tilde{\theta_j}$ and their ideal values is noticably higher than that for randomly chosen pairs up to round 10, where we cease to take data. Again, little difference is seen between non-mitgated and mitigated data, because our method of mitigation does not aim to correct for these values.
 
+\subsection{Summary}
 
-%\subsection{11 qubit Alibaba device}
-
+To summarize, results from real devices running circuits generated according to case 1 were compared to those from simulated instances of case 1 and 2. The results from the real devices were found to correspond more closely to the simulations of case 2, which shows a potent effect of the noise in washing away the expected structure from the outputs. The execption to this was the 5 qubit IBM device, which showed good agreement to the simulated case 1 once some post-processing was performed to mitigate errors. This therefore shows the strongest signs of what we have called \textit{quantum competence}.
 
 
 \section{Conclusions}
 
-We compared all quantum processors currently publicly available using benchmarks based on random circuits. The process can essentially be viewed as a game played on the devices, with the game designed such that it remains playable over many round only when the player is skilled.
+Given the results we have gathered, the conditions required for quantum computational supremacy seem to still be beyond current devices. The intermediate milestone of quantum competence, which was only clearly acheived for one of the devices considered, therefore provides a more realistic goal for experimental efforts in the near-term. Devices should be developed to show ever stronger demonstrations of this goal, and maintain this quality while the size of the devices is increased.
 
-Runs implemented on real devices were for the case of a perfect player. These were compared with simulated (and therefore noiseless) runs on the same device for both a similarly perfect player, and one whose moves are entirely random.
-
-It was found that the game when run on a real device corresponds well to the simulated runs with a random player. This demonstrates the strength of noise present in these devices: The glitchiness they cause in the game causes the same difficulty level as a completely unskilled player.
-
-Based on this, we define the notion of \textit{quantum competence}. To acheive this, a device should perform better for a perfect player on a real device than for an incompetent player on a perfect device. We found evidence that this is indeed acheived for the IBM devices, but only when post-processing is run on the output to mitigate for errors.
-
-The conditions required for quantum computational supremacy seem to still be beyond current devices. The milestone of quantum competence is therefore a more realistic goal for experimental efforts in the near-term. Devices should be developed to show ever stronger demonstrations of this goal, and maintain this quality while the size of the devices is increased.
-
-
-
+All data presented in this paper, as well as the software used to gather and process the data, is available at Ref \cite{awesomeness}. A link allowing a game to be played based on the data can be found therein.
 
 
 \section{Acknowledgements}
 
-This work was supported by the Swiss National Science Foundation and the NCCR QSIT.
+The author thanks Will Zeng, Alan Ho and Michael Bremner for discussions. This work was supported by the Swiss National Science Foundation and the NCCR QSIT.
 
-Results for this work were generated using hardware from IBM Q and Rigetti, and software from IBM Q (QISKit), Rigetti (Forest) and Project Q. The views expressed are those of the author and do not reflect the official policy or position of any of these entities.
+Results for this work were generated using hardware from IBM Q and Rigetti, and software from IBM Q (QISKit), Rigetti (Forest), Project Q and Joris van Rantwijk. The views expressed are those of the author and do not reflect the official policy or position of any of these entities.
 
 
 \bibliography{refs}
 
-\appendix
-
-\section{Figures for results}
 
 \pagebreak
 

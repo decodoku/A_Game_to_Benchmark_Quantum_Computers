@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.3.31)  5 JUN 2018 17:25
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.3.31)  6 JUN 2018 16:21
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -401,363 +401,259 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 50.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-)
-
-Package natbib Warning: Citation `boixo:18' on page 1 undefined on input line 5
-8.
-
-
-Package natbib Warning: Citation `boixo:18' on page 1 undefined on input line 5
-8.
-
-<figures/ibmqx4.png, id=1, 473.77pt x 305.14pt>
+) [1
+Non-PDF special ignored!{/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/upd
+map/pdftex.map}] <figures/ibmqx4.png, id=14, 473.77pt x 305.14pt>
 File: figures/ibmqx4.png Graphic file (type png)
- <use figures/ibmqx4.png>
-Package pdftex.def Info: figures/ibmqx4.png used on input line 70.
+
+<use figures/ibmqx4.png>
+Package pdftex.def Info: figures/ibmqx4.png used on input line 74.
 (pdftex.def)             Requested size: 123.0pt x 79.21811pt.
 
-<figures/ibmqx5.png, id=3, 1205.50375pt x 214.8025pt>
+<figures/ibmqx5.png, id=16, 1205.50375pt x 214.8025pt>
 File: figures/ibmqx5.png Graphic file (type png)
- <use figures/ibmqx5.png>
-Package pdftex.def Info: figures/ibmqx5.png used on input line 74.
+
+<use figures/ibmqx5.png>
+Package pdftex.def Info: figures/ibmqx5.png used on input line 78.
 (pdftex.def)             Requested size: 246.0pt x 43.83157pt.
-
-<figures/acorn.png, id=4, 1485.55pt x 395.4775pt>
+ <figures/acorn.png, id=17, 1485.55pt x 395.4775pt>
 File: figures/acorn.png Graphic file (type png)
- <use figures/acorn.png>
-Package pdftex.def Info: figures/acorn.png used on input line 78.
+
+<use figures/acorn.png>
+Package pdftex.def Info: figures/acorn.png used on input line 82.
 (pdftex.def)             Requested size: 246.0pt x 65.48631pt.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 116.
 
-
-Package natbib Warning: Citation `boixo:18' on page 1 undefined on input line 8
-4.
-
-[1
-Non-PDF special ignored!{/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/upd
-map/pdftex.map}]
-
-LaTeX Warning: A float is stuck (cannot be placed); try class option [floatfix]
- on input line 85.
-
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 114.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 114.
-
-
-LaTeX Warning: Reference `prob' on page 2 undefined on input line 117.
-
-[2 <./figures/ibmqx4.png> <./figures/ibmqx5.png> <./figures/acorn.png>]
-
-LaTeX Warning: Reference `prob' on page 3 undefined on input line 126.
-
-
-LaTeX Warning: Reference `prob' on page 3 undefined on input line 134.
-
-
-LaTeX Warning: Reference `prob' on page 3 undefined on input line 134.
-
-
-LaTeX Warning: Reference `prob' on page 3 undefined on input line 140.
-
-
-LaTeX Warning: Reference `prob' on page 3 undefined on input line 144.
-
-[3]
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 116.
+ [2 <./figures/ibmqx4.png> <./figures/ibmqx5.png> <./figures/acorn.png>] [3]
 Missing character: There is no â in font cmr10!
 Missing character: There is no € in font cmr10!
 Missing character: There is no ™ in font cmr10!
 Missing character: There is no â in font cmr10!
 Missing character: There is no € in font cmr10!
 Missing character: There is no ™ in font cmr10!
-
-
-LaTeX Warning: Reference `prob' on page 4 undefined on input line 173.
-
+ [4]
 Missing character: There is no â in font cmr10!
 Missing character: There is no € in font cmr10!
 Missing character: There is no ™ in font cmr10!
-[4]
-
-Package natbib Warning: Citation `awesomeness' on page 5 undefined on input lin
-e 189.
-
-
-LaTeX Warning: Reference `fig:example_fuzz' on page 5 undefined on input line 2
-03.
-
-
-Package natbib Warning: Citation `boixo:18' on page 5 undefined on input line 2
-05.
+ [5] (./paper.bbl
+Missing character: There is no Å in font cmr9!
+Missing character: There is no » in font cmr9!
+[6]
+Underfull \hbox (badness 10000) in paragraph at lines 93--96
+ []\OT1/cmr/m/n/9 J. Preskill, in \OT1/cmr/m/it/9 25th Solvay Con-fer-ence \OT1
+/cmr/m/n/9 (2012),
+ []
 
 
-LaTeX Warning: Reference `fig:example_mwpm' on page 5 undefined on input line 2
-09.
+Underfull \hbox (badness 1874) in paragraph at lines 144--148
+ []\OT1/cmr/m/n/9 J. R. Woot-ton (2017), Source code and data for
+ []
 
 
-LaTeX Warning: Reference `fig:example_diff' on page 5 undefined on input line 2
-11.
+Underfull \hbox (badness 2253) in paragraph at lines 144--148
+ \OT1/cmr/m/n/9 Quan-tum Awe-some-ness, ac-cessed June 2018, URL
+ []
 
 
-LaTeX Warning: Reference `fig:ibmqx4' on page 5 undefined on input line 215.
+Underfull \hbox (badness 10000) in paragraph at lines 144--148
+ \OT1/cmtt/m/n/9 https : / / github . com / decodoku / A _ Game _ to _ Benchmar
+k _
+ []
 
-! You can't use `macro parameter character #' in horizontal mode.
-l.216 #
-       $0.4$
-? 
-
-LaTeX Warning: Reference `fig:ibmqx5' on page 5 undefined on input line 218.
-
-[5]
-
-LaTeX Warning: Reference `fig:acorn' on page 6 undefined on input line 229.
-
-No file paper.bbl.
-[6] <figures/line_fuzz.png, id=44, 1878.01625pt x 664.4825pt>
+) <figures/line_fuzz.png, id=43, 1878.01625pt x 664.4825pt>
 File: figures/line_fuzz.png Graphic file (type png)
 
 <use figures/line_fuzz.png>
-Package pdftex.def Info: figures/line_fuzz.png used on input line 274.
+Package pdftex.def Info: figures/line_fuzz.png used on input line 271.
 (pdftex.def)             Requested size: 458.99689pt x 162.39914pt.
 
-<figures/ladder_fuzz.png, id=45, 1918.0458pt x 685.1196pt>
+<figures/ladder_fuzz.png, id=44, 1918.0458pt x 685.1196pt>
 File: figures/ladder_fuzz.png Graphic file (type png)
 
 <use figures/ladder_fuzz.png>
-Package pdftex.def Info: figures/ladder_fuzz.png used on input line 277.
+Package pdftex.def Info: figures/ladder_fuzz.png used on input line 274.
 (pdftex.def)             Requested size: 458.99689pt x 163.95117pt.
 
-<figures/square_fuzz.png, id=46, 1925.2728pt x 644.6484pt>
+<figures/square_fuzz.png, id=45, 1925.2728pt x 644.6484pt>
 File: figures/square_fuzz.png Graphic file (type png)
 
 <use figures/square_fuzz.png>
-Package pdftex.def Info: figures/square_fuzz.png used on input line 280.
+Package pdftex.def Info: figures/square_fuzz.png used on input line 277.
 (pdftex.def)             Requested size: 458.99689pt x 153.68594pt.
 
-<figures/web_fuzz.png, id=47, 1884.0789pt x 685.1196pt>
+<figures/web_fuzz.png, id=46, 1884.0789pt x 685.1196pt>
 File: figures/web_fuzz.png Graphic file (type png)
 
 <use figures/web_fuzz.png>
-Package pdftex.def Info: figures/web_fuzz.png used on input line 283.
+Package pdftex.def Info: figures/web_fuzz.png used on input line 280.
 (pdftex.def)             Requested size: 458.99689pt x 166.89922pt.
 
 
-LaTeX Warning: Reference `subsec:example' on page 7 undefined on input line 285
-.
+LaTeX Warning: Float too large for page by 13.93547pt on input line 283.
 
-
-LaTeX Warning: Reference `subsec:example' on page 7 undefined on input line 285
-.
-
-
-LaTeX Warning: Float too large for page by 13.93547pt on input line 286.
-
-<figures/line_mwpm.png, id=48, 1857.339pt x 685.1196pt>
+<figures/line_mwpm.png, id=47, 1857.339pt x 685.1196pt>
 File: figures/line_mwpm.png Graphic file (type png)
 
 <use figures/line_mwpm.png>
-Package pdftex.def Info: figures/line_mwpm.png used on input line 292.
+Package pdftex.def Info: figures/line_mwpm.png used on input line 289.
 (pdftex.def)             Requested size: 458.99689pt x 169.30365pt.
 
-<figures/ladder_mwpm.png, id=49, 1898.5329pt x 685.1196pt>
+<figures/ladder_mwpm.png, id=48, 1898.5329pt x 685.1196pt>
 File: figures/ladder_mwpm.png Graphic file (type png)
 
 <use figures/ladder_mwpm.png>
-Package pdftex.def Info: figures/ladder_mwpm.png used on input line 295.
+Package pdftex.def Info: figures/ladder_mwpm.png used on input line 292.
 (pdftex.def)             Requested size: 458.99689pt x 165.63428pt.
 
-<figures/square_mwpm.png, id=50, 1905.7599pt x 644.6484pt>
+<figures/square_mwpm.png, id=49, 1905.7599pt x 644.6484pt>
 File: figures/square_mwpm.png Graphic file (type png)
 
 <use figures/square_mwpm.png>
-Package pdftex.def Info: figures/square_mwpm.png used on input line 298.
+Package pdftex.def Info: figures/square_mwpm.png used on input line 295.
 (pdftex.def)             Requested size: 458.99689pt x 155.25978pt.
 
-<figures/web_mwpm.png, id=51, 1865.2887pt x 685.1196pt>
+<figures/web_mwpm.png, id=50, 1865.2887pt x 685.1196pt>
 File: figures/web_mwpm.png Graphic file (type png)
 
 <use figures/web_mwpm.png>
-Package pdftex.def Info: figures/web_mwpm.png used on input line 301.
+Package pdftex.def Info: figures/web_mwpm.png used on input line 298.
 (pdftex.def)             Requested size: 458.99689pt x 168.58232pt.
 
 
-LaTeX Warning: Reference `subsec:example' on page 7 undefined on input line 303
-.
+LaTeX Warning: Float too large for page by 37.78003pt on input line 301.
 
-
-LaTeX Warning: Reference `subsec:example' on page 7 undefined on input line 303
-.
-
-
-LaTeX Warning: Float too large for page by 37.78003pt on input line 304.
-
-<figures/line_diff.png, id=52, 1876.1292pt x 699.5736pt>
+<figures/line_diff.png, id=51, 1876.1292pt x 699.5736pt>
 File: figures/line_diff.png Graphic file (type png)
 
 <use figures/line_diff.png>
-Package pdftex.def Info: figures/line_diff.png used on input line 310.
+Package pdftex.def Info: figures/line_diff.png used on input line 307.
 (pdftex.def)             Requested size: 458.99689pt x 171.14618pt.
 
-<figures/ladder_diff.png, id=53, 1918.0458pt x 699.5736pt>
+<figures/ladder_diff.png, id=52, 1918.0458pt x 699.5736pt>
 File: figures/ladder_diff.png Graphic file (type png)
 
 <use figures/ladder_diff.png>
-Package pdftex.def Info: figures/ladder_diff.png used on input line 313.
+Package pdftex.def Info: figures/ladder_diff.png used on input line 310.
 (pdftex.def)             Requested size: 458.99689pt x 167.41005pt.
 
-<figures/square_diff.png, id=54, 1925.2728pt x 659.8251pt>
+<figures/square_diff.png, id=53, 1925.2728pt x 659.8251pt>
 File: figures/square_diff.png Graphic file (type png)
 
 <use figures/square_diff.png>
-Package pdftex.def Info: figures/square_diff.png used on input line 316.
+Package pdftex.def Info: figures/square_diff.png used on input line 313.
 (pdftex.def)             Requested size: 458.99689pt x 157.30411pt.
 
-<figures/web_diff.png, id=55, 1884.0789pt x 699.5736pt>
+<figures/web_diff.png, id=54, 1884.0789pt x 699.5736pt>
 File: figures/web_diff.png Graphic file (type png)
 
 <use figures/web_diff.png>
-Package pdftex.def Info: figures/web_diff.png used on input line 319.
+Package pdftex.def Info: figures/web_diff.png used on input line 316.
 (pdftex.def)             Requested size: 458.99689pt x 170.4203pt.
 
 
-LaTeX Warning: Reference `subsec:example' on page 7 undefined on input line 321
-.
+LaTeX Warning: Float too large for page by 33.28064pt on input line 319.
 
-
-LaTeX Warning: Reference `subsec:example' on page 7 undefined on input line 321
-.
-
-
-LaTeX Warning: Float too large for page by 45.28064pt on input line 322.
-
-<figures/ibmqx4_fuzz.png, id=56, 1898.09125pt x 632.3625pt>
+<figures/ibmqx4_fuzz.png, id=55, 1898.09125pt x 632.3625pt>
 File: figures/ibmqx4_fuzz.png Graphic file (type png)
 
 <use figures/ibmqx4_fuzz.png>
-Package pdftex.def Info: figures/ibmqx4_fuzz.png used on input line 329.
+Package pdftex.def Info: figures/ibmqx4_fuzz.png used on input line 326.
 (pdftex.def)             Requested size: 510.0pt x 169.91034pt.
 
-<figures/ibmqx4_mwpm.png, id=57, 1877.5746pt x 644.6484pt>
+<figures/ibmqx4_mwpm.png, id=56, 1877.5746pt x 644.6484pt>
 File: figures/ibmqx4_mwpm.png Graphic file (type png)
 
 <use figures/ibmqx4_mwpm.png>
-Package pdftex.def Info: figures/ibmqx4_mwpm.png used on input line 332.
+Package pdftex.def Info: figures/ibmqx4_mwpm.png used on input line 329.
 (pdftex.def)             Requested size: 510.0pt x 175.10007pt.
 
-<figures/ibmqx4_diff.png, id=58, 1896.3648pt x 659.8251pt>
+<figures/ibmqx4_diff.png, id=57, 1896.3648pt x 659.8251pt>
 File: figures/ibmqx4_diff.png Graphic file (type png)
 
 <use figures/ibmqx4_diff.png>
-Package pdftex.def Info: figures/ibmqx4_diff.png used on input line 335.
+Package pdftex.def Info: figures/ibmqx4_diff.png used on input line 332.
 (pdftex.def)             Requested size: 510.0pt x 177.45038pt.
 
-
-LaTeX Warning: Reference `subsec:ibm' on page 7 undefined on input line 337.
-
-
-LaTeX Warning: Reference `subsec:ibm' on page 7 undefined on input line 337.
-
-<figures/ibmqx5_fuzz.png, id=59, 1917.1625pt x 632.3625pt>
+<figures/ibmqx5_fuzz.png, id=58, 1917.1625pt x 632.3625pt>
 File: figures/ibmqx5_fuzz.png Graphic file (type png)
 
 <use figures/ibmqx5_fuzz.png>
-Package pdftex.def Info: figures/ibmqx5_fuzz.png used on input line 344.
+Package pdftex.def Info: figures/ibmqx5_fuzz.png used on input line 341.
 (pdftex.def)             Requested size: 510.0pt x 168.2121pt.
 
-<figures/ibmqx5_mwpm.png, id=60, 1877.5746pt x 644.6484pt>
+<figures/ibmqx5_mwpm.png, id=59, 1877.5746pt x 644.6484pt>
 File: figures/ibmqx5_mwpm.png Graphic file (type png)
 
 <use figures/ibmqx5_mwpm.png>
-Package pdftex.def Info: figures/ibmqx5_mwpm.png used on input line 347.
+Package pdftex.def Info: figures/ibmqx5_mwpm.png used on input line 344.
 (pdftex.def)             Requested size: 510.0pt x 175.10007pt.
 
-<figures/ibmqx5_diff.png, id=61, 1896.3648pt x 659.8251pt>
+<figures/ibmqx5_diff.png, id=60, 1896.3648pt x 659.8251pt>
 File: figures/ibmqx5_diff.png Graphic file (type png)
 
 <use figures/ibmqx5_diff.png>
-Package pdftex.def Info: figures/ibmqx5_diff.png used on input line 350.
+Package pdftex.def Info: figures/ibmqx5_diff.png used on input line 347.
 (pdftex.def)             Requested size: 510.0pt x 177.45038pt.
 
-
-LaTeX Warning: Reference `subsec:ibm' on page 7 undefined on input line 352.
-
-
-LaTeX Warning: Reference `subsec:ibm' on page 7 undefined on input line 352.
-
-<figures/acorn_fuzz.png, id=62, 1944.26375pt x 632.3625pt>
+<figures/acorn_fuzz.png, id=61, 1944.26375pt x 632.3625pt>
 File: figures/acorn_fuzz.png Graphic file (type png)
 
 <use figures/acorn_fuzz.png>
-Package pdftex.def Info: figures/acorn_fuzz.png used on input line 359.
+Package pdftex.def Info: figures/acorn_fuzz.png used on input line 356.
 (pdftex.def)             Requested size: 510.0pt x 165.86737pt.
 
-<figures/acorn_mwpm.png, id=63, 1924.5501pt x 644.6484pt>
+<figures/acorn_mwpm.png, id=62, 1924.5501pt x 644.6484pt>
 File: figures/acorn_mwpm.png Graphic file (type png)
 
 <use figures/acorn_mwpm.png>
-Package pdftex.def Info: figures/acorn_mwpm.png used on input line 362.
+Package pdftex.def Info: figures/acorn_mwpm.png used on input line 359.
 (pdftex.def)             Requested size: 510.0pt x 170.83101pt.
 
-<figures/acorn_diff.png, id=64, 1962.8532pt x 659.8251pt>
+<figures/acorn_diff.png, id=63, 1962.8532pt x 659.8251pt>
 File: figures/acorn_diff.png Graphic file (type png)
 
 <use figures/acorn_diff.png>
-Package pdftex.def Info: figures/acorn_diff.png used on input line 365.
+Package pdftex.def Info: figures/acorn_diff.png used on input line 362.
 (pdftex.def)             Requested size: 510.0pt x 171.43973pt.
-
-
-LaTeX Warning: Reference `subsec:ibm' on page 7 undefined on input line 367.
-
-
-LaTeX Warning: Reference `subsec:ibm' on page 7 undefined on input line 367.
-
-
-Package natbib Warning: There were undefined citations.
-
-[7 <./figures/line_fuzz.png> <./figures/ladder_fuzz.png> <./figures/square_fuzz
-.png> <./figures/web_fuzz.png>] [8 <./figures/line_mwpm.png> <./figures/ladder_
-mwpm.png> <./figures/square_mwpm.png> <./figures/web_mwpm.png>] [9 <./figures/l
-ine_diff.png> <./figures/ladder_diff.png> <./figures/square_diff.png> <./figure
-s/web_diff.png>] [10 <./figures/ibmqx4_fuzz.png> <./figures/ibmqx4_mwpm.png> <.
-/figures/ibmqx4_diff.png>] [11 <./figures/ibmqx5_fuzz.png> <./figures/ibmqx5_mw
-pm.png> <./figures/ibmqx5_diff.png>] [12 <./figures/acorn_fuzz.png> <./figures/
-acorn_mwpm.png> <./figures/acorn_diff.png>] (./paper.aux)
-
-LaTeX Warning: There were undefined references.
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right .
-
-
- ) 
+ [7] [8 <./figures/line_fuzz.png> <./figures/ladder_fuzz.png> <./figures/square
+_fuzz.png> <./figures/web_fuzz.png>] [9 <./figures/line_mwpm.png> <./figures/la
+dder_mwpm.png> <./figures/square_mwpm.png> <./figures/web_mwpm.png>] [10 <./fig
+ures/line_diff.png> <./figures/ladder_diff.png> <./figures/square_diff.png> <./
+figures/web_diff.png>] [11 <./figures/ibmqx4_fuzz.png> <./figures/ibmqx4_mwpm.p
+ng> <./figures/ibmqx4_diff.png>] [12 <./figures/ibmqx5_fuzz.png> <./figures/ibm
+qx5_mwpm.png> <./figures/ibmqx5_diff.png>] [13 <./figures/acorn_fuzz.png> <./fi
+gures/acorn_mwpm.png> <./figures/acorn_diff.png>]
+(./paper.aux) ) 
 Here is how much of TeX's memory you used:
- 6349 strings out of 493089
- 92526 string characters out of 6134842
- 182130 words of memory out of 5000000
- 9705 multiletter control sequences out of 15000+600000
+ 6427 strings out of 493089
+ 93818 string characters out of 6134842
+ 189130 words of memory out of 5000000
+ 9781 multiletter control sequences out of 15000+600000
  15179 words of font info for 58 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 42i,7n,40p,1097b,539s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
-></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb>
-</usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></
-usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></u
-sr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></us
-r/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/
-local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/lo
-cal/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local
-/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/te
-xlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/tex
-live/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texli
-ve/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/local/texlive
-/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/
-2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb></usr/local/texlive/20
-15/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/201
-5/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb>
-Output written on paper.pdf (12 pages, 4602534 bytes).
+ 42i,7n,40p,1010b,539s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmbx12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/c
+m/cmbx9.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/
+cmex10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mmi10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cm
+mi7.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr1
+0.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.p
+fb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb>
+</usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><
+/usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></u
+sr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr
+/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/
+local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb></usr/lo
+cal/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/loc
+al/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb>
+Output written on paper.pdf (13 pages, 4617891 bytes).
 PDF statistics:
  156 PDF objects out of 1000 (max. 8388607)
  77 compressed objects within 1 object stream

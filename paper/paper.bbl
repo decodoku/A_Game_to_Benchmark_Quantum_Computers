@@ -1,0 +1,149 @@
+\begin{thebibliography}{16}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+\expandafter\ifx\csname bibnamefont\endcsname\relax
+  \def\bibnamefont#1{#1}\fi
+\expandafter\ifx\csname bibfnamefont\endcsname\relax
+  \def\bibfnamefont#1{#1}\fi
+\expandafter\ifx\csname citenamefont\endcsname\relax
+  \def\citenamefont#1{#1}\fi
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{\texttt{#1}}\fi
+\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
+\providecommand{\bibinfo}[2]{#2}
+\providecommand{\eprint}[2][]{\url{#2}}
+
+\bibitem[{\citenamefont{Emerson et~al.}(2005)\citenamefont{Emerson, Alicki, and
+  Życzkowski}}]{emerson:05}
+\bibinfo{author}{\bibfnamefont{J.}~\bibnamefont{Emerson}},
+  \bibinfo{author}{\bibfnamefont{R.}~\bibnamefont{Alicki}}, \bibnamefont{and}
+  \bibinfo{author}{\bibfnamefont{K.}~\bibnamefont{Życzkowski}},
+  \bibinfo{journal}{Journal of Optics B: Quantum and Semiclassical Optics}
+  \textbf{\bibinfo{volume}{7}}, \bibinfo{pages}{S347} (\bibinfo{year}{2005}).
+
+\bibitem[{\citenamefont{Magesan et~al.}(2011)\citenamefont{Magesan, Gambetta,
+  and Emerson}}]{magesan:11}
+\bibinfo{author}{\bibfnamefont{E.}~\bibnamefont{Magesan}},
+  \bibinfo{author}{\bibfnamefont{J.~M.} \bibnamefont{Gambetta}},
+  \bibnamefont{and} \bibinfo{author}{\bibfnamefont{J.}~\bibnamefont{Emerson}},
+  \bibinfo{journal}{Phys. Rev. Lett.} \textbf{\bibinfo{volume}{106}},
+  \bibinfo{pages}{180504} (\bibinfo{year}{2011}).
+
+\bibitem[{\citenamefont{Moll et~al.}(2017)\citenamefont{Moll, Barkoutsos,
+  Bishop, Chow, Cross, Egger, Filipp, Fuhrer, Gambetta, Ganzhorn
+  et~al.}}]{moll:17}
+\bibinfo{author}{\bibfnamefont{N.}~\bibnamefont{Moll}},
+  \bibinfo{author}{\bibfnamefont{P.}~\bibnamefont{Barkoutsos}},
+  \bibinfo{author}{\bibfnamefont{L.~S.} \bibnamefont{Bishop}},
+  \bibinfo{author}{\bibfnamefont{J.~M.} \bibnamefont{Chow}},
+  \bibinfo{author}{\bibfnamefont{A.}~\bibnamefont{Cross}},
+  \bibinfo{author}{\bibfnamefont{D.~J.} \bibnamefont{Egger}},
+  \bibinfo{author}{\bibfnamefont{S.}~\bibnamefont{Filipp}},
+  \bibinfo{author}{\bibfnamefont{A.}~\bibnamefont{Fuhrer}},
+  \bibinfo{author}{\bibfnamefont{J.~M.} \bibnamefont{Gambetta}},
+  \bibinfo{author}{\bibfnamefont{M.}~\bibnamefont{Ganzhorn}},
+  \bibnamefont{et~al.} (\bibinfo{year}{2017}),
+  \bibinfo{note}{arXiv:1710.01022}.
+
+\bibitem[{\citenamefont{Coles et~al.}(2018)\citenamefont{Coles, Eidenbenz,
+  Pakin, Adedoyin, Ambrosiano, Anisimov, Casper, Chennupati, Coffrin, Djidjev
+  et~al.}}]{coles:18}
+\bibinfo{author}{\bibfnamefont{P.~J.} \bibnamefont{Coles}},
+  \bibinfo{author}{\bibfnamefont{S.}~\bibnamefont{Eidenbenz}},
+  \bibinfo{author}{\bibfnamefont{S.}~\bibnamefont{Pakin}},
+  \bibinfo{author}{\bibfnamefont{A.}~\bibnamefont{Adedoyin}},
+  \bibinfo{author}{\bibfnamefont{J.}~\bibnamefont{Ambrosiano}},
+  \bibinfo{author}{\bibfnamefont{P.}~\bibnamefont{Anisimov}},
+  \bibinfo{author}{\bibfnamefont{W.}~\bibnamefont{Casper}},
+  \bibinfo{author}{\bibfnamefont{G.}~\bibnamefont{Chennupati}},
+  \bibinfo{author}{\bibfnamefont{C.}~\bibnamefont{Coffrin}},
+  \bibinfo{author}{\bibfnamefont{H.}~\bibnamefont{Djidjev}},
+  \bibnamefont{et~al.} (\bibinfo{year}{2018}),
+  \bibinfo{note}{arXiv:1804.03719}.
+
+\bibitem[{\citenamefont{Wootton and Loss}(2018)}]{wootton:18}
+\bibinfo{author}{\bibfnamefont{J.~R.} \bibnamefont{Wootton}} \bibnamefont{and}
+  \bibinfo{author}{\bibfnamefont{D.}~\bibnamefont{Loss}},
+  \bibinfo{journal}{Phys. Rev. A} \textbf{\bibinfo{volume}{97}},
+  \bibinfo{pages}{052313} (\bibinfo{year}{2018}).
+
+\bibitem[{\citenamefont{Naveh et~al.}(2018)\citenamefont{Naveh, Kashefi,
+  Wootton, and Bertels}}]{naveh:18}
+\bibinfo{author}{\bibfnamefont{Y.}~\bibnamefont{Naveh}},
+  \bibinfo{author}{\bibfnamefont{E.}~\bibnamefont{Kashefi}},
+  \bibinfo{author}{\bibfnamefont{J.~R.} \bibnamefont{Wootton}},
+  \bibnamefont{and} \bibinfo{author}{\bibfnamefont{K.}~\bibnamefont{Bertels}},
+  in \emph{\bibinfo{booktitle}{{Proceedings of the 2018 Design, Automation and
+  Test in Europe (DATE)}}} (\bibinfo{year}{2018}).
+
+\bibitem[{\citenamefont{Boixo et~al.}(2018)\citenamefont{Boixo, Isakov,
+  Smelyanskiy, Babbush, Ding, Jiang, Bremner, Martinis, and Neven}}]{boixo:18}
+\bibinfo{author}{\bibfnamefont{S.}~\bibnamefont{Boixo}},
+  \bibinfo{author}{\bibfnamefont{S.~V.} \bibnamefont{Isakov}},
+  \bibinfo{author}{\bibfnamefont{V.~N.} \bibnamefont{Smelyanskiy}},
+  \bibinfo{author}{\bibfnamefont{R.}~\bibnamefont{Babbush}},
+  \bibinfo{author}{\bibfnamefont{N.}~\bibnamefont{Ding}},
+  \bibinfo{author}{\bibfnamefont{Z.}~\bibnamefont{Jiang}},
+  \bibinfo{author}{\bibfnamefont{M.~J.} \bibnamefont{Bremner}},
+  \bibinfo{author}{\bibfnamefont{J.~M.} \bibnamefont{Martinis}},
+  \bibnamefont{and} \bibinfo{author}{\bibfnamefont{H.}~\bibnamefont{Neven}},
+  \bibinfo{journal}{Nature Physics}  (\bibinfo{year}{2018}), ISSN
+  \bibinfo{issn}{1745-2481}.
+
+\bibitem[{\citenamefont{Preskill}(2012)}]{preskill:12}
+\bibinfo{author}{\bibfnamefont{J.}~\bibnamefont{Preskill}}, in
+  \emph{\bibinfo{booktitle}{25th Solvay Conference}} (\bibinfo{year}{2012}),
+  \bibinfo{note}{arXiv:1203.5813}.
+
+\bibitem[{\citenamefont{Chen et~al.}(2018)\citenamefont{Chen, Zhang, Huang,
+  Newman, and Shi}}]{chen:18}
+\bibinfo{author}{\bibfnamefont{J.}~\bibnamefont{Chen}},
+  \bibinfo{author}{\bibfnamefont{F.}~\bibnamefont{Zhang}},
+  \bibinfo{author}{\bibfnamefont{C.}~\bibnamefont{Huang}},
+  \bibinfo{author}{\bibfnamefont{M.}~\bibnamefont{Newman}}, \bibnamefont{and}
+  \bibinfo{author}{\bibfnamefont{Y.}~\bibnamefont{Shi}} (\bibinfo{year}{2018}),
+  \bibinfo{note}{arXiv:1805.01450}.
+
+\bibitem[{\citenamefont{IBM}(2018)}]{ibm:backends}
+\bibinfo{author}{\bibnamefont{IBM}} (\bibinfo{year}{2018}),
+  \bibinfo{note}{{{IBM QX team, backend specification, accessed June 2018}}},
+  \urlprefix\url{https://github.com/QISKit/qiskit-backend-information}.
+
+\bibitem[{\citenamefont{Rigetti}(2018)}]{rigetti:acorn}
+\bibinfo{author}{\bibnamefont{Rigetti}} (\bibinfo{year}{2018}),
+  \bibinfo{note}{{{Rigetti QPU overview, accessed 2018}}},
+  \urlprefix\url{http://pyquil.readthedocs.io/en/latest/qpu.html}.
+
+\bibitem[{\citenamefont{Dennis et~al.}(2002)\citenamefont{Dennis, Kitaev,
+  Landahl, and Preskill}}]{dennis}
+\bibinfo{author}{\bibfnamefont{E.}~\bibnamefont{Dennis}},
+  \bibinfo{author}{\bibfnamefont{A.}~\bibnamefont{Kitaev}},
+  \bibinfo{author}{\bibfnamefont{A.}~\bibnamefont{Landahl}}, \bibnamefont{and}
+  \bibinfo{author}{\bibfnamefont{J.}~\bibnamefont{Preskill}},
+  \bibinfo{journal}{J. Math. Phys.} \textbf{\bibinfo{volume}{43}},
+  \bibinfo{pages}{4452} (\bibinfo{year}{2002}).
+
+\bibitem[{\citenamefont{Lidar and Brun}(2013)}]{lidar:13}
+\bibinfo{editor}{\bibfnamefont{D.~A.} \bibnamefont{Lidar}} \bibnamefont{and}
+  \bibinfo{editor}{\bibfnamefont{T.~A.} \bibnamefont{Brun}}, eds.,
+  \emph{\bibinfo{title}{{Quantum Error Correction}}}
+  (\bibinfo{publisher}{Cambridge University Press},
+  \bibinfo{address}{{Cambride, UK}}, \bibinfo{year}{2013}).
+
+\bibitem[{\citenamefont{Edmonds}(1965)}]{edmonds:65}
+\bibinfo{author}{\bibfnamefont{J.}~\bibnamefont{Edmonds}},
+  \bibinfo{journal}{Canad. J. Math.} \textbf{\bibinfo{volume}{17}},
+  \bibinfo{pages}{449} (\bibinfo{year}{1965}).
+
+\bibitem[{\citenamefont{van Rantwijk}(2018)}]{rantwijk}
+\bibinfo{author}{\bibfnamefont{J.}~\bibnamefont{van Rantwijk}}
+  (\bibinfo{year}{2018}), \bibinfo{note}{{{Weighted maximum matching in general
+  graphs, accessed June 2018}}},
+  \urlprefix\url{http://jorisvr.nl/article/maximum-matching}.
+
+\bibitem[{\citenamefont{Wootton}(2017)}]{awesomeness}
+\bibinfo{author}{\bibfnamefont{J.~R.} \bibnamefont{Wootton}}
+  (\bibinfo{year}{2017}), \bibinfo{note}{{{Source code and data for Quantum
+  Awesomeness, accessed June 2018}}},
+  \urlprefix\url{https://github.com/decodoku/A_Game_to_Benchmark_Quantum_Computers/blob/master/README.md}.
+
+\end{thebibliography}
