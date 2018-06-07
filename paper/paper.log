@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.8.23)  7 JUN 2018 17:36
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.8.23)  7 JUN 2018 17:47
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -461,13 +461,13 @@ Missing character: There is no ² in font cmr10!
 Missing character: There is no â in font cmr10!
 Missing character: There is no € in font cmr10!
 Missing character: There is no ² in font cmr10!
- [5] [6] (./paper.bbl [7]
+ [5] [6] (./paper.bbl
 Underfull \hbox (badness 10000) in paragraph at lines 93--96
  []\OT1/cmr/m/n/9 J. Preskill, in \OT1/cmr/m/it/9 25th Solvay Con-fer-ence \OT1
 /cmr/m/n/9 (2012),
  []
 
-
+[7]
 Underfull \hbox (badness 1874) in paragraph at lines 152--156
  []\OT1/cmr/m/n/9 J. R. Woot-ton (2017), Source code and data for
  []
@@ -672,7 +672,7 @@ rn_diff.png>] (./paper.aux) )
 Here is how much of TeX's memory you used:
  6495 strings out of 494910
  94548 string characters out of 6179836
- 180445 words of memory out of 5000000
+ 179445 words of memory out of 5000000
  9650 multiletter control sequences out of 15000+600000
  15179 words of font info for 58 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
@@ -692,7 +692,7 @@ lic/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
 sfonts/cm/cmti9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
 cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmt
 t9.pfb>
-Output written on paper.pdf (15 pages, 5545978 bytes).
+Output written on paper.pdf (15 pages, 5545921 bytes).
 PDF statistics:
  174 PDF objects out of 1000 (max. 8388607)
  81 compressed objects within 1 object stream
