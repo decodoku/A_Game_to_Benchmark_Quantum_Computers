@@ -4,7 +4,7 @@ def supportedDevices ():
 
 	# Returns the list of all supported devices
 
-	return ["ibmqx4","ibmqx5","19Q-Acorn"]
+	return ["ibmqx4","ibmqx5","19Q-Acorn","8Q-Agave"]
 
 def getLayout (device):
 
@@ -135,7 +135,7 @@ def getLayout (device):
     elif device=="19Q-Acorn":
         # A device by Rigetti with 20 qubits, but since one is isolated it is effectively 19
         # https://arxiv.org/abs/1712.05771
-        # http://pyquil.readthedocs.io/en/latest/qpu_overview.html#acorn-qpu-properties
+        # http://pyquil.readthedocs.io/en/latest/qpu.html
     
         num = 20
         area = [10,4]
@@ -152,7 +152,20 @@ def getLayout (device):
         sdk = "Forest"
         runs = {True:{'shots':[100],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[10000],'move':['C'],'maxScore':10,'samples':1000}}
     
+    elif device=="8Q-Agave":
+        # A device by Rigetti with 8 qubits
+        # http://pyquil.readthedocs.io/en/latest/qpu.html
     
+        num = 8
+        area = [3,3]
+        entangleType = "CZ"
+        pairs = { 'A': [0,1], 'B': [1,2], 'C': [2,3], 'D': [3,4], 'E': [4,5], 'F': [5,6], 'G': [6,7],
+                  'H': [7,0] }
+        pos = { 0: [1,2], 1: [0,2], 2: [0,1], 3: [0,0],
+                4: [1,0], 5: [2,0], 6: [2,1], 7: [2,2] }
+        example = [0.44, 0.45, 0.06, 0.075, 0.175, 0.165, 0.235, 0.225]
+        sdk = "Forest"
+        runs = {True:{'shots':[100],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[10000],'move':['C'],'maxScore':10,'samples':1000}}
     
     ######## ALIBABA DEVICES ########
     
