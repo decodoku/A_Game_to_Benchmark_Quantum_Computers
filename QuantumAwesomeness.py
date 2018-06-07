@@ -264,13 +264,13 @@ def getResults ( device, sim, shots, q, c, engine, script ):
         # execute job
         noResults = True
         while noResults:
-            try: # try to run, and wait for 10 mins if it fails
+            try: # try to run, and wait for 5 mins if it fails
                 resultsVeryRaw = engine.run_and_measure(script, qubits_active, trials=shots)
                 noResults = False
             except Exception as e:
-                print(e)
-                print("Job failed. We'll wait and try again.")
-                time.sleep(1800)
+                #print(e)
+                print("\nJob failed. We'll wait and try again.\n")
+                time.sleep(300)
                 
         # convert them the correct form
         resultsRaw = {}
@@ -543,8 +543,12 @@ def printPuzzle ( device, oneProb, move ):
                 labels[node] = node
 
         # show it
+        if area[0]>2*area[1]:
+            ratio = 0.65
+        else:
+            ratio = 1
 
-        plt.figure(2,figsize=(2*area[0],1.25*area[1])) 
+        plt.figure(2,figsize=(2*area[0],2*ratio*area[1])) 
         nx.draw(G, pos, node_color = colors, node_size = sizes, labels = labels, with_labels = True,
                 font_color ='w', font_size = 22.5)
 
