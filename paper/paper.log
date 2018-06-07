@@ -1,12 +1,12 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.3.31)  6 JUN 2018 16:21
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.8.23)  7 JUN 2018 17:36
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **paper.tex
 (./paper.tex
-LaTeX2e <2015/01/01>
-Babel <3.9l> and hyphenation patterns for 79 languages loaded.
-(/usr/local/texlive/2015/texmf-dist/tex/latex/revtex/revtex4-1.cls
+LaTeX2e <2016/02/01>
+Babel <3.9q> and hyphenation patterns for 5 language(s) loaded.
+(/usr/share/texlive/texmf-dist/tex/latex/revtex/revtex4-1.cls
 Document Class: revtex4-1 2010/07/25/20:33:00 4.1r (http://publish.aps.org/revt
 ex4/ for documentation)
  Copyright (c) 2009 The American Physical Society.
@@ -66,7 +66,7 @@ Class revtex4-1 Info: Overriding \@vspace, \@vspacer, \@no@pgbk, \@newline, and
 \widetext@top=\box39
 \widetext@bot=\box40
 Class revtex4-1 Info: Selecting society aps on input line 7542.
-(/usr/local/texlive/2015/texmf-dist/tex/latex/revtex/aps4-1.rtx
+(/usr/share/texlive/texmf-dist/tex/latex/revtex/aps4-1.rtx
 File: aps4-1 2010/07/25/20:33:00 4.1r (http://publish.aps.org/revtex4/ for docu
 mentation)
 Class revtex4-1 Info: RevTeX society APS selected on input line 31.
@@ -77,19 +77,19 @@ Class revtex4-1 Info: APS journal PRL selected on input line 7545.
 
 Class revtex4-1 Warning: No type size specified, using default 10.
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/revtex/aps10pt4-1.rtx
+(/usr/share/texlive/texmf-dist/tex/latex/revtex/aps10pt4-1.rtx
 File: aps10pt4-1 2010/07/25/20:33:00 4.1r (http://publish.aps.org/revtex4/ for 
 documentation)
 Class revtex4-1 Info: RevTeX pointsize 10pt selected on input line 30.
 )
-(/usr/local/texlive/2015/texmf-dist/tex/latex/textcase/textcase.sty
+(/usr/share/texlive/texmf-dist/tex/latex/textcase/textcase.sty
 Package: textcase 2004/10/07 v0.07 Text only upper/lower case changing (DPC)
 )
-(/usr/local/texlive/2015/texmf-dist/tex/latex/url/url.sty
+(/usr/share/texlive/texmf-dist/tex/latex/url/url.sty
 \Urlmuskip=\muskip10
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
-(/usr/local/texlive/2015/texmf-dist/tex/latex/natbib/natbib.sty
+(/usr/share/texlive/texmf-dist/tex/latex/natbib/natbib.sty
 Package: natbib 2010/09/13 8.31b (PWD, AO)
 \bibhang=\skip44
 \bibsep=\skip45
@@ -98,32 +98,32 @@ LaTeX Info: Redefining \cite on input line 694.
 )
 Class revtex4-1 Info: Repairing natbib's \BibitemShut on input line 7549.
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/revtex/revsymb4-1.sty
+(/usr/share/texlive/texmf-dist/tex/latex/revtex/revsymb4-1.sty
 Package: revsymb4-1 2010/07/25/20:33:00 4.1r (http://publish.aps.org/revtex4/ f
 or documentation)
 LaTeX Info: Redefining \REV@mathfrak on input line 119.
 ))
-(/usr/local/texlive/2015/texmf-dist/tex/latex/psfrag/psfrag.sty
+(/usr/share/texlive/texmf-dist/tex/latex/psfrag/psfrag.sty
 Package: psfrag 1998/04/11 v3.04 PSfrag (MCG)
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/graphics/graphics.sty
-Package: graphics 2014/10/28 v1.0p Standard LaTeX Graphics (DPC,SPQR)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2016/01/03 v1.0q Standard LaTeX Graphics (DPC,SPQR)
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/graphics/trig.sty
-Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
 )
-(/usr/local/texlive/2015/texmf-dist/tex/latex/latexconfig/graphics.cfg
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/graphics.cfg
 File: graphics.cfg 2010/04/23 v1.9 graphics configuration of TeX Live
 )
-Package graphics Info: Driver file: pdftex.def on input line 94.
+Package graphics Info: Driver file: pdftex.def on input line 95.
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/pdftex-def/pdftex.def
+(/usr/share/texlive/texmf-dist/tex/latex/pdftex-def/pdftex.def
 File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
 
-(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/infwarerr.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/infwarerr.sty
 Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
 )
-(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
 Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
 )
 \Gread@gobject=\count95
@@ -132,20 +132,20 @@ Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
 \pfg@scount=\count97
 \pfg@temp=\write4
 )
-(/usr/local/texlive/2015/texmf-dist/tex/latex/graphics/graphicx.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
 Package: graphicx 2014/10/28 v1.0g Enhanced LaTeX Graphics (DPC,SPQR)
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/graphics/keyval.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
 Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
 \KV@toks@=\toks16
 )
 \Gin@req@height=\dimen102
 \Gin@req@width=\dimen103
 )
-(/usr/local/texlive/2015/texmf-dist/tex/latex/tools/dcolumn.sty
+(/usr/share/texlive/texmf-dist/tex/latex/tools/dcolumn.sty
 Package: dcolumn 2014/10/28 v1.06 decimal alignment package (DPC)
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/tools/array.sty
+(/usr/share/texlive/texmf-dist/tex/latex/tools/array.sty
 Package: array 2014/10/28 v2.4c Tabular extension package (FMi)
 \col@sep=\dimen104
 \extrarowheight=\dimen105
@@ -153,43 +153,43 @@ Package: array 2014/10/28 v2.4c Tabular extension package (FMi)
 \extratabsurround=\skip46
 \backup@length=\skip47
 ))
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsmath.sty
-Package: amsmath 2013/01/14 v2.14 AMS math features
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2016/03/03 v2.15a AMS math features
 \@mathmargin=\skip48
 
 For additional information on amsmath, use the `?' option.
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amstext.sty
-Package: amstext 2000/06/29 v2.01
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+Package: amstext 2000/06/29 v2.01 AMS text
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsgen.sty
-File: amsgen.sty 1999/11/30 v2.0
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0 generic functions
 \@emptytoks=\toks18
 \ex@=\dimen106
 )
-LaTeX Info: Redefining \text on input line 39.
+LaTeX Info: Redefining \text on input line 28.
 )
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsbsy.sty
-Package: amsbsy 1999/11/29 v1.2d
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d Bold Symbols
 \pmbraise@=\dimen107
 )
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsopn.sty
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty
 Package: amsopn 1999/12/14 v2.01 operator names
 )
 \inf@bad=\count98
-LaTeX Info: Redefining \frac on input line 210.
+LaTeX Info: Redefining \frac on input line 199.
 \uproot@=\count99
 \leftroot@=\count100
-LaTeX Info: Redefining \overline on input line 306.
+LaTeX Info: Redefining \overline on input line 297.
 \classnum@=\count101
 \DOTSCASE@=\count102
-LaTeX Info: Redefining \ldots on input line 378.
-LaTeX Info: Redefining \dots on input line 381.
-LaTeX Info: Redefining \cdots on input line 466.
+LaTeX Info: Redefining \ldots on input line 394.
+LaTeX Info: Redefining \dots on input line 397.
+LaTeX Info: Redefining \cdots on input line 518.
 \Mathstrutbox@=\box41
 \strutbox@=\box42
 \big@size=\dimen108
-LaTeX Font Info:    Redeclaring font encoding OML on input line 566.
-LaTeX Font Info:    Redeclaring font encoding OMS on input line 567.
+LaTeX Font Info:    Redeclaring font encoding OML on input line 630.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 631.
 \macc@depth=\count103
 \c@MaxMatrixCols=\count104
 \dotsspace@=\muskip11
@@ -210,13 +210,13 @@ LaTeX Font Info:    Redeclaring font encoding OMS on input line 567.
 \multlinegap=\skip49
 \multlinetaggap=\skip50
 \mathdisplay@stack=\toks22
-LaTeX Info: Redefining \[ on input line 2665.
-LaTeX Info: Redefining \] on input line 2666.
+LaTeX Info: Redefining \[ on input line 2735.
+LaTeX Info: Redefining \] on input line 2736.
 )
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
 Package: amssymb 2013/01/14 v3.01 AMS font symbols
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty
 Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
 \symAMSa=\mathgroup4
 \symAMSb=\mathgroup5
@@ -225,7 +225,7 @@ LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 LaTeX Info: Redefining \frak on input line 111.
 LaTeX Info: Redefining \Bbb on input line 113.
 ))
-(/usr/local/texlive/2015/texmf-dist/tex/latex/tools/bm.sty
+(/usr/share/texlive/texmf-dist/tex/latex/tools/bm.sty
 Package: bm 2014/10/28 v1.1c Bold Symbol Support (DPC/FMi)
 \symboldoperators=\mathgroup6
 \symboldletters=\mathgroup7
@@ -233,28 +233,28 @@ Package: bm 2014/10/28 v1.1c Bold Symbol Support (DPC/FMi)
 LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 141.
 LaTeX Info: Redefining \bm on input line 207.
 )
-(/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/epstopdf.sty
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf.sty
 Package: epstopdf 2010/02/09 v2.5 Conversion with epstopdf on the fly (HO)
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/grfext.sty
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/grfext.sty
 Package: grfext 2010/08/19 v1.1 Manage graphics extensions (HO)
 
-(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty
 Package: kvdefinekeys 2011/04/07 v1.3 Define keys (HO)
 ))
-(/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/kvoptions.sty
 Package: kvoptions 2011/06/30 v3.11 Key value format for package options (HO)
 
-(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
 Package: kvsetkeys 2012/04/25 v1.16 Key value parser (HO)
 
-(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/etexcmds.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/etexcmds.sty
 Package: etexcmds 2011/02/16 v1.5 Avoid name clashes with e-TeX commands (HO)
 
-(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/ifluatex.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifluatex.sty
 Package: ifluatex 2010/03/01 v1.3 Provides the ifluatex switch (HO)
 Package ifluatex Info: LuaTeX not detected.
 )
@@ -263,11 +263,11 @@ Package etexcmds Info: Could not find \expanded.
 (etexcmds)             that some package has redefined \expanded.
 (etexcmds)             In the latter case, load this package earlier.
 )))
-(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
 Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
 )
 
-(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/ifpdf.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifpdf.sty
 Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
 Package ifpdf Info: pdfTeX in PDF mode is detected.
 )
@@ -281,14 +281,14 @@ Package grfext Info: Graphics extension search list:
 G,.JBIG2,.JB2,.eps]
 (grfext)             \AppendGraphicsExtensions on input line 452.
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 )))
-(/usr/local/texlive/2015/texmf-dist/tex/latex/mathtools/mathtools.sty
-Package: mathtools 2015/05/11 v1.16 mathematical typesetting tools
+(/usr/share/texlive/texmf-dist/tex/latex/mathtools/mathtools.sty
+Package: mathtools 2015/11/12 v1.18 mathematical typesetting tools
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/tools/calc.sty
+(/usr/share/texlive/texmf-dist/tex/latex/tools/calc.sty
 Package: calc 2014/10/28 v4.3 Infix arithmetic (KKT,FJ)
 \calc@Acount=\count110
 \calc@Bcount=\count111
@@ -301,7 +301,7 @@ LaTeX Info: Redefining \addtolength on input line 81.
 \calc@Ccount=\count112
 \calc@Cskip=\skip53
 )
-(/usr/local/texlive/2015/texmf-dist/tex/latex/mathtools/mhsetup.sty
+(/usr/share/texlive/texmf-dist/tex/latex/mathtools/mhsetup.sty
 Package: mhsetup 2010/01/21 v1.2a programming setup (MH)
 )
 LaTeX Info: Thecontrolsequence`\('isalreadyrobust on input line 129.
@@ -318,15 +318,15 @@ LaTeX Info: Thecontrolsequence`\]'isalreadyrobust on input line 129.
 \l_MT_above_shortintertext_sep=\dimen122
 \l_MT_below_shortintertext_sep=\dimen123
 )
-(/usr/local/texlive/2015/texmf-dist/tex/latex/caption/subcaption.sty
-Package: subcaption 2013/02/03 v1.1-62 Sub-captions (AR)
+(/usr/share/texlive/texmf-dist/tex/latex/caption/subcaption.sty
+Package: subcaption 2016/02/20 v1.1-142 Sub-captions (AR)
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/caption/caption.sty
-Package: caption 2013/05/02 v3.3-89 Customizing captions (AR)
+(/usr/share/texlive/texmf-dist/tex/latex/caption/caption.sty
+Package: caption 2016/02/21 v3.3-144 Customizing captions (AR)
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/caption/caption3.sty
-Package: caption3 2013/05/02 v1.6-88 caption3 kernel (AR)
-Package caption3 Info: TeX engine: e-TeX on input line 57.
+(/usr/share/texlive/texmf-dist/tex/latex/caption/caption3.sty
+Package: caption3 2016/02/04 v1.7-139 caption3 kernel (AR)
+Package caption3 Info: TeX engine: e-TeX on input line 67.
 \captionmargin=\dimen124
 \captionmargin@=\dimen125
 \captionwidth=\dimen126
@@ -374,8 +374,7 @@ LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 29.
 LaTeX Font Info:    ... okay on input line 29.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 29.
 LaTeX Font Info:    ... okay on input line 29.
-
-(/usr/local/texlive/2015/texmf-dist/tex/context/base/supp-pdf.mkii
+ (/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count117
 \scratchdimen=\dimen131
@@ -394,19 +393,18 @@ Package caption Info: End \AtBeginDocument code.
 \openout3 = `paperNotes.bib'.
 
 LaTeX Font Info:    Try loading font information for U+msa on input line 50.
- (/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsa.fd
+ (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
 LaTeX Font Info:    Try loading font information for U+msb on input line 50.
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsb.fd
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
-Non-PDF special ignored!{/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/upd
-map/pdftex.map}] <figures/ibmqx4.png, id=14, 473.77pt x 305.14pt>
+Non-PDF special ignored!{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
+<figures/ibmqx4.png, id=14, 473.77pt x 305.14pt>
 File: figures/ibmqx4.png Graphic file (type png)
-
-<use figures/ibmqx4.png>
+ <use figures/ibmqx4.png>
 Package pdftex.def Info: figures/ibmqx4.png used on input line 74.
 (pdftex.def)             Requested size: 123.0pt x 79.21811pt.
 
@@ -416,247 +414,288 @@ File: figures/ibmqx5.png Graphic file (type png)
 <use figures/ibmqx5.png>
 Package pdftex.def Info: figures/ibmqx5.png used on input line 78.
 (pdftex.def)             Requested size: 246.0pt x 43.83157pt.
- <figures/acorn.png, id=17, 1485.55pt x 395.4775pt>
+ <figures/agave.png, id=17, 365.365pt x 359.3425pt>
+File: figures/agave.png Graphic file (type png)
+
+<use figures/agave.png>
+Package pdftex.def Info: figures/agave.png used on input line 82.
+(pdftex.def)             Requested size: 123.0pt x 120.97403pt.
+ <figures/acorn.png, id=18, 1485.55pt x 395.4775pt>
 File: figures/acorn.png Graphic file (type png)
 
 <use figures/acorn.png>
-Package pdftex.def Info: figures/acorn.png used on input line 82.
+Package pdftex.def Info: figures/acorn.png used on input line 86.
 (pdftex.def)             Requested size: 246.0pt x 65.48631pt.
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 116.
+ [2 <./figures/ibmqx4.png> <./figures/ibmqx5.png> <./figures/agave.png> <./figu
+res/acorn.png>]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 124.
 
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/base/omscmr.fd
+(/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 116.
- [2 <./figures/ibmqx4.png> <./figures/ibmqx5.png> <./figures/acorn.png>] [3]
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 124.
+ [3]
+<figures/example_fuzz.png, id=36, 1264.725pt x 632.3625pt>
+File: figures/example_fuzz.png Graphic file (type png)
+
+<use figures/example_fuzz.png>
+Package pdftex.def Info: figures/example_fuzz.png used on input line 169.
+(pdftex.def)             Requested size: 246.0pt x 122.9966pt.
+
+<figures/example_mwpm.png, id=37, 1226.4219pt x 644.6484pt>
+File: figures/example_mwpm.png Graphic file (type png)
+
+<use figures/example_mwpm.png>
+Package pdftex.def Info: figures/example_mwpm.png used on input line 189.
+(pdftex.def)             Requested size: 246.0pt x 129.30118pt.
+ [4 <./figures/example_fuzz.png> <./figures/example_mwpm.png>]
+File: figures/example_mwpm.png Graphic file (type png)
+ <use figures/example_mwpm.png>
+Package pdftex.def Info: figures/example_mwpm.png used on input line 207.
+(pdftex.def)             Requested size: 246.0pt x 129.30118pt.
 Missing character: There is no â in font cmr10!
 Missing character: There is no € in font cmr10!
-Missing character: There is no ™ in font cmr10!
+Missing character: There is no ² in font cmr10!
 Missing character: There is no â in font cmr10!
 Missing character: There is no € in font cmr10!
-Missing character: There is no ™ in font cmr10!
- [4]
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no ™ in font cmr10!
- [5] (./paper.bbl
-Missing character: There is no Å in font cmr9!
-Missing character: There is no » in font cmr9!
-[6]
+Missing character: There is no ² in font cmr10!
+ [5] [6] (./paper.bbl [7]
 Underfull \hbox (badness 10000) in paragraph at lines 93--96
  []\OT1/cmr/m/n/9 J. Preskill, in \OT1/cmr/m/it/9 25th Solvay Con-fer-ence \OT1
 /cmr/m/n/9 (2012),
  []
 
 
-Underfull \hbox (badness 1874) in paragraph at lines 144--148
+Underfull \hbox (badness 1874) in paragraph at lines 152--156
  []\OT1/cmr/m/n/9 J. R. Woot-ton (2017), Source code and data for
  []
 
 
-Underfull \hbox (badness 2253) in paragraph at lines 144--148
+Underfull \hbox (badness 2253) in paragraph at lines 152--156
  \OT1/cmr/m/n/9 Quan-tum Awe-some-ness, ac-cessed June 2018, URL
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 144--148
+Underfull \hbox (badness 10000) in paragraph at lines 152--156
  \OT1/cmtt/m/n/9 https : / / github . com / decodoku / A _ Game _ to _ Benchmar
 k _
  []
 
-) <figures/line_fuzz.png, id=43, 1878.01625pt x 664.4825pt>
+) <figures/line_fuzz.png, id=53, 1878.01625pt x 664.4825pt>
 File: figures/line_fuzz.png Graphic file (type png)
 
 <use figures/line_fuzz.png>
-Package pdftex.def Info: figures/line_fuzz.png used on input line 271.
+Package pdftex.def Info: figures/line_fuzz.png used on input line 321.
 (pdftex.def)             Requested size: 458.99689pt x 162.39914pt.
 
-<figures/ladder_fuzz.png, id=44, 1918.0458pt x 685.1196pt>
+<figures/ladder_fuzz.png, id=54, 1919.17pt x 664.4825pt>
 File: figures/ladder_fuzz.png Graphic file (type png)
 
 <use figures/ladder_fuzz.png>
-Package pdftex.def Info: figures/ladder_fuzz.png used on input line 274.
-(pdftex.def)             Requested size: 458.99689pt x 163.95117pt.
+Package pdftex.def Info: figures/ladder_fuzz.png used on input line 324.
+(pdftex.def)             Requested size: 458.99689pt x 158.91125pt.
 
-<figures/square_fuzz.png, id=45, 1925.2728pt x 644.6484pt>
+<figures/square_fuzz.png, id=55, 1925.2728pt x 644.6484pt>
 File: figures/square_fuzz.png Graphic file (type png)
 
 <use figures/square_fuzz.png>
-Package pdftex.def Info: figures/square_fuzz.png used on input line 277.
+Package pdftex.def Info: figures/square_fuzz.png used on input line 327.
 (pdftex.def)             Requested size: 458.99689pt x 153.68594pt.
 
-<figures/web_fuzz.png, id=46, 1884.0789pt x 685.1196pt>
+<figures/web_fuzz.png, id=56, 1884.0789pt x 685.1196pt>
 File: figures/web_fuzz.png Graphic file (type png)
 
 <use figures/web_fuzz.png>
-Package pdftex.def Info: figures/web_fuzz.png used on input line 280.
+Package pdftex.def Info: figures/web_fuzz.png used on input line 330.
 (pdftex.def)             Requested size: 458.99689pt x 166.89922pt.
 
 
-LaTeX Warning: Float too large for page by 13.93547pt on input line 283.
+LaTeX Warning: Float too large for page by 8.89555pt on input line 333.
 
-<figures/line_mwpm.png, id=47, 1857.339pt x 685.1196pt>
+<figures/line_mwpm.png, id=57, 1857.339pt x 685.1196pt>
 File: figures/line_mwpm.png Graphic file (type png)
 
 <use figures/line_mwpm.png>
-Package pdftex.def Info: figures/line_mwpm.png used on input line 289.
+Package pdftex.def Info: figures/line_mwpm.png used on input line 339.
 (pdftex.def)             Requested size: 458.99689pt x 169.30365pt.
 
-<figures/ladder_mwpm.png, id=48, 1898.5329pt x 685.1196pt>
+<figures/ladder_mwpm.png, id=58, 1898.5329pt x 685.1196pt>
 File: figures/ladder_mwpm.png Graphic file (type png)
 
 <use figures/ladder_mwpm.png>
-Package pdftex.def Info: figures/ladder_mwpm.png used on input line 292.
+Package pdftex.def Info: figures/ladder_mwpm.png used on input line 342.
 (pdftex.def)             Requested size: 458.99689pt x 165.63428pt.
 
-<figures/square_mwpm.png, id=49, 1905.7599pt x 644.6484pt>
+<figures/square_mwpm.png, id=59, 1905.7599pt x 644.6484pt>
 File: figures/square_mwpm.png Graphic file (type png)
 
 <use figures/square_mwpm.png>
-Package pdftex.def Info: figures/square_mwpm.png used on input line 295.
+Package pdftex.def Info: figures/square_mwpm.png used on input line 345.
 (pdftex.def)             Requested size: 458.99689pt x 155.25978pt.
 
-<figures/web_mwpm.png, id=50, 1865.2887pt x 685.1196pt>
+<figures/web_mwpm.png, id=60, 1865.2887pt x 685.1196pt>
 File: figures/web_mwpm.png Graphic file (type png)
 
 <use figures/web_mwpm.png>
-Package pdftex.def Info: figures/web_mwpm.png used on input line 298.
+Package pdftex.def Info: figures/web_mwpm.png used on input line 348.
 (pdftex.def)             Requested size: 458.99689pt x 168.58232pt.
 
 
-LaTeX Warning: Float too large for page by 37.78003pt on input line 301.
+LaTeX Warning: Float too large for page by 25.78003pt on input line 351.
 
-<figures/line_diff.png, id=51, 1876.1292pt x 699.5736pt>
+<figures/line_diff.png, id=61, 1876.1292pt x 699.5736pt>
 File: figures/line_diff.png Graphic file (type png)
 
 <use figures/line_diff.png>
-Package pdftex.def Info: figures/line_diff.png used on input line 307.
+Package pdftex.def Info: figures/line_diff.png used on input line 357.
 (pdftex.def)             Requested size: 458.99689pt x 171.14618pt.
 
-<figures/ladder_diff.png, id=52, 1918.0458pt x 699.5736pt>
+<figures/ladder_diff.png, id=62, 1918.0458pt x 699.5736pt>
 File: figures/ladder_diff.png Graphic file (type png)
 
 <use figures/ladder_diff.png>
-Package pdftex.def Info: figures/ladder_diff.png used on input line 310.
+Package pdftex.def Info: figures/ladder_diff.png used on input line 360.
 (pdftex.def)             Requested size: 458.99689pt x 167.41005pt.
 
-<figures/square_diff.png, id=53, 1925.2728pt x 659.8251pt>
+<figures/square_diff.png, id=63, 1925.2728pt x 659.8251pt>
 File: figures/square_diff.png Graphic file (type png)
 
 <use figures/square_diff.png>
-Package pdftex.def Info: figures/square_diff.png used on input line 313.
+Package pdftex.def Info: figures/square_diff.png used on input line 363.
 (pdftex.def)             Requested size: 458.99689pt x 157.30411pt.
 
-<figures/web_diff.png, id=54, 1884.0789pt x 699.5736pt>
+<figures/web_diff.png, id=64, 1884.0789pt x 699.5736pt>
 File: figures/web_diff.png Graphic file (type png)
 
 <use figures/web_diff.png>
-Package pdftex.def Info: figures/web_diff.png used on input line 316.
+Package pdftex.def Info: figures/web_diff.png used on input line 366.
 (pdftex.def)             Requested size: 458.99689pt x 170.4203pt.
 
 
-LaTeX Warning: Float too large for page by 33.28064pt on input line 319.
+LaTeX Warning: Float too large for page by 33.28064pt on input line 369.
 
-<figures/ibmqx4_fuzz.png, id=55, 1898.09125pt x 632.3625pt>
+<figures/ibmqx4_fuzz.png, id=65, 1898.09125pt x 632.3625pt>
 File: figures/ibmqx4_fuzz.png Graphic file (type png)
 
 <use figures/ibmqx4_fuzz.png>
-Package pdftex.def Info: figures/ibmqx4_fuzz.png used on input line 326.
+Package pdftex.def Info: figures/ibmqx4_fuzz.png used on input line 376.
 (pdftex.def)             Requested size: 510.0pt x 169.91034pt.
 
-<figures/ibmqx4_mwpm.png, id=56, 1877.5746pt x 644.6484pt>
+<figures/ibmqx4_mwpm.png, id=66, 1877.5746pt x 644.6484pt>
 File: figures/ibmqx4_mwpm.png Graphic file (type png)
 
 <use figures/ibmqx4_mwpm.png>
-Package pdftex.def Info: figures/ibmqx4_mwpm.png used on input line 329.
+Package pdftex.def Info: figures/ibmqx4_mwpm.png used on input line 379.
 (pdftex.def)             Requested size: 510.0pt x 175.10007pt.
 
-<figures/ibmqx4_diff.png, id=57, 1896.3648pt x 659.8251pt>
+<figures/ibmqx4_diff.png, id=67, 1896.3648pt x 659.8251pt>
 File: figures/ibmqx4_diff.png Graphic file (type png)
 
 <use figures/ibmqx4_diff.png>
-Package pdftex.def Info: figures/ibmqx4_diff.png used on input line 332.
+Package pdftex.def Info: figures/ibmqx4_diff.png used on input line 382.
 (pdftex.def)             Requested size: 510.0pt x 177.45038pt.
 
-<figures/ibmqx5_fuzz.png, id=58, 1917.1625pt x 632.3625pt>
+<figures/ibmqx5_fuzz.png, id=68, 1917.1625pt x 632.3625pt>
 File: figures/ibmqx5_fuzz.png Graphic file (type png)
 
 <use figures/ibmqx5_fuzz.png>
-Package pdftex.def Info: figures/ibmqx5_fuzz.png used on input line 341.
+Package pdftex.def Info: figures/ibmqx5_fuzz.png used on input line 391.
 (pdftex.def)             Requested size: 510.0pt x 168.2121pt.
 
-<figures/ibmqx5_mwpm.png, id=59, 1877.5746pt x 644.6484pt>
+<figures/ibmqx5_mwpm.png, id=69, 1877.5746pt x 644.6484pt>
 File: figures/ibmqx5_mwpm.png Graphic file (type png)
 
 <use figures/ibmqx5_mwpm.png>
-Package pdftex.def Info: figures/ibmqx5_mwpm.png used on input line 344.
+Package pdftex.def Info: figures/ibmqx5_mwpm.png used on input line 394.
 (pdftex.def)             Requested size: 510.0pt x 175.10007pt.
 
-<figures/ibmqx5_diff.png, id=60, 1896.3648pt x 659.8251pt>
+<figures/ibmqx5_diff.png, id=70, 1896.3648pt x 659.8251pt>
 File: figures/ibmqx5_diff.png Graphic file (type png)
 
 <use figures/ibmqx5_diff.png>
-Package pdftex.def Info: figures/ibmqx5_diff.png used on input line 347.
+Package pdftex.def Info: figures/ibmqx5_diff.png used on input line 397.
 (pdftex.def)             Requested size: 510.0pt x 177.45038pt.
 
-<figures/acorn_fuzz.png, id=61, 1944.26375pt x 632.3625pt>
+<figures/agave_fuzz.png, id=71, 1932.21875pt x 632.3625pt>
+File: figures/agave_fuzz.png Graphic file (type png)
+
+<use figures/agave_fuzz.png>
+Package pdftex.def Info: figures/agave_fuzz.png used on input line 406.
+(pdftex.def)             Requested size: 510.0pt x 166.90947pt.
+
+<figures/agave_mwpm.png, id=72, 1912.9869pt x 644.6484pt>
+File: figures/agave_mwpm.png Graphic file (type png)
+
+<use figures/agave_mwpm.png>
+Package pdftex.def Info: figures/agave_mwpm.png used on input line 409.
+(pdftex.def)             Requested size: 510.0pt x 171.854pt.
+
+<figures/agave_diff.png, id=73, 1931.7771pt x 659.8251pt>
+File: figures/agave_diff.png Graphic file (type png)
+
+<use figures/agave_diff.png>
+Package pdftex.def Info: figures/agave_diff.png used on input line 412.
+(pdftex.def)             Requested size: 510.0pt x 174.19838pt.
+
+<figures/acorn_fuzz.png, id=74, 1944.26375pt x 632.3625pt>
 File: figures/acorn_fuzz.png Graphic file (type png)
 
 <use figures/acorn_fuzz.png>
-Package pdftex.def Info: figures/acorn_fuzz.png used on input line 356.
+Package pdftex.def Info: figures/acorn_fuzz.png used on input line 421.
 (pdftex.def)             Requested size: 510.0pt x 165.86737pt.
 
-<figures/acorn_mwpm.png, id=62, 1924.5501pt x 644.6484pt>
+<figures/acorn_mwpm.png, id=75, 1924.5501pt x 644.6484pt>
 File: figures/acorn_mwpm.png Graphic file (type png)
 
 <use figures/acorn_mwpm.png>
-Package pdftex.def Info: figures/acorn_mwpm.png used on input line 359.
+Package pdftex.def Info: figures/acorn_mwpm.png used on input line 424.
 (pdftex.def)             Requested size: 510.0pt x 170.83101pt.
 
-<figures/acorn_diff.png, id=63, 1962.8532pt x 659.8251pt>
+<figures/acorn_diff.png, id=76, 1962.8532pt x 659.8251pt>
 File: figures/acorn_diff.png Graphic file (type png)
 
 <use figures/acorn_diff.png>
-Package pdftex.def Info: figures/acorn_diff.png used on input line 362.
+Package pdftex.def Info: figures/acorn_diff.png used on input line 427.
 (pdftex.def)             Requested size: 510.0pt x 171.43973pt.
- [7] [8 <./figures/line_fuzz.png> <./figures/ladder_fuzz.png> <./figures/square
-_fuzz.png> <./figures/web_fuzz.png>] [9 <./figures/line_mwpm.png> <./figures/la
-dder_mwpm.png> <./figures/square_mwpm.png> <./figures/web_mwpm.png>] [10 <./fig
-ures/line_diff.png> <./figures/ladder_diff.png> <./figures/square_diff.png> <./
-figures/web_diff.png>] [11 <./figures/ibmqx4_fuzz.png> <./figures/ibmqx4_mwpm.p
-ng> <./figures/ibmqx4_diff.png>] [12 <./figures/ibmqx5_fuzz.png> <./figures/ibm
-qx5_mwpm.png> <./figures/ibmqx5_diff.png>] [13 <./figures/acorn_fuzz.png> <./fi
-gures/acorn_mwpm.png> <./figures/acorn_diff.png>]
-(./paper.aux) ) 
+ [8] [9 <./figures/line_fuzz.png> <./figures/ladder_fuzz.png> <./figures/square
+_fuzz.png> <./figures/web_fuzz.png>] [10 <./figures/line_mwpm.png> <./figures/l
+adder_mwpm.png> <./figures/square_mwpm.png> <./figures/web_mwpm.png>] [11 <./fi
+gures/line_diff.png> <./figures/ladder_diff.png> <./figures/square_diff.png> <.
+/figures/web_diff.png>] [12 <./figures/ibmqx4_fuzz.png> <./figures/ibmqx4_mwpm.
+png> <./figures/ibmqx4_diff.png>] [13 <./figures/ibmqx5_fuzz.png> <./figures/ib
+mqx5_mwpm.png> <./figures/ibmqx5_diff.png>]
+[14 <./figures/agave_fuzz.png> <./figures/agave_mwpm.png> <./figures/agave_diff
+.png>] [15 <./figures/acorn_fuzz.png> <./figures/acorn_mwpm.png> <./figures/aco
+rn_diff.png>] (./paper.aux) ) 
 Here is how much of TeX's memory you used:
- 6427 strings out of 493089
- 93818 string characters out of 6134842
- 189130 words of memory out of 5000000
- 9781 multiletter control sequences out of 15000+600000
+ 6495 strings out of 494910
+ 94548 string characters out of 6179836
+ 180445 words of memory out of 5000000
+ 9650 multiletter control sequences out of 15000+600000
  15179 words of font info for 58 fonts, out of 8000000 for 9000
- 1141 hyphenation exceptions out of 8191
- 42i,7n,40p,1010b,539s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmbx12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/c
-m/cmbx9.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/
-cmex10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/c
-mmi10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-mi7.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr1
-0.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.p
-fb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb>
-</usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><
-/usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></u
-sr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr
-/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/
-local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb></usr/lo
-cal/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/loc
-al/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb>
-Output written on paper.pdf (13 pages, 4617891 bytes).
+ 36 hyphenation exceptions out of 8191
+ 42i,7n,40p,1078b,543s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texlive/texmf-dist/fonts/type1/public/
+amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfon
+ts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.
+pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></u
+sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/shar
+e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/f
+onts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmsy9.pfb></usr/share/texlive/texmf-dist/fonts/type1/pub
+lic/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
+sfonts/cm/cmti9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmt
+t9.pfb>
+Output written on paper.pdf (15 pages, 5545978 bytes).
 PDF statistics:
- 156 PDF objects out of 1000 (max. 8388607)
- 77 compressed objects within 1 object stream
+ 174 PDF objects out of 1000 (max. 8388607)
+ 81 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 121 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 151 words of extra memory for PDF output out of 10000 (max. 10000000)
 

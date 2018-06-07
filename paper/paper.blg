@@ -1,4 +1,4 @@
-This is BibTeX, Version 0.99d (TeX Live 2015)
+This is BibTeX, Version 0.99d (TeX Live 2015/Debian)
 Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: paper.aux
 The style file: apsrev.bst
@@ -7,44 +7,44 @@ Database file #1: paperNotes.bib
 Database file #2: refs.bib
 Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
-You've used 16 entries,
+You've used 17 entries,
             3411 wiz_defined-function locations,
-            1239 strings with 13244 characters,
-and the built_in function-call counts, 11306 in all, are:
-= -- 589
-> -- 483
-< -- 66
-+ -- 416
-- -- 120
-* -- 1568
-:= -- 1237
-add.period$ -- 16
-call.type$ -- 16
-change.case$ -- 68
-chr.to.int$ -- 16
-cite$ -- 16
-duplicate$ -- 1007
-empty$ -- 900
-format.name$ -- 280
-if$ -- 2058
+            1244 strings with 13412 characters,
+and the built_in function-call counts, 12005 in all, are:
+= -- 628
+> -- 508
+< -- 69
++ -- 436
+- -- 126
+* -- 1671
+:= -- 1312
+add.period$ -- 17
+call.type$ -- 17
+change.case$ -- 72
+chr.to.int$ -- 17
+cite$ -- 17
+duplicate$ -- 1073
+empty$ -- 958
+format.name$ -- 295
+if$ -- 2187
 int.to.chr$ -- 1
-int.to.str$ -- 17
-missing$ -- 144
-newline$ -- 63
-num.names$ -- 49
-pop$ -- 241
+int.to.str$ -- 18
+missing$ -- 154
+newline$ -- 66
+num.names$ -- 52
+pop$ -- 255
 preamble$ -- 1
-purify$ -- 64
+purify$ -- 68
 quote$ -- 0
-skip$ -- 448
+skip$ -- 471
 stack$ -- 0
-substring$ -- 266
-swap$ -- 798
-text.length$ -- 58
+substring$ -- 281
+swap$ -- 854
+text.length$ -- 61
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 94
+type$ -- 100
 warning$ -- 0
-while$ -- 37
+while$ -- 40
 width$ -- 0
-write$ -- 169
+write$ -- 180

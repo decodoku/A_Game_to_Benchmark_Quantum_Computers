@@ -1,4 +1,4 @@
-\begin{thebibliography}{16}
+\begin{thebibliography}{17}
 \expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
 \expandafter\ifx\csname bibnamefont\endcsname\relax
   \def\bibnamefont#1{#1}\fi
@@ -13,10 +13,10 @@
 \providecommand{\eprint}[2][]{\url{#2}}
 
 \bibitem[{\citenamefont{Emerson et~al.}(2005)\citenamefont{Emerson, Alicki, and
-  Życzkowski}}]{emerson:05}
+  Zyczkowski}}]{emerson:05}
 \bibinfo{author}{\bibfnamefont{J.}~\bibnamefont{Emerson}},
   \bibinfo{author}{\bibfnamefont{R.}~\bibnamefont{Alicki}}, \bibnamefont{and}
-  \bibinfo{author}{\bibfnamefont{K.}~\bibnamefont{Życzkowski}},
+  \bibinfo{author}{\bibfnamefont{K.}~\bibnamefont{Zyczkowski}},
   \bibinfo{journal}{Journal of Optics B: Quantum and Semiclassical Optics}
   \textbf{\bibinfo{volume}{7}}, \bibinfo{pages}{S347} (\bibinfo{year}{2005}).
 
@@ -112,6 +112,14 @@
 \bibinfo{author}{\bibnamefont{Rigetti}} (\bibinfo{year}{2018}),
   \bibinfo{note}{{{Rigetti QPU overview, accessed 2018}}},
   \urlprefix\url{http://pyquil.readthedocs.io/en/latest/qpu.html}.
+
+\bibitem[{\citenamefont{Gambetta et~al.}(2017)\citenamefont{Gambetta, Chow, and
+  Steffen}}]{gambetta:17}
+\bibinfo{author}{\bibfnamefont{J.~M.} \bibnamefont{Gambetta}},
+  \bibinfo{author}{\bibfnamefont{J.~M.} \bibnamefont{Chow}}, \bibnamefont{and}
+  \bibinfo{author}{\bibfnamefont{M.}~\bibnamefont{Steffen}},
+  \bibinfo{journal}{npj Quantum Information} \textbf{\bibinfo{volume}{3}},
+  \bibinfo{pages}{2} (\bibinfo{year}{2017}), ISSN \bibinfo{issn}{2056-6387}.
 
 \bibitem[{\citenamefont{Dennis et~al.}(2002)\citenamefont{Dennis, Kitaev,
   Landahl, and Preskill}}]{dennis}
