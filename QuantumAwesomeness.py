@@ -484,7 +484,7 @@ def calculateMutual ( oneProb, sameProb, pairs ):
         
     return I
 
-def printPuzzle ( device, oneProb, move ):
+def printPuzzle ( device, oneProb, move, ascii=False ):
     
     # ### *printPuzzle*
     # 
@@ -504,55 +504,104 @@ def printPuzzle ( device, oneProb, move ):
     
     if move=="M":
         
-        # create a graph with qubits as vertices and possible entangling gates as edges
+        if ascii:
+            
+            def change_char (string, char, pos):
+                return string[:pos] + char + string[(pos+len(char)):]
 
-        G=nx.Graph()
+            lines = 5
+            length = 10
 
-        for p in pairs:
-            if p[0:4]!='fake':
-                G.add_edge(pairs[p][0],pairs[p][1])
+            def get_x (X):
+                return int( length * X )
 
-        for p in pairs:
-            if p[0:4]!='fake':
-                G.add_edge(pairs[p][0],p)
-                G.add_edge(pairs[p][1],p)
-                pos[p] = [(pos[pairs[p][0]][dim] + pos[pairs[p][1]][dim])/2 for dim in range(2)]
+            def get_y (Y):
+                return H-1 - int( lines * Y )
 
-        # colour and label the edges with the oneProb data
-        colors = []
-        sizes = []
-        labels = {}
-        for node in G:
-            if type(node)!=str:
-                if (oneProb[node]>1): # if oneProb is out of bounds (due to this node having already been selected) make it grey
-                    colors.append( (0.5,0.5,0.5) )
-                else: # otherwise it is on the spectrum between red and blue
-                    # E = min(1, 2*calculateFrac( oneProb[node] ) ) # colour is determine by the guessed frac
-                    E = calculateEntanglement( oneProb[node] ) # colour is determined by entanglement
-                    colors.append( (1-E,0,E) )
-                sizes.append( 3000 )
-                if oneProb[node]>1:
-                    labels[node] = ""
-                elif oneProb[node]==0.5:
-                    labels[node] = "99"
-                else:
-                    labels[node] = "%.0f" % ( 100 * ( E ) )
-            else:
-                colors.append( "black" )
-                sizes.append( 1000 )
-                labels[node] = node
+            W = length*(area[0]-1)+1
+            H = lines*(area[1]-1)+1
 
-        # show it
-        if area[0]>2*area[1]:
-            ratio = 0.65
+            plot = [ "░"*(W+4) for _ in range(H) ]
+
+            for pair in pairs:
+                x = get_x( (pos[pairs[pair][0]][0]+pos[pairs[pair][1]][0])/2 )
+                y = get_y( (pos[pairs[pair][0]][1]+pos[pairs[pair][1]][1])/2 )
+                plot[y] = change_char(plot[y],pair,x)
+
+                xx = [0]*2
+                yy = [0]*2
+                for j in range(2):
+                    xx[j] = get_x( pos[pairs[pair][j]][0] )
+                    yy[j] = get_y( pos[pairs[pair][j]][1] )
+
+                for p in range(length):
+                    x = int( xx[0] + (p/length)*(xx[1]-xx[0]) )
+                    y = int( yy[0] + (p/length)*(yy[1]-yy[0]) )
+                    plot[y] = change_char(plot[y]," ",x)
+
+            for qubit in pos:
+                x = get_x( pos[qubit][0] )
+                y = get_y( pos[qubit][1] )
+
+                num = "("+str(int(100*oneProb[qubit])) +")"
+
+                plot[y] = change_char(plot[y],num,x)  
+               
+            print("░"*(W+8))
+            for line in plot:
+                print("░░░░"+line)
+            print("░"*(W+8))
+        
         else:
-            ratio = 1
+        
+            # create a graph with qubits as vertices and possible entangling gates as edges
 
-        plt.figure(2,figsize=(2*area[0],2*ratio*area[1])) 
-        nx.draw(G, pos, node_color = colors, node_size = sizes, labels = labels, with_labels = True,
-                font_color ='w', font_size = 22.5)
+            G=nx.Graph()
 
-        plt.show()
+            for p in pairs:
+                if p[0:4]!='fake':
+                    G.add_edge(pairs[p][0],pairs[p][1])
+
+            for p in pairs:
+                if p[0:4]!='fake':
+                    G.add_edge(pairs[p][0],p)
+                    G.add_edge(pairs[p][1],p)
+                    pos[p] = [(pos[pairs[p][0]][dim] + pos[pairs[p][1]][dim])/2 for dim in range(2)]
+
+            # colour and label the edges with the oneProb data
+            colors = []
+            sizes = []
+            labels = {}
+            for node in G:
+                if type(node)!=str:
+                    if (oneProb[node]>1): # if oneProb is out of bounds (due to this node having already been selected) make it grey
+                        colors.append( (0.5,0.5,0.5) )
+                    else: # otherwise it is on the spectrum between red and blue
+                        E = calculateEntanglement( oneProb[node] )
+                        colors.append( (1-E,0,E) )
+                    sizes.append( 3000 )
+                    if oneProb[node]>1:
+                        labels[node] = ""
+                    elif oneProb[node]==0.5:
+                        labels[node] = "99"
+                    else:
+                        labels[node] = "%.0f" % ( 100 * ( E ) )
+                else:
+                    colors.append( "black" )
+                    sizes.append( 1000 )
+                    labels[node] = node
+
+            # show it
+            if area[0]>2*area[1]:
+                ratio = 0.65
+            else:
+                ratio = 1
+
+            plt.figure(2,figsize=(2*area[0],2*ratio*area[1])) 
+            nx.draw(G, pos, node_color = colors, node_size = sizes, labels = labels, with_labels = True,
+                    font_color ='w', font_size = 22.5)
+
+            plt.show()
 
         
 def calculateFracDifference (frac1, frac2):
@@ -598,7 +647,7 @@ def getDisjointPairs ( pairs, oneProb = [], weight = {}):
     return matchingPairs
 
 
-def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, game=None):
+def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, game=None, ascii=False):
         
     # Input:
     # * *device* - String specifying the device on which the game is played.
@@ -731,9 +780,9 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
                 print("Round "+str(score))
                 if clean==True:
                     printM("\nRaw puzzle",move)    
-                    printPuzzle( device, rawOneProb, move )
+                    printPuzzle( device, rawOneProb, move, ascii=ascii)
                     printM("\nCleaned puzzle", move)
-                printPuzzle( device, displayedOneProb, move )                
+                printPuzzle( device, displayedOneProb, move, ascii=ascii)                
 
                 pairGuess = input("\nChoose a pair  (or type 'done' to skip to the next round, or 'restart' for a new game)\n")
                 if num<=26 : # if there are few enough qubits, we don't need to be case sensitive
@@ -807,10 +856,10 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
         if clean==True:
             printM("\nRaw puzzle",move)    
             if move=="M":
-                printPuzzle( device, rawOneProb, move )
+                printPuzzle( device, rawOneProb, move, ascii=ascii)
             printM("\nCleaned puzzle", move )
         if move=="M":
-            printPuzzle( device, oneProb, move )
+            printPuzzle( device, oneProb, move, ascii=ascii)
         printM("", move)
         printM("Round "+str(score)+" complete", move)
         printM("", move)
@@ -1190,7 +1239,7 @@ def PlotGraphSet ( devices, sims_to_use ):
     MakeGraph(X,Yc,yc,["Game round","Average correctness for MWPM"],labels=labels)
     MakeGraph(X,Yd,yd,["Game round","Average difference from correct values"],labels=labels)
 
-def PlayGame():
+def PlayGame(ascii=False):
     
     clear_output()
     print("")
@@ -1246,7 +1295,7 @@ def PlayGame():
     
     tut = str.upper(input("\n> Do you want to read the tutorial? (y/n)...\n"))
     if tut!="N":
-        printPuzzle(device,example,"M")
+        printPuzzle(device,example,"M", ascii=ascii)
         input("> The game is a series of puzzles, which look something like this...\n")
         input("> All the coloured circles" + ((num_active_qubits%2)==1)*" (except one)" + " are paired up...\n")
         input("> Your job is to identify these pairs...\n")
@@ -1267,7 +1316,7 @@ def PlayGame():
     shots = min( runs[sim]['shots'] )
 
     try:
-        runGame ( device, 'M', shots, sim, None, clean=True, dataNeeded=False )
+        runGame ( device, 'M', shots, sim, None, clean=True, dataNeeded=False, ascii=ascii)
     except:
         input("> Something went wrong. This probably means there is no saved data to play the game you requested.\n> Try choosing a different device...\n")
 
