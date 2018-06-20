@@ -13,8 +13,8 @@ Puzzles from higher rounds require higher depth circuits, and so build-up of noi
 
 For more on the gritty details, see
 * [Benchmarking of quantum processors with random circuits (paper)](https://arxiv.org/abs/1806.02736)
-* [Using a simple puzzle game to benchmark quantum computers (blog post)](https://medium.com/@decodoku/understanding-quantum-computers-through-a-simple-puzzle-game-a290dde89fb2).
-* [Kicking the tires of quantum processors (blog post)](https://hackernoon.com/kicking-the-tires-of-quantum-processors-2b18750916dd).
+* [Using a simple puzzle game to benchmark quantum computers (blog post)](https://medium.com/@decodoku/understanding-quantum-computers-through-a-simple-puzzle-game-a290dde89fb2)
+* [Kicking the tires of quantum processors (blog post)](https://hackernoon.com/kicking-the-tires-of-quantum-processors-2b18750916dd)
 
 ### How to play
 
