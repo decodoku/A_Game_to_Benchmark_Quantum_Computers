@@ -19,6 +19,17 @@ path = os.path.dirname(os.path.abspath(__file__))
 
 def importSDK ( device ):
     
+    # *This function contains SDK specific code.*
+    # 
+    # Input:
+    # * *device* - String specifying the device on which the game is played.
+    #              Details about the device will be obtained using getLayout.
+    # Process:
+    # * The SDK associated with this device is imported.
+    #
+    # Output:
+    # * Nothing returned, but global variables required by the SDKs are defined
+    
     num, area, entangleType, pairs, pos, example, sdk, runs = getLayout(device)
 
     if sdk in ["QISKit","ManualQISKit"]:
@@ -52,14 +63,15 @@ def initializeQuantumProgram ( device, sim ):
     # Input:
     # * *device* - String specifying the device on which the game is played.
     #              Details about the device will be obtained using getLayout.
-    # * *sim* - Whether this is a simulated run
+    # * *sim* - Boolean denoting whether this is a simulated run
     # Process:
     # * Initializes everything required by the SDK for the quantum program. The details depend on which SDK is used.
+    #
     # Output:
-    # * *q* - Register of qubits (needed by both QISKit and ProjectQ).
-    # * *c* - Register of classical bits (needed by QISKit only).
-    # * *engine* - Class required to create programs in ProjectQ and Forest.
-    # * *script* - The quantum program, needed by QISKit and Forest.
+    # * *q* - Register of qubits (used by QISKit and ProjectQ).
+    # * *c* - Register of classical bits (used by QISKit).
+    # * *engine* - Class required to create programs (used by ProjectQ and Forest).
+    # * *script* - The quantum program (used by QISKit and Forest).
 
     num, area, entangleType, pairs, pos, example, sdk, runs = getLayout(device)
     
@@ -87,24 +99,24 @@ def initializeQuantumProgram ( device, sim ):
     return q, c, engine, script
 
 
-def implementGate (device, gate, qubit, script, frac = 0 ):
+def implementGate (device, gate, qubit, script, frac = None ):
     
     # *This function contains SDK specific code.*
     # 
     # Input:
     # * *device* - String specifying the device on which the game is played.
     #              Details about the device will be obtained using getLayout.
-    # * *gate* - String that specifies gate type.
+    # * *gate* - String that specifies gate type. Should be 'X', 'Y' or 'XX' rotation, or 'finish'.
     # * *qubit* - Qubit, list of two qubits or qubit register on which the gate is applied.
-    # * *script* - 
-    # * *frac* -  
+    # * *script* - Used to store the quantum program in some SDKs
+    # * *frac=0* - Fraction of pi for which an X rotation is applied. Not required for gate of type 'finish'.
     # 
     # Process:
     # * For gates of type 'X', 'Y' and 'XX', the gate $U = \exp(-i \,\times\, gate \,\times\, frac )$ is implemented on the qubit or pair of qubits in *qubit*.
     # * *gate='Finish'* implements the measurement command on the qubit register required for ProjectQ to not complain.
     # 
     # Output:
-    # * None are returned, but modifications are made to the classes that contain the quantum program.
+    # * None are returned, but modifications are made to the objects that contain the quantum program.
     
     num, area, entangleType, pairs, pos, example, sdk, runs = getLayout(device)
     
@@ -175,6 +187,20 @@ def implementGate (device, gate, qubit, script, frac = 0 ):
                 
 def resultsLoad ( fileType, move, shots, sim, device ) :
     
+    # Input:
+    # * *fileType* - String describing type of file to load.
+    # * *move* - String describing the way moves were chosen for the results to be loaded.
+    # * *shots* - Number of shots used in the results to be loaded.
+    # * *sim* - Boolean denoting whether a simulator was used for the results to be loaded.
+    # * *device* - String specifying the device on which the game is played.
+    #
+    # Process:
+    # * A filename is created using the details given in the input. This file, which will contain and array of arrays, is then loaded, evalulated and stored as an which will contain and array of arrays.
+    # If the file doesn't exist, the process will fail and throw and exception. This is a fatal error, so no exception handling is used.
+    #
+    # Output:
+    # * *samples* - Array of arrays of whatever it was the file contained.
+    
     filename = 'move='+move+'_shots=' + str(shots) + '_sim=' + str(sim) + '.txt'
     saveFile = open(path+'/results/' + device + '/'+fileType+'_'+filename)
     sampleStrings = saveFile.readlines()
@@ -194,12 +220,16 @@ def getResults ( device, sim, shots, q, c, engine, script ):
     # Input:
     # * *device* - String specifying the device on which the game is played.
     #              Details about the device will be obtained using getLayout.
+    # * *q* - Register of qubits (used in some SDKs).
+    # * *c* - Register of classical bits (used in some SDKs).
+    # * *engine* - Class required to create programs (used in some SDKs).
+    # * *script* - The quantum program (used in some SDKs).
     # 
     # Process:
-    # * Implements all unitary quantum operations used in the program.
+    # * This function sends the quantum program to the desired backend to be run, and obtains results.
     # 
     # Output:
-    # * None are returned, but modifications are made to the classes that contain the quantum program.
+    # * *resultsRaw* - A dictionary whose keys are the bit strings obtained as results, and the values are the fraction of shots for which they occurred.
     
     num, area, entangleType, pairs, pos, example, sdk, runs = getLayout(device)
     
@@ -240,8 +270,8 @@ def getResults ( device, sim, shots, q, c, engine, script ):
         for n in range(num):
             script.measure( q[n], c[n] )
         qasm = engine.get_qasm("script")
-        input("\nYou'll now be given the QASM representation of the circuit. Find a way to run it, and then either copy the results or write a job ID in the input box...\n")
-        input_data = input(qasm+"Either copy the results dictionary or write a job ID in the box below\n")
+        input("\nHere is a QASM representation of the circuit you need to run\n"+qasm)
+        input_data = input("Whatever you enter into the box below will go into the results file.\nObviously, it is best if you put the results. But you can also put a job ID that can be replaced with the results later.\n")
         try: # if the input successfully evaluates, we treat it as data
             resultsRaw = eval(input_data)
         except: # otherwise we treat it as a job ID
@@ -290,6 +320,22 @@ def getResults ( device, sim, shots, q, c, engine, script ):
     return resultsRaw
 
 def processResults ( resultsRaw, num, pairs, sim, shots ):
+    
+    # Input:
+    # * *resultsRaw* - String specifying the device on which the game is played. Details about the device will be obtained using getLayout.
+    # * *num* - The number of qubits in the device.
+    # * *pairs* - A dictionary of pairs of qubits for which an entagling gate is possible. The key is a string which serves as the name of the pair. The value is a two element list with the qubit numbers of the two qubits in the pair. For controlled-NOTs, the control qubit is listed first.
+    # * *sim* - Boolean denoting whether a simulator was used.
+    # * *shots* - Number of shots used for statistics.
+    # 
+    # Process:
+    # * This function sends the quantum program to the desired backend to be run, and obtains results.
+    # 
+    # Output:
+    # * *oneProb* - A list with an entry for each qubit. Each entry is the fraction of samples for which the measurement of that qubit returns *1*.
+    # * *sameProb* - A dictionary with pair names as keys, and probability that the two qubits each pair give the same results as values.
+    # * *results* - If results are not from a simulator, this is just resultsRaw. If they are, it is assumed that the simulated effectively gave results with no statistical noise, so a sampling process is used to simulate the effect of the required number of shots.
+
     
     oneProb = [0]*num
     sameProb = {p: 0 for p in pairs}
@@ -342,17 +388,17 @@ def entangle( device, move, shots, sim, gates, conjugates ):
     # Input:
     # * *device* - String specifying the device on which the game is played.
     #              Details about the device will be obtained using getLayout.
-    # * *move* -
-    # * *shots* -
-    # * *sim* -
+    # * *move* - String describing the way moves were chosen when creating the circuit.
+    # * *shots* - Number of shots to be taken.
+    # * *sim* - Boolean denoting whether a simulator will be used.
     # * *gates* - Entangling gates applied so far. Each round of the game corresponds to two 'slices'. *gates* is a list with a dictionary for each slice. The dictionary has pairs of qubits as keys and fractions of pi defining a corresponding entangling gate as values.
     # * *conjugates* - List of single qubit gates to conjugate entangling gates of previous rounds. Each is specified by a two element list. First is a string specifying the rotation axis ('X' or 'Y'), and the second specifies the fraction of pi for the rotation.
     #
     # Process:
-    # * Sets up and runs a quantum circuit consisting of all gates thus far.
+    # * Quantum circuit is created and run given the details (device, gates, etc) provided by the input. The results are then processed to give the final output.
     #
     # Output:
-    # * *oneProb* - A list with an entry for each qubit. Each entry is the fraction of samples for which the measurement of that qubit returns *1*.
+    # * *oneProb*, *sameProb* and *results* - See processResults() for explanation.
     
     num, area, entangleType, pairs, pos, example, sdk, runs = getLayout(device)
     
@@ -410,17 +456,35 @@ def entangle( device, move, shots, sim, gates, conjugates ):
 
 def calculateEntanglement( oneProb ):
     
-    # was once the mixedness
+    # Input:
+    # * *oneProb* - Float representing the fraction of samples for which the measurement of a qubit returns *1*.
+    # 
+    # Process:
+    # * Calculates the number that will be shown to the player, based on oneProb. This should be zero when oneProb is zero, 1 when oneProb is 0.5, and monotonic.
+    # This is done by first calculating the frac that would result in such a oneProb (oneProb=0 ==> frac=0, oneProb=0.5 ==> frac=1/2, oneProb=1 ==> frac=1), and then doubling it. Since the result can exceed 1 in general (though only due to spurious effects that result in oneprob>0.5), it is capped by 1 before being returned.
+    # This quantity is called the 'entanglement' because early versions used the mixedness
     # E = 1-2*abs( 0.5-oneProb )
-    #but now based on frac
+    # which is a measure of how entangled a qubit is with the rest of the universe. The frac based measure is now used instead such that the resulting values have a more uniform spread.
+    # 
+    # Output:
+    # * *E* - As described above.
     
     E = ( 2 * calculateFrac( oneProb ) )    
     return min( E, 1)
 
 def calculateFrac ( oneProb ):
-
+    
+    # Input:
+    # * *oneProb* - Float representing the fraction of samples for which the measurement of a qubit returns *1*.
+    # 
+    # Process:
+    # * Calculates the fraction of pi for an X rotation which would result in the given value of oneProb.
     # Prob(1) = sin(frac*pi/2)^2
     # therefore frac = asin(sqrt(oneProb)) *2 /pi
+    # 
+    # Output:
+    # * *frac* - As described above.
+
     oneProb = max(0,oneProb)
     oneProb = min(1,oneProb)
     frac = math.asin(math.sqrt( oneProb )) * 2 / math.pi
@@ -450,6 +514,15 @@ def calculateFuzz ( oneProb, pairs, matchingPairs ):
 
 def calculateEntropy ( probs ):
     
+    # Input:
+    # * *probs* - Array of probabilities. They are assumed to sum to 1, but this is not checked.
+    # 
+    # Process:
+    # * The Shannon entropy, H, of the probability distribution is calculated
+    # 
+    # Output:
+    # * *H* - As described above.
+    
     H = 0
     for prob in probs:
         if prob>0:
@@ -457,11 +530,35 @@ def calculateEntropy ( probs ):
 
     return H
 
-def calculateExpect ( p0, p1, ps ):
+def calculateExpect ( probs ):
     
-    return [ 1-2*p0, 1-2*p1, 2*ps-1 ]
+    # Input:
+    # * *probs* - Array of probabilities.
+    #
+    # Process:
+    # * For each probability, the expectation value is calculated. The probabilities are takem to be the probability of a value -1 value, with 1-p representing the probability of +1.
+    # 
+    # Output:
+    # * *expect* - Corresponding array of expectation values.
+    
+    expect = []
+    for p in probs:
+        expect.append( 1-2*p)
+    
+    return expect
 
 def calculateMutual ( oneProb, sameProb, pairs ):
+    
+    # Input:
+    # * *oneProb* - A list with an entry for each qubit. Each entry is the fraction of samples for which the measurement of that qubit returns *1*.
+    # * *sameProb* - A dictionary with pair names as keys, and probability that the two qubits each pair give the same results as values.
+    # * *pairs* - A dictionary of pairs of qubits for which an entagling gate is possible. The key is a string which serves as the name of the pair. The value is a two element list with the qubit numbers of the two qubits in the pair. For controlled-NOTs, the control qubit is listed first.
+    #
+    # Process:
+    # * For each pair, the (classical) mutual information for the measureent results of the two qubits is calculated. This is done using oneProbs and sameProbs, which is a bit of a pain. But this information is sufficient to calculate the probability for the results '00', '01', '10' and '11' for the two qubits of each pair, which the probability distrubution required to calculate the mutual information.
+    # 
+    # Output:
+    # * *I* - Dictionary with pair names as keys and corresponding values of the mutual information as values.
     
     I = {}
     
@@ -470,7 +567,7 @@ def calculateMutual ( oneProb, sameProb, pairs ):
         p0 = oneProb[pairs[p][0]]
         p1 = oneProb[pairs[p][1]]
         
-        expect = calculateExpect( p0, p1, sameProb[p] )
+        expect = calculateExpect( [ p0, p1, 1-sameProb[p] ] )
             
         prob = [0]*4
         prob[0] = ( 1 + expect[0] + expect[1] + expect[2] )/4
@@ -486,16 +583,16 @@ def calculateMutual ( oneProb, sameProb, pairs ):
 
 def printPuzzle ( device, oneProb, move, ascii=False ):
     
-    # ### *printPuzzle*
-    # 
     # Input:
     # * *device* - String specifying the device on which the game is played.
     #              Details about the device will be obtained using getLayout.
-    # * *oneProb* - A list with an entry for each qubit.
-    #               Each entry is the fraction of samples for which the measurement of that qubit returns *1*.
+    # * *oneProb* - A list with an entry for each qubit. Each entry is the fraction of samples for which the measurement of that qubit returns 1.
+    # * *move* - String describing the way moves are chosen.
+    # * *ascii* - Boolean to convey whether the image should be purely ascii.
     #
     # Process:
-    # * The contents of *oneProb* contains some basic clues about the circuit that has been performed. It is the player's job to use those clues to guess the circuit. This means we have to print *oneProb* to screen. In order to make the game a pleasant experience and help build intuition about the device, this is done visually. The networkx package is used to visualize the layout of the qubits, and the oneProb information is conveyed using colour. 
+    # * The contents of *oneProb* contains some basic clues about the circuit that has been performed. It is the player's job to use those clues to guess the circuit. This means we have to print *oneProb* to screen. In order to make the game a pleasant experience and help build intuition about the device, this is done visually. The networkx package is used to visualize the layout of the qubits, and the oneProb information is conveyed using colour. This is done only when a player is manually playing, and so when move='M'.
+    # * An altenative visualization has been partially implemented. This would use only ascii.
     # 
     # Output:
     # * None returned, but the above described image is printed to screen.
@@ -606,6 +703,15 @@ def printPuzzle ( device, oneProb, move, ascii=False ):
         
 def calculateFracDifference (frac1, frac2):
     
+    # Input:
+    # * *frac1*, *frac2* - Two values of frac
+    # 
+    # Process:
+    # * Determine the minimum difference between the two, accounting for the fact that frac=0 and frac=2 are equivalent. Note that his means that the 
+    # 
+    # Output:
+    # * *matchingPairs* - A list of the names of a random set of disjoint pairs included in the matching.
+    
     delta = max(frac1,frac2) - min(frac1,frac2)
     delta = min( delta, 1-delta )
     return delta  
@@ -615,10 +721,11 @@ def getDisjointPairs ( pairs, oneProb = [], weight = {}):
 
     # Input:
     # * *pairs* - A dictionary with names of pairs as keys and lists of the two qubits of each pair as values
+    # * *oneProb* - A list with an entry for each qubit. Each entry is the fraction of samples for which the measurement of that qubit returns 1.
+    # * *weight* - dictionary with pair names as keys and a weight assigned to each pair as the corresponding values.
     # 
     # Process:
-    # * A graph is created using the pairs as edges, and is assigned random weights.
-    #   These max weight matched to find a disjoint set of pairs.
+    # * A minimum weight perfect matching of the qubits us performed, according to the possible pairings. If weights are not given, but oneProbs are, the weights are calculated from the oneProbs. Otherwise the weights are chosen randomly to generate a random pairing.
     # 
     # Output:
     # * *matchingPairs* - A list of the names of a random set of disjoint pairs included in the matching.
@@ -647,22 +754,30 @@ def getDisjointPairs ( pairs, oneProb = [], weight = {}):
     return matchingPairs
 
 
-def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, game=None, ascii=False):
+def runGame ( device, move, shots, sim, maxScore=None, dataNeeded=True, cleanup=False, game=None, ascii=False):
         
     # Input:
     # * *device* - String specifying the device on which the game is played.
     #              Details about the device will be obtained using getLayout.
-    # * *move* -
-    # * *shots* -
-    # * *sim* -
+    # * *move* - String describing the way moves are chosen.
+    # * *shots* - Number of shots to be used for statistics.
+    # * *sim* - Boolean for whether the simulator is to be used.
+    # * *maxScore* - maximum number of rounds to run the game for
+    # * *dataNeeded* - Boolean determining whether game need to obtain new data, or will run on old data
+    # * *cleanup* - Boolean determining whether error mitigation post-processing is used
+    # * *game* - Integer identifiying a specific game to play from a file (can only be True if dataNeeded=True)
+    # * *ascii* - Boolean to convey whether the image presented to the player should be purely ascii.
+
     #
     # Process:
-    # * Run the game!
+    # * Runs the game! Done either by loading up saved data, or running a new instance.
     #
     # Output:
-    # * *score* - score reached by the player at game over
-    # * *gates*
-    # * *conjugates*
+    # * *gates* - Entangling gates applied so far. Each round of the game corresponds to two 'slices'. *gates* is a list with a dictionary for each slice. The dictionary has pairs of qubits as keys and fractions of pi defining a corresponding entangling gate as values.
+    # * *conjugates* - List of single qubit gates to conjugate entangling gates of previous rounds. Each is specified by a two element list. First is a string specifying the rotation axis ('X' or 'Y'), and the second specifies the fraction of pi for the rotation.
+    # * *oneProbs*: Array of oneProb arrays (see processResults() for explanation of these), with an element for each round of the game.
+    # * *sameProbs*: Array of oneProb arrays (see processResults() for explanation of these), with an element for each round of the game.
+    # * *resultsDicts*: Array of results arrays (see processResults() for explanation of these), with an element for each round of the game.
     
     num, area, entangleType, pairs, pos, example, sdk, runs = getLayout(device)
     
@@ -682,26 +797,21 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
         if maxScore is None: # if a maxScore is not given, use the value from the first sample
             maxScore = len( oneProbSamples[ 0 ] )
         
-        if clean:
-            try:
-                cleaner = resultsLoad( 'cleaner', 'C', shots, sim, device )[0]
-            except:
-                cleaner = [[0.55,0.45,0]*num]*maxScore # default cleaner when no other is available
+        if cleanup:
+            cleaner = getCleaningProfile ( device, move, shots, sim, num, maxScore, gritty=True )
         
         samples = len(oneProbSamples) # find out how many samples there are
         
 
         
-        # choose a game randomly, if a specific one was not requested
+        # choose a game randomly if a specific one was not requested
         if game is None:
             game = random.randint( 0, samples-1 )
         # get the data for this game
         oneProbs = oneProbSamples[ game ]
         sameProbs = sameProbSamples[ game ] 
         originalOneProbs = copy.deepcopy( oneProbs )
-        gates = gateSamples[ game ]
-
-            
+        gates = gateSamples[ game ]      
             
     
     gameOn = True
@@ -746,7 +856,7 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
             correlatedPairs = getDisjointPairs( pairs, weight=I )
             
             rawOneProb = copy.deepcopy( oneProb )
-            if clean:
+            if cleanup:
                 oneProb = CleanData(cleaner[score-1],rawOneProb,sameProb,pairs)
             
             results = []
@@ -778,7 +888,7 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
                 clear_output()
                 print("")
                 print("Round "+str(score))
-                if clean==True:
+                if cleanup:
                     printM("\nRaw puzzle",move)    
                     printPuzzle( device, rawOneProb, move, ascii=ascii)
                     printM("\nCleaned puzzle", move)
@@ -853,7 +963,7 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
         if move=='M':
             clear_output()
         
-        if clean==True:
+        if cleanup==True:
             printM("\nRaw puzzle",move)    
             if move=="M":
                 printPuzzle( device, rawOneProb, move, ascii=ascii)
@@ -880,7 +990,6 @@ def runGame ( device, move, shots, sim, maxScore, dataNeeded=True, clean=False, 
         input("> There is no more data on this game :( Press Enter to restart...\n")
     
     return gates, conjugates, oneProbs, sameProbs, resultsDicts
-
 
 
 def MakeGraph(X,Y,y,axisLabel,labels=[],verbose=False,log=False,tall=False):
@@ -949,7 +1058,7 @@ def GetData ( device, move, shots, sim, samples, maxScore ):
 
         print("move="+move+", shots="+str(shots)+", sample=" + str(sample+1) )
 
-        gates, conjugates, oneProbs, sameProbs, resultsDicts = runGame( device, move, shots, sim, maxScore )
+        gates, conjugates, oneProbs, sameProbs, resultsDicts = runGame( device, move, shots, sim, maxScore=maxScore )
 
         # make a directory for this device if it doesn't already exist
         if not os.path.exists(path+'/results/' + device):
@@ -980,9 +1089,7 @@ def GetData ( device, move, shots, sim, samples, maxScore ):
         
         
 def CalculateQuality ( x, oneProbSamples, sameProbSamples, gateSamples, pairs, score ) :
-    
-    #print("\n\n")
-    
+        
     # see what fraction of the matchings we have correCt
     
     fractionCorrect = [0 for _ in range(2)]
@@ -1024,15 +1131,11 @@ def CalculateQuality ( x, oneProbSamples, sameProbSamples, gateSamples, pairs, s
     fractionCorrect[0] = fractionCorrect[0] / sample_num
     fractionCorrect[1] = fractionCorrect[1] / sample_num
     fractionCorrect[1] -= fractionCorrect[0]**2
-    
-    #print(fracDifference[0]**2,fracDifference[1])
-    
+        
     fracDifference[0] = fracDifference[0] / sample_num
     fracDifference[1] = fracDifference[1] / sample_num
     fracDifference[1] -= fracDifference[0]**2
-    
-    #print(fracDifference[0]**2,fracDifference[1])
-            
+                
     return fractionCorrect, fracDifference
 
 
@@ -1068,75 +1171,18 @@ def CleanData ( x, rawOneProb, sameProb, pairs ):
     return oneProb
 
 
-def Metropolis ( x, oneProbSamples, sameProbSamples, gateSamples, num, pairs, score, steps_per_num=500, delta=0.01 ):
-
-    best_x = copy.deepcopy(x)
-    [bestFractionCorrect,_] , [bestFracDifference,_] = CalculateQuality ( x, oneProbSamples, sameProbSamples, gateSamples, pairs, score )
-    bestDiff = 0
-        
-    if True:
-                
-        x = copy.deepcopy(best_x)
-        fractionCorrect = bestFractionCorrect
-        fracDifference = bestFracDifference
-        
-        steps = steps_per_num * num
-        
-        for step in range(steps):
-
-            n = random.randint(0,3*num-1)
-            random_delta = random.uniform(+delta,-delta)
-
-            x[n] += random_delta
-
-            [proposedFractionCorrect,_] , [proposedFracDifference,_] = CalculateQuality ( x, oneProbSamples, sameProbSamples, gateSamples, pairs, score )
-            
-            diff = fracDifference - proposedFracDifference
-            
-            accept = (proposedFractionCorrect>fractionCorrect)
-            accept = accept or (proposedFractionCorrect==fractionCorrect) and ( proposedFracDifference < bestFracDifference  )
-            
-            if accept:
-                fractionCorrect = proposedFractionCorrect
-                fracDifference = proposedFracDifference
-            else:
-                x[n] -= random_delta
-
-            if (proposedFractionCorrect>=bestFractionCorrect) and ( proposedFracDifference < bestFracDifference  ):
-                best_x = copy.deepcopy(x)
-                bestFractionCorrect = fractionCorrect
-                bestFracDifference = fracDifference
-            
-            if (step%100==0):
-                print("step =", step, ", best fraction =", bestFractionCorrect, ", best difference =", bestFracDifference)
+def getCleaningProfile ( device, move, shots, sim, num, maxScore, gritty=False ):
     
-    print("\nbest fraction = ", bestFractionCorrect, ", best difference = ", bestFracDifference, "\nbest x = ", best_x)   
-        
-    return best_x
-
-
-def CreateCleaningProfile ( device, move, shots, sim ) :
+    try: # see if a specific cleaner file has been made
+        cleaner = resultsLoad( 'cleaner', move, shots, sim, device )[0]
+    except: # if not, go with the default
+        if gritty:
+            cleaner = [[0.5,0.5,0]*num]*maxScore
+        else:
+            cleaner = [[0.45,0.55,0]*num]*maxScore
+            
+    return cleaner
     
-    num, area, entangleType, pairs, pos, example, sdk, runs = getLayout(device)
-    
-    oneProbSamples = resultsLoad ( 'oneProbs', move, shots, sim, device )
-    sameProbSamples = resultsLoad ( 'sameProbs', move, shots, sim, device )
-    gateSamples = resultsLoad ( 'gates', move, shots, sim, device )
-    #cleaner = resultsLoad( 'cleaner', shots, sim, device )
-        
-    maxScore = len( oneProbSamples[0] )
-    
-    cleaner = []
-    for score in range(1,maxScore+1):
-        x = [0.5,0.5,0]*num
-        print("\nscore = ",score)
-        cleaner.append( Metropolis ( x, oneProbSamples, sameProbSamples, gateSamples, num, pairs, score ) )
-     
-    filename = 'move=' + move + '_shots=' + str(shots) + '_sim=' + str(sim) + '.txt'
-    saveFile = open(path+'/results/' + device + '/cleaner_'+filename, 'a')
-    saveFile.write( str(cleaner)+'\n' )
-    saveFile.close()
-
 
 def ProcessData ( device, move, shots, sim, cleanup):
     
@@ -1152,12 +1198,7 @@ def ProcessData ( device, move, shots, sim, cleanup):
     maxScore = len(oneProbSamples[0])
     
     if cleanup:
-        try:
-            cleaner = resultsLoad( 'cleaner', move, shots, sim, device )[0]
-        except:
-            cleaner = [[0.5,0.5,0]*num]*maxScore
-    else:
-        cleaner = []
+        cleaner = getCleaningProfile ( device, move, shots, sim, num, maxScore )
     
     # find number of samples
     samples = len(oneProbSamples)
@@ -1166,7 +1207,7 @@ def ProcessData ( device, move, shots, sim, cleanup):
     
     for oneProbSample, sameProbSample, gateSample in zip(oneProbSamples, sameProbSamples, gateSamples):
         for score in range(len(oneProbSample)):
-            if cleaner:
+            if cleanup:
                 oneProb = CleanData ( cleaner[score], oneProbSample[score], sameProbSample[score], pairs )
             else:
                 oneProb = oneProbSample[score]
@@ -1179,7 +1220,7 @@ def ProcessData ( device, move, shots, sim, cleanup):
     correctFracs = []
     differenceFracs = []
     for score in range(1,maxScore+1):
-        if cleaner:
+        if cleanup:
             x = cleaner[score-1]
         else:
             x = []
@@ -1316,7 +1357,8 @@ def PlayGame(ascii=False):
     shots = min( runs[sim]['shots'] )
 
     try:
-        runGame ( device, 'M', shots, sim, None, clean=True, dataNeeded=False, ascii=ascii)
-    except:
+        runGame ( device, 'M', shots, sim, cleanup=True, dataNeeded=False, ascii=ascii)
+    except Exception as e:
+        print(e)
         input("> Something went wrong. This probably means there is no saved data to play the game you requested.\n> Try choosing a different device...\n")
 
