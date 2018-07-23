@@ -717,7 +717,7 @@ def calculateFracDifference (frac1, frac2):
     return delta  
         
 
-def getDisjointPairs ( pairs, oneProb = [], weight = {}):
+getDisjointPairs ( pairs )
 
     # Input:
     # * *pairs* - A dictionary with names of pairs as keys and lists of the two qubits of each pair as values
@@ -834,7 +834,7 @@ def runGame ( device, move, shots, sim, maxScore=None, dataNeeded=True, cleanup=
             # and so are specified by a pair p=[j,k] and a random fraction frac
   
             # first we generate a random set of edges
-            matchingPairs = getDisjointPairs( pairs, weight={} )
+            matchingPairs = getDisjointPairs( pairs )
           
             # then we add gates these to the list of gates
             appliedGates = {}
@@ -873,10 +873,10 @@ def runGame ( device, move, shots, sim, maxScore=None, dataNeeded=True, cleanup=
             guessedPairs = matchingPairs
         # if choices are random, we generate a set of random pairs
         if (move=="R"):
-            guessedPairs = getDisjointPairs( pairs, weight={} )
+            guessedPairs = getDisjointPairs( pairs )
         # if choices are via MWPM, we do this
         if (move=="B"):
-            guessedPairs = getDisjointPairs( pairs, oneProb=oneProb, weight={} )
+            guessedPairs = getDisjointPairs( pairs, oneProb=oneProb )
         # if choices are manual, let's get choosing
         if (move=="M"):
             
@@ -976,7 +976,7 @@ def runGame ( device, move, shots, sim, maxScore=None, dataNeeded=True, cleanup=
         printM("Pairs you guessed for this round", move)
         printM(sorted(guessedPairs), move)
         printM("Pairs our bot would have guessed", move)
-        printM(sorted(getDisjointPairs( pairs, oneProb=oneProb, weight={} )), move )
+        printM(sorted(getDisjointPairs( pairs, oneProb=oneProb )), move )
         printM("Correct pairs for this round", move)
         printM(sorted(matchingPairs), move)
         correctGuesses = list( set(guessedPairs).intersection( set(matchingPairs) ) )
@@ -1106,7 +1106,7 @@ def CalculateQuality ( x, oneProbSamples, sameProbSamples, gateSamples, pairs, s
         gate = gates[ 2*(score-1) ]
         
         matchingPairs = list(gate.keys())
-        guessedPairs = getDisjointPairs( pairs, oneProb=oneProb, weight={}  )
+        guessedPairs = getDisjointPairs( pairs, oneProb=oneProb )
         correctGuesses = list( set(guessedPairs).intersection( set(matchingPairs) ) )
         dC = len(correctGuesses) / len(matchingPairs)
         fractionCorrect[0] += dC # for mean
