@@ -6,6 +6,18 @@ def supportedDevices ():
 
 	return ["ibmqx4","ibmqx5","19Q-Acorn","8Q-Agave"]
 
+def makeExample ( num, pairs ):
+    
+    example = [0]*num
+    from QuantumAwesomeness import getDisjointPairs
+    import random
+    matchingPairs = getDisjointPairs ( pairs, [], {} )
+    for pair in matchingPairs:
+        example[ pairs[pair][0] ] = random.random()/2
+        example[ pairs[pair][1] ] = example[ pairs[pair][0] ] + 0.05 * random.random()
+        
+    return example
+
 def makeLayout (pattern):
     
     if pattern[0:4]=="line":
@@ -85,13 +97,7 @@ def makeLayout (pattern):
         
         print("\nWarning: " + str(device) + " is not a known device or pattern.\n")
     
-    example = [0]*num
-    from QuantumAwesomeness import getDisjointPairs
-    import random
-    matchingPairs = getDisjointPairs ( pairs, [], {} )
-    for pair in matchingPairs:
-        example[ pairs[pair][0] ] = random.random()/2
-        example[ pairs[pair][1] ] = example[ pairs[pair][0] ] + 0.05 * random.random()
+    example = makeExample ( num, pairs )
     
     return area, pairs, pos, example
     
@@ -293,6 +299,34 @@ def getLayout (device):
         entangleType = "CZ"
         sdk = "Cirq"
         runs = {True:{'shots':[100],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[8192],'move':['C'],'maxScore':10,'samples':100}}
+    
+    elif device=="Bristlecone":
+        
+        num = 72
+        
+        area = [11,11]
+        
+        import cirq
+        coords = sorted(cirq.google.Bristlecone.qubits)
+        
+        pos = {}
+        for q in range(num):
+            pos[q] = [coords[q].row, coords[q].col]
+            
+        pairs = {}
+        char = 33
+        for q1 in range(num):
+            for q2 in range(num):
+                if coords[q1].is_adjacent(coords[q2]) and [q2,q1] not in pairs.values():
+                        pairs[chr(char)] = [q1,q2]
+                        char+=1
+            
+        example = makeExample ( num, pairs )
+        
+        entangleType = "CZ"
+        sdk = "Cirq"
+        runs = {True:{'shots':[100],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[8192],'move':['C'],'maxScore':10,'samples':100}}
+    
     
     ######## DEVICES NOT ON THE CLOUD ########
     

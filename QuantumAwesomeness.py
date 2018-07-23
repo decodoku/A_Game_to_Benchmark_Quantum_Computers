@@ -359,6 +359,8 @@ def getResults ( device, sim, shots, q, c, engine, script ):
             backend = google.XmonSimulator()
         elif device=='Foxtail':
             backend = google.Foxtail
+        elif device=='Bristlecone':
+            backend = google.Bristlecone
 
         resultsExtremelyRaw = backend.run(script, repetitions=shots)              
 
@@ -799,7 +801,6 @@ def getDisjointPairs ( pairs, oneProb, weight ):
                 weight[p] = -calculateFracDifference( calculateFrac( oneProb[ pairs[p][0] ] ) , calculateFrac( oneProb[ pairs[p][1] ] ) )
             else:
                 weight[p] = random.randint(0,100)
-                print(weight[p])
 
     edges = []
     for p in pairs.keys():
