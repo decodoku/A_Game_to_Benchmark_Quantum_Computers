@@ -6,6 +6,96 @@ def supportedDevices ():
 
 	return ["ibmqx4","ibmqx5","19Q-Acorn","8Q-Agave"]
 
+def makeLayout (pattern):
+    
+    if pattern[0:4]=="line":
+        
+        num = int(pattern[4:])
+        
+        if (num%2)==1: # we can continue only num is odd
+            area = [num,1]
+            entangleType = "CZ"
+            pairs = {}
+            for qubit in range(num-1):
+                pairs[chr(65+qubit)] = [qubit,qubit+1]
+            pos = {}
+            for qubit in range(num):
+                pos[qubit] = [qubit,0]
+            runs = {True:{'shots':[100],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[],'move':[],'maxScore':0,'samples':0}}
+        else:
+            print("Try again with a valid number of qubits for this configuration")
+        
+    elif pattern[0:6] in ["ladder","square"]:
+        
+        num = int(pattern[6:])
+        
+        if pattern[0:6]=="ladder":
+            Lx = int(num/2)
+            Ly = 2
+            good_num = ((num%2)==0) # we can continue only num is even
+        else:
+            Lx = int(math.sqrt(num))
+            Ly = Lx
+            good_num = (type(Lx) is int) # we can continue only num is square
+        
+        if good_num: 
+            
+            area = [Lx,Ly]
+            entangleType = "CZ"
+            pairs = {}
+            pos = {}
+
+            
+            char = 65
+            for y in range(Ly):
+                for x in range(Lx):
+                    q = y*Lx+x
+                    if x<(Lx-1): # pair for (x,y) and (x+1,y)
+                        pairs[chr(char)] = [q,q+1]
+                        char+=1
+                    if y<(Ly-1): # pair for (x,y) and (x,y+Lx)
+                        pairs[chr(char)] = [q,q+Lx]
+                        char+=1
+                    pos[q] = [x,y]
+                    
+        else:
+            print("Try again with a valid number of qubits for this configuration")
+            
+        
+    elif pattern[0:3]=="web":
+        
+        num = int(pattern[3:])
+        
+        L = int(math.sqrt(num))
+            
+        area = [L,L]
+        pairs = {}
+        pos = {}
+            
+        char = 65
+        for q0 in range(num-1):
+            for q1 in range(q0+1,num):
+                pairs[chr(char)] = [q0,q1]
+                char+=1
+        
+        for q0 in range(num):
+            pos[q0] = [L*math.cos(q0*(2*math.pi)/num),L*math.sin(q0*(2*math.pi)/num)]
+            
+    else:
+        
+        print("\nWarning: " + str(device) + " is not a known device or pattern.\n")
+    
+    example = [0]*num
+    from QuantumAwesomeness import getDisjointPairs
+    import random
+    matchingPairs = getDisjointPairs ( pairs, [], {} )
+    for pair in matchingPairs:
+        example[ pairs[pair][0] ] = random.random()/2
+        example[ pairs[pair][1] ] = example[ pairs[pair][0] ] + 0.05 * random.random()
+    
+    return area, pairs, pos, example
+    
+
 def getLayout (device):
 
 	# Input:
@@ -125,7 +215,7 @@ def getLayout (device):
         example = [0.16, 0.165, 0.46, 0.41, 0.055, 0.08, 0.075, 0.455, 0.06, 0.42, 0.26, 0.215, 0.39, 0.095, 0.235, 0.26, 0.39, 0.21, 0.24, 0.09]
         #          0    1    2    3    4    5     6   7    8    9    10   11   12   13   14   15   16   17   18   19
         sdk = "QISKit"
-        runs = {True:{'shots':[100],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[8192],'move':['C'],'maxScore':10,'samples':20}}
+        runs = {True:{'shots':[100],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[8192],'move':['C'],'maxScore':10,'samples':100}}
     
     
     
@@ -184,6 +274,25 @@ def getLayout (device):
         runs = {True:{'shots':[100],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[9000],'move':['C'],'maxScore':2,'samples':20}}
     
     
+    ######## GOOGLE DEVICES ########
+    
+    elif device=="9Q-Google":
+        
+        area, pairs, pos, example = makeLayout ("line9")
+        
+        num = 9
+        entangleType = "CZ"
+        sdk = "Cirq"
+        runs = {True:{'shots':[100],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[8192],'move':['C'],'maxScore':10,'samples':100}}
+        
+    elif device=="Foxtail":
+        
+        area, pairs, pos, example = makeLayout ("ladder22")
+        
+        num = 22
+        entangleType = "CZ"
+        sdk = "Cirq"
+        runs = {True:{'shots':[100],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[8192],'move':['C'],'maxScore':10,'samples':100}}
     
     ######## DEVICES NOT ON THE CLOUD ########
     
@@ -201,100 +310,19 @@ def getLayout (device):
                 8: [0,0], 7: [1,0], 6: [2,0], 5: [3,0] }
         example = [None, 0.24, 0.25, 0.06, 0.075, 0.175, 0.165, 0.235, 0.225]
         sdk = "ProjectQ"
-        runs = {True:{'shots':[100],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[10000],'move':['C'],'maxScore':5,'samples':20}}
+        runs = {True:{'shots':[100],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[8192],'move':['C'],'maxScore':10,'samples':100}}
     
     
     
-    ######## EXAMPLE DEVICES (FOR SIMULATION ONLY) ########
-    
-    elif device[0:4]=="line":
-        
-        num = int(device[4:])
-        
-        if (num%2)==1: # we can continue only num is odd
-            area = [num,1]
-            entangleType = "CZ"
-            pairs = {}
-            for qubit in range(num-1):
-                pairs[chr(65+qubit)] = [qubit,qubit+1]
-            pos = {}
-            for qubit in range(num):
-                pos[qubit] = [qubit,0]
-            example = [0.5]*num
-            sdk = "QISKit"
-            runs = {True:{'shots':[100],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[],'move':[],'maxScore':0,'samples':0}}
-        else:
-            print("Try again with a valid number of qubits for this configuration")
-        
-    elif device[0:6] in ["ladder","square"]:
-        
-        num = int(device[6:])
-        
-        if device[0:6]=="ladder":
-            Lx = int(num/2)
-            Ly = 2
-            good_num = ((num%2)==0) # we can continue only num is even
-        else:
-            Lx = int(math.sqrt(num))
-            Ly = Lx
-            good_num = (type(Lx) is int) # we can continue only num is square
-        
-        if good_num: 
-            
-            area = [Lx,Ly]
-            entangleType = "CZ"
-            pairs = {}
-            pos = {}
-            example = [0.5]*num
-            sdk = "QISKit"
-            runs = {True:{'shots':[100],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[],'move':[],'maxScore':0,'samples':0}}
-            
-            char = 65
-            for y in range(Ly):
-                for x in range(Lx):
-                    q = y*Lx+x
-                    if x<(Lx-1): # pair for (x,y) and (x+1,y)
-                        pairs[chr(char)] = [q,q+1]
-                        char+=1
-                    if y<(Ly-1): # pair for (x,y) and (x,y+Lx)
-                        pairs[chr(char)] = [q,q+Lx]
-                        char+=1
-                    pos[q] = [x,y]
-                    
-        else:
-            print("Try again with a valid number of qubits for this configuration")
-            
-    elif device[0:3]=="web":
-        
-        num = int(device[3:])
-        
-        L = int(math.sqrt(num))
-            
-        area = [L,L]
-        entangleType = "CZ"
-        pairs = {}
-        pos = {}
-        example = [0.5]*num
-        sdk = "QISKit"
-        runs = {True:{'shots':[100],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[],'move':[],'maxScore':0,'samples':0}}
-            
-        char = 65
-        for q0 in range(num-1):
-            for q1 in range(q0+1,num):
-                pairs[chr(char)] = [q0,q1]
-                char+=1
-        
-        for q0 in range(num):
-            pos[q0] = [L*math.cos(q0*(2*math.pi)/num),L*math.sin(q0*(2*math.pi)/num)]
-
-    
-    
-    ######## NO MORE DEVICES ########
+    ######## PATTERN DEVICES (FOR SIMULATION ONLY) ########
     
     
     else:
         
-        print("\nWarning: " + str(device) + " is not a known device.\n")
+        area,  pairs, pos, example = makeLayout ("ladder22")
+        entangleType = "CZ"
+        sdk = "QISKit" # any could be used, but QISKit is the best sdk
+        runs = {True:{'shots':[100],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[],'move':[],'maxScore':0,'samples':0}}
     
     
     return num, area, entangleType, pairs, pos, example, sdk, runs
