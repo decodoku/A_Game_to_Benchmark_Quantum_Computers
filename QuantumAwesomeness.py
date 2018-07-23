@@ -54,7 +54,9 @@ def importSDK ( device ):
         from pyquil.quil import Program
         import pyquil.api as api
         from pyquil.gates import I, H, CNOT, CZ, RX, RY
-
+    elif sdk=="Cirq":
+        global GridQubit, CNOT, CZ, X, Y, Circuit, H, measure, google
+        from cirq import GridQubit, CNOT, CZ, X, Y, Circuit, H, measure, google
 
 def initializeQuantumProgram ( device, sim ):
     
@@ -68,10 +70,10 @@ def initializeQuantumProgram ( device, sim ):
     # * Initializes everything required by the SDK for the quantum program. The details depend on which SDK is used.
     #
     # Output:
-    # * *q* - Register of qubits (used by QISKit and ProjectQ).
+    # * *q* - Register of qubits (used by QISKit, ProjectQ and Circ).
     # * *c* - Register of classical bits (used by QISKit).
     # * *engine* - Class required to create programs (used by ProjectQ and Forest).
-    # * *script* - The quantum program (used by QISKit and Forest).
+    # * *script* - The quantum program (used by QISKit, Forest and Circ).
 
     num, area, entangleType, pairs, pos, example, sdk, runs = getLayout(device)
     
@@ -95,6 +97,14 @@ def initializeQuantumProgram ( device, sim ):
         script = Program()
         q = range(num)
         c = range(num)
+    elif sdk=="Cirq":
+        q = []
+        for qubit in range(num):
+            q.append( GridQubit( pos[qubit][0], pos[qubit][1] ) )
+        c = None
+        engine = None
+        script = Circuit.from_ops()                   
+        
         
     return q, c, engine, script
 
@@ -183,6 +193,28 @@ def implementGate (device, gate, qubit, script, frac = None ):
                 script.inst( RX ( frac * math.pi, qubit[1] ) )
             else:
                 print("Support for this is yet to be added")
+                
+    elif sdk=="Cirq":
+        if gate=='X':
+            if qubit in pos.keys(): # only if qubit is active
+                script.append( X(qubit)**frac )
+        elif gate=='Y': # a Y axis rotation
+            if qubit in pos.keys(): # only if qubit is active
+                script.append( Y(qubit)**frac )
+        elif gate=='XX':
+            if entangleType=='CX':
+                script.append( CNOT(qubit[0],qubit[1]) )        
+                script.append( X(qubit[0])**frac )
+                script.append( CNOT(qubit[0],qubit[1]) ) 
+            elif entangleType=='CZ':
+                script.append( H(qubit[1]) )
+                script.append( CZ(qubit[0],qubit[1]) ) 
+                script.append( X(qubit[0])**frac )
+                script.append( CZ(qubit[0],qubit[1]) ) 
+                script.append( H(qubit[1]) )
+            else:
+                print("Support for this is yet to be added")           
+                
 
                 
 def resultsLoad ( fileType, move, shots, sim, device ) :
@@ -317,7 +349,38 @@ def getResults ( device, sim, shots, q, c, engine, script ):
                 resultsRaw[bitString] = 0
             resultsRaw[bitString] += 1/shots 
     
+    elif sdk=="Cirq":
+                              
+        # add measurement for all qubits
+        for qubit in range(num):
+            script.append( measure(q[qubit],key=qubit) )
+                              
+        if sim:
+            backend = google.XmonSimulator()
+        elif device=='Foxtail':
+            backend = google.Foxtail
+
+        resultsExtremelyRaw = backend.run(script, repetitions=shots)              
+
+        resultsVeryRaw = []
+        for qubit in range(num):
+            resultsVeryRaw.append( resultsExtremelyRaw.measurements[qubit][:, 0] )
+
+        resultsRaw = {}
+        for shot in range(shots):
+            bitString = ""
+            for qubit in range(num):
+                if resultsVeryRaw[qubit][shot]:
+                    bitString += '1'
+                else:
+                    bitString += '0'
+            if bitString not in resultsRaw.keys():
+                resultsRaw[bitString] = 0
+            resultsRaw[bitString] += 1/shots                     
+
+    
     return resultsRaw
+
 
 def processResults ( resultsRaw, num, pairs, sim, shots ):
     
@@ -702,7 +765,7 @@ def printPuzzle ( device, oneProb, move, ascii=False ):
 
         
 def calculateFracDifference (frac1, frac2):
-    
+ 
     # Input:
     # * *frac1*, *frac2* - Two values of frac
     # 
@@ -717,7 +780,7 @@ def calculateFracDifference (frac1, frac2):
     return delta  
         
 
-getDisjointPairs ( pairs )
+def getDisjointPairs ( pairs, oneProb, weight ):
 
     # Input:
     # * *pairs* - A dictionary with names of pairs as keys and lists of the two qubits of each pair as values
@@ -729,13 +792,14 @@ getDisjointPairs ( pairs )
     # 
     # Output:
     # * *matchingPairs* - A list of the names of a random set of disjoint pairs included in the matching.
-    
+
     if not weight:
         for p in pairs.keys():
             if oneProb:
                 weight[p] = -calculateFracDifference( calculateFrac( oneProb[ pairs[p][0] ] ) , calculateFrac( oneProb[ pairs[p][1] ] ) )
             else:
-                weight[p] = random.randint(0,100)     
+                weight[p] = random.randint(0,100)
+                print(weight[p])
 
     edges = []
     for p in pairs.keys():
@@ -750,6 +814,7 @@ getDisjointPairs ( pairs )
         for p in pairs.keys():
             if pairs[p]==[v,match[v]] and p[0:4]!='fake' :
                 matchingPairs.append(p)
+    
     
     return matchingPairs
 
@@ -834,7 +899,7 @@ def runGame ( device, move, shots, sim, maxScore=None, dataNeeded=True, cleanup=
             # and so are specified by a pair p=[j,k] and a random fraction frac
   
             # first we generate a random set of edges
-            matchingPairs = getDisjointPairs( pairs )
+            matchingPairs = getDisjointPairs( pairs, [], {} )
           
             # then we add gates these to the list of gates
             appliedGates = {}
@@ -853,7 +918,7 @@ def runGame ( device, move, shots, sim, maxScore=None, dataNeeded=True, cleanup=
             matchingPairs = list(gates[ 2*(score-1) ].keys())
             
             I = calculateMutual ( oneProb, sameProb, pairs )
-            correlatedPairs = getDisjointPairs( pairs, weight=I )
+            correlatedPairs = getDisjointPairs( pairs, [], I )
             
             rawOneProb = copy.deepcopy( oneProb )
             if cleanup:
@@ -873,10 +938,10 @@ def runGame ( device, move, shots, sim, maxScore=None, dataNeeded=True, cleanup=
             guessedPairs = matchingPairs
         # if choices are random, we generate a set of random pairs
         if (move=="R"):
-            guessedPairs = getDisjointPairs( pairs )
+            guessedPairs = getDisjointPairs( pairs, [], {} )
         # if choices are via MWPM, we do this
         if (move=="B"):
-            guessedPairs = getDisjointPairs( pairs, oneProb=oneProb )
+            guessedPairs = getDisjointPairs( pairs, oneProb, {} )
         # if choices are manual, let's get choosing
         if (move=="M"):
             
@@ -976,7 +1041,7 @@ def runGame ( device, move, shots, sim, maxScore=None, dataNeeded=True, cleanup=
         printM("Pairs you guessed for this round", move)
         printM(sorted(guessedPairs), move)
         printM("Pairs our bot would have guessed", move)
-        printM(sorted(getDisjointPairs( pairs, oneProb=oneProb )), move )
+        printM(sorted(getDisjointPairs( pairs, oneProb, {} )), move )
         printM("Correct pairs for this round", move)
         printM(sorted(matchingPairs), move)
         correctGuesses = list( set(guessedPairs).intersection( set(matchingPairs) ) )
@@ -1106,7 +1171,7 @@ def CalculateQuality ( x, oneProbSamples, sameProbSamples, gateSamples, pairs, s
         gate = gates[ 2*(score-1) ]
         
         matchingPairs = list(gate.keys())
-        guessedPairs = getDisjointPairs( pairs, oneProb=oneProb )
+        guessedPairs = getDisjointPairs( pairs, oneProb, {} )
         correctGuesses = list( set(guessedPairs).intersection( set(matchingPairs) ) )
         dC = len(correctGuesses) / len(matchingPairs)
         fractionCorrect[0] += dC # for mean
