@@ -26,6 +26,14 @@ This version either simulates a game on the chosen device, or creates one using 
 
 ### Contributing data
 
-If you have a quantum device you want to run the game on, check out [devices.py](devices.py). Here you can add the details of your setup. You can choose to use either QISKit or ProjectQ as the SDK, but you'll have to get the SDK to talk to your device yourself. As a first step, you can set the SDK to be "ManualQISKit". This will print a QASM to screen when it wants to run a quantum job, and ask for the results to be pasted in.
+If you have a quantum device, please consider running this game and contributing the resulting data. This will allow the public to get some experience of how your device works, and how it compares to others.
 
-Once you've generated data, it would be great if you added it to this repository. Then all could see how great your device is.
+If your device is already set up in [devices.py](devices.py), and the game already has support for your SDK, then all you need to do is run it! Do this with the [Get_Data](notebooks/Get_Data.ipynb) notebook. Just set the `device` variable to the name of your device, and then run all.
+
+If your device is not already set up, but it is compatible with one of the supported SDKs (QISKit, ProjectQ, Forest and Cirq), then you need to add the specifications to [devices.py](devices.py). See the comments and examples in this file to see how to do this.
+
+If you need to add a new SDK, this will need to be done in [QuantumAwesomeness.py](QuantumAwesomeness.py). Go through all the functions with the comment *This function contains SDK specific code*, and add the required code for your SDK.
+
+To avoid the above, you can also manually mediate between the game and your device. To do this, set the SDK for your device in [devices.py](devices.py) to be "ManualQISKit". This will print a QASM to screen when it wants to run a quantum job, and ask for the results to be pasted in.
+
+Once you've added your device, your SDK, or even your data from a real device, make a pull reqeust so we can add it in.
