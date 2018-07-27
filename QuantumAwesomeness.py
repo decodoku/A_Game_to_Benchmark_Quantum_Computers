@@ -560,8 +560,8 @@ def calculateFrac ( oneProb ):
 def calculateFuzz ( oneProb, pairs, matchingPairs ):
     
     # Input:
-    # * *oneProb* - A list with an entry for each qubit.
-    #               Each entry is the fraction of samples for which the measurement of that qubit returns *1*.
+    # * *oneProb* - A list with an entry for each qubit. Each entry is the fraction of samples for which the measurement of that qubit returns *1*.
+    # * *pairs* - A dictionary of pairs of qubits for which an entagling gate is possible. The key is a string which serves as the name of the pair. The value is a two element list with the qubit numbers of the two qubits in the pair. For controlled-NOTs, the control qubit is listed first.
     # * *matchingPairs* - The pairing of qubits in the current round.
     # 
     # Process:
@@ -620,7 +620,7 @@ def calculateMutual ( oneProb, sameProb, pairs ):
     # * *pairs* - A dictionary of pairs of qubits for which an entagling gate is possible. The key is a string which serves as the name of the pair. The value is a two element list with the qubit numbers of the two qubits in the pair. For controlled-NOTs, the control qubit is listed first.
     #
     # Process:
-    # * For each pair, the (classical) mutual information for the measureent results of the two qubits is calculated. This is done using oneProbs and sameProbs, which is a bit of a pain. But this information is sufficient to calculate the probability for the results '00', '01', '10' and '11' for the two qubits of each pair, which the probability distrubution required to calculate the mutual information.
+    # * For each pair, the (classical) mutual information for the measurement results of the two qubits is calculated. This is done using oneProbs and sameProbs, which is a bit of a pain. But this information is sufficient to calculate the probability for the results '00', '01', '10' and '11' for the two qubits of each pair, which the probability distrubution required to calculate the mutual information.
     # 
     # Output:
     # * *I* - Dictionary with pair names as keys and corresponding values of the mutual information as values.
@@ -790,7 +790,7 @@ def getDisjointPairs ( pairs, oneProb, weight ):
     # * *weight* - dictionary with pair names as keys and a weight assigned to each pair as the corresponding values.
     # 
     # Process:
-    # * A minimum weight perfect matching of the qubits us performed, according to the possible pairings. If weights are not given, but oneProbs are, the weights are calculated from the oneProbs. Otherwise the weights are chosen randomly to generate a random pairing.
+    # * A minimum weight perfect matching of the qubits is performed, using the possible pairing and weights provided. If weights are not given, but oneProbs are, the weights are calculated from the oneProbs. If oneProbs aren't given either, the weights are chosen randomly to generate a random pairing.
     # 
     # Output:
     # * *matchingPairs* - A list of the names of a random set of disjoint pairs included in the matching.
@@ -842,7 +842,7 @@ def runGame ( device, move, shots, sim, maxScore=None, dataNeeded=True, cleanup=
     # * *gates* - Entangling gates applied so far. Each round of the game corresponds to two 'slices'. *gates* is a list with a dictionary for each slice. The dictionary has pairs of qubits as keys and fractions of pi defining a corresponding entangling gate as values.
     # * *conjugates* - List of single qubit gates to conjugate entangling gates of previous rounds. Each is specified by a two element list. First is a string specifying the rotation axis ('X' or 'Y'), and the second specifies the fraction of pi for the rotation.
     # * *oneProbs*: Array of oneProb arrays (see processResults() for explanation of these), with an element for each round of the game.
-    # * *sameProbs*: Array of oneProb arrays (see processResults() for explanation of these), with an element for each round of the game.
+    # * *sameProbs*: Array of sameProb arrays (see processResults() for explanation of these), with an element for each round of the game.
     # * *resultsDicts*: Array of results arrays (see processResults() for explanation of these), with an element for each round of the game.
     
     num, area, entangleType, pairs, pos, example, sdk, runs = getLayout(device)
@@ -1060,6 +1060,22 @@ def runGame ( device, move, shots, sim, maxScore=None, dataNeeded=True, cleanup=
 
 def MakeGraph(X,Y,y,axisLabel,labels=[],verbose=False,log=False,tall=False):
     
+    # Input:
+    # * *X* - array of x axis values
+    # * *Y* - array of arrays of y axis values for multiple series
+    # * *y* - array of arrays of error bar widths for the y axis values for multiple series
+    # * *axisLabel* - list of two strings: labels for the x and z axis
+    # * *labels* - list of strings, giving the names for each series
+    # * *verbose* - when True, the arrays X, Y and y will be printed to screen
+    # * *log* - When true, the plot will be a log plot (on the y axis)
+    # * *tall* - if true, the plot will be a square to spread out the y axis values a bit more
+    # 
+    # Process:
+    # * Set up the required call to matplotlib and make the graph
+    # 
+    # Output:
+    # * Nothing is returned, but the required graph is output to screen
+    
     from matplotlib import pyplot as plt
     plt.rcParams.update({'font.size': 30})
     
@@ -1119,7 +1135,22 @@ def MakeGraph(X,Y,y,axisLabel,labels=[],verbose=False,log=False,tall=False):
 
 
 def GetData ( device, move, shots, sim, samples, maxScore ):
-
+    
+    # Input:
+    # * *device* - String specifying the device on which the game is played.
+    #              Details about the device will be obtained using getLayout.
+    # * *move* - String describing the way moves are chosen.
+    # * *shots* - Number of shots to be used for statistics.
+    # * *sim* - Boolean for whether the simulator is to be used.
+    # * *samples* - Number of full games to run
+    # * *maxScore* - Number of rounds to run each game for
+    #
+    # Process:
+    # * The game is the required number of times with the given specs. The information supplied by runGame() is then saved to file.
+    # 
+    # Output:
+    # * Nothing is returned, but the collected data is saved to file.
+    
     for sample in range(samples):
 
         print("move="+move+", shots="+str(shots)+", sample=" + str(sample+1) )
@@ -1156,7 +1187,25 @@ def GetData ( device, move, shots, sim, samples, maxScore ):
         
 def CalculateQuality ( x, oneProbSamples, sameProbSamples, gateSamples, pairs, score ) :
         
-    # see what fraction of the matchings we have correCt
+    # Input:
+    # * *x* - Array of values used to perform an independent linear transformation on each qubit
+    # * *oneProbSamples* - oneProbSamples[j][score-1] is the oneProb array for round s of the jth sample
+    # * *sameProbSamples* - as above, but for sameProbs
+    # * *gateSamples* - as above, but for gates
+    # * *pairs* - A dictionary with names of pairs as keys and lists of the two qubits of each pair as values
+    # * *score* - The round being played (numbered from 1 instead of 0)
+    #
+    # Process:
+    # * For a given round, the data from all samples are considered. This is used to determine:
+    #     * The average fraction of pairs that are guessed correctly by MWPM (see getDisjointPairs() for how this is done)
+    #     * The average difference between the frac value we get from calculateFrac(oneProb) and the actual value of frac used
+    #       (actually it is the average oneProb for the two qubits in each correct pair that is used)
+    # 
+    # Output:
+    # * *fractionCorrect* - Array of two values: the mean of the fraction of pairs that are correct, and the variance of this
+    # * *fracDifference* - Array of two values: the mean of the difference between measured and correct frac values, and the variance of this
+        
+    # see what fraction of the matchings we have correct
     
     fractionCorrect = [0 for _ in range(2)]
     fracDifference = [0 for _ in range(2)]
@@ -1187,8 +1236,6 @@ def CalculateQuality ( x, oneProbSamples, sameProbSamples, gateSamples, pairs, s
             
             dD += abs( calculateFrac(guessedOneProb)-gate[p] ) / len(gate)
         
-        #print(dD)
-        
         fracDifference[0] += dD # for mean
         fracDifference[1] += ( dD )**2 # for variance
             
@@ -1206,6 +1253,20 @@ def CalculateQuality ( x, oneProbSamples, sameProbSamples, gateSamples, pairs, s
 
 
 def CleanData ( x, rawOneProb, sameProb, pairs ):
+    
+    # Input:
+    # * **x* - Array of values used to perform an independent linear transformation on each qubit
+    # * *rawOneProb* - A list with an entry for each qubit. Each entry is the fraction of samples for which the measurement of that qubit returns *1*.
+    # * *sameProb* - A dictionary with pair names as keys, and probability that the two qubits each pair give the same results as values.
+    # * *pairs* - A dictionary with names of pairs as keys and lists of the two qubits of each pair as values
+    #
+    # Process:
+    # * Each oneProb in the input is transformed according to the following linear transformation, given values from x
+    # * oneProb[n] = x[3*n] * rawOneProb[n] + x[3*n+1] * rawOneProb[match] + x[3*n+2]
+    # * Here n is the qubit to which we are applying the tranformation, and match is the qubit that is most correlated with n
+    # 
+    # Output:
+    # * *oneProb* - The oneProb values after the transform has been applied
     
     I = calculateMutual ( rawOneProb, sameProb, pairs )
     
@@ -1239,6 +1300,20 @@ def CleanData ( x, rawOneProb, sameProb, pairs ):
 
 def getCleaningProfile ( device, move, shots, sim, num, maxScore, gritty=False ):
     
+    # Input:
+    # * *num* - number of qubits
+    # * *maxScore* - number of rounds that can be played
+    # * *gritty* - Whether to create a cleaning profile optimized for human players
+    # * other inputs are those required to address a given saved file
+    #
+    # Process:
+    # * This function obtains an array of cleaning profiles x (see CleanData() for more details on these).
+    # * This is done by loading them from a save file if one exists
+    # * If not, a generic one is made. This made to not make things look artificially perfect when a human is playing.
+    # 
+    # Output:
+    # * An arrays of cleaning profiles x, with one for each round
+    
     try: # see if a specific cleaner file has been made
         cleaner = resultsLoad( 'cleaner', move, shots, sim, device )[0]
     except: # if not, go with the default
@@ -1251,6 +1326,21 @@ def getCleaningProfile ( device, move, shots, sim, num, maxScore, gritty=False )
     
 
 def ProcessData ( device, move, shots, sim, cleanup):
+    
+    # Input:
+    # * *device* - String specifying the device on which the game is played.
+    # * *move* - String describing the way moves were chosen for the results to be loaded.
+    # * *shots* - Number of shots used in the results to be loaded.
+    # * *sim* - Boolean denoting whether a simulator was used for the results to be loaded.- 
+    # * *cleanup* - Boolean determining whether error mitigation post-processing is used
+    #
+    # Process:
+    # * The inputs specify data for a given set of runs that are loaded from file, and then used to calculate quantities that tell us how well the game was implemented. These are then returned as outputs.
+    # 
+    # Output:
+    # * *fuzzAvs* - Array of the average and variance of the fuzz (see calculateFuzz() ) for each round
+    # * *correctFracs* - Array of fractionCorrect (see calculateQuality() ) for each round
+    # * *differenceFracs* - Array of fracDifference (see calculateQuality() ) for each round
     
     num, area, entangleType, pairs, pos, example, sdk, runs = getLayout(device)
     
@@ -1297,6 +1387,16 @@ def ProcessData ( device, move, shots, sim, cleanup):
     return fuzzAvs, correctFracs, differenceFracs
 
 def PlotGraphSet ( devices, sims_to_use ):
+    
+    # Input:
+    # * *devices* - Any array of devices
+    # * *sims_to_used* - An array of sims
+    #
+    # Process:
+    # * For a given set of devices and sims, all the processed data produced by ProcessData() is plotted
+    # 
+    # Output:
+    # * None are returned, but graphs are printed to screen
     
     # what follows assumes that 'devices' is a list, so ensure this is true
     if type(devices) is not list:
@@ -1346,7 +1446,18 @@ def PlotGraphSet ( devices, sims_to_use ):
     MakeGraph(X,Yc,yc,["Game round","Average correctness for MWPM"],labels=labels)
     MakeGraph(X,Yd,yd,["Game round","Average difference from correct values"],labels=labels)
 
-def PlayGame(ascii=False):
+def PlayGame ( ):
+    
+    # Input:
+    # * None given, since the required information is taken directly from the player
+    #
+    # Process:
+    # * User is asked to specify a device, and whether they want data from real or simulated runs.
+    # * Using this info, a call to runGame() is set up to play the game with existing data.
+    # * User is also given the option to view background information.
+    # 
+    # Output:
+    # * None returned, but the game is played onscreen.
     
     clear_output()
     print("")
