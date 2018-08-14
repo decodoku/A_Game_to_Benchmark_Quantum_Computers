@@ -1,106 +1,21 @@
-import math
+'''
+This is the file where you need to make changes to add a new device.
+
+The supportedDevices() function returns a list of all devices that are ready to play offline, using Play_Quantum_Awesomeness.ipynb.
+This means that the notebooks/GetData.ipynb must have already been run (sim=True and sim=False) for any device added to this.
+
+The getLayout() function is where the details of a device must be entered, including name, number of qubits, connectivity, SDK, etc.
+'''
+
+from devicePrep import *
 
 def supportedDevices ():
 
-	# Returns the list of all supported devices
+	# Returns a list of all devices that can be selected in the Play_Quantum_Awesomeness.ipynb file
+    # 
 
 	return ["ibmqx4","ibmqx5","19Q-Acorn","8Q-Agave"]
 
-def makeExample ( num, pairs ):
-    
-    example = [0]*num
-    from QuantumAwesomeness import getDisjointPairs
-    import random
-    matchingPairs = getDisjointPairs ( pairs, [], {} )
-    for pair in matchingPairs:
-        example[ pairs[pair][0] ] = random.random()/2
-        example[ pairs[pair][1] ] = example[ pairs[pair][0] ] + 0.05 * random.random()
-        
-    return example
-
-def makeLayout (pattern):
-    
-    if pattern[0:4]=="line":
-        
-        num = int(pattern[4:])
-        
-        if (num%2)==1: # we can continue only num is odd
-            area = [num,1]
-            entangleType = "CZ"
-            pairs = {}
-            for qubit in range(num-1):
-                pairs[chr(65+qubit)] = [qubit,qubit+1]
-            pos = {}
-            for qubit in range(num):
-                pos[qubit] = [qubit,0]
-            runs = {True:{'shots':[100],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[],'move':[],'maxScore':0,'samples':0}}
-        else:
-            print("Try again with a valid number of qubits for this configuration")
-        
-    elif pattern[0:6] in ["ladder","square"]:
-        
-        num = int(pattern[6:])
-        
-        if pattern[0:6]=="ladder":
-            Lx = int(num/2)
-            Ly = 2
-            good_num = ((num%2)==0) # we can continue only num is even
-        else:
-            Lx = int(math.sqrt(num))
-            Ly = Lx
-            good_num = (type(Lx) is int) # we can continue only num is square
-        
-        if good_num: 
-            
-            area = [Lx,Ly]
-            entangleType = "CZ"
-            pairs = {}
-            pos = {}
-
-            
-            char = 65
-            for y in range(Ly):
-                for x in range(Lx):
-                    q = y*Lx+x
-                    if x<(Lx-1): # pair for (x,y) and (x+1,y)
-                        pairs[chr(char)] = [q,q+1]
-                        char+=1
-                    if y<(Ly-1): # pair for (x,y) and (x,y+Lx)
-                        pairs[chr(char)] = [q,q+Lx]
-                        char+=1
-                    pos[q] = [x,y]
-                    
-        else:
-            print("Try again with a valid number of qubits for this configuration")
-            
-        
-    elif pattern[0:3]=="web":
-        
-        num = int(pattern[3:])
-        
-        L = int(math.sqrt(num))
-            
-        area = [L,L]
-        pairs = {}
-        pos = {}
-            
-        char = 65
-        for q0 in range(num-1):
-            for q1 in range(q0+1,num):
-                pairs[chr(char)] = [q0,q1]
-                char+=1
-        
-        for q0 in range(num):
-            pos[q0] = [L*math.cos(q0*(2*math.pi)/num),L*math.sin(q0*(2*math.pi)/num)]
-            
-    else:
-        
-        print("\nWarning: " + str(device) + " is not a known device or pattern.\n")
-    
-    example = makeExample ( num, pairs )
-    
-    return area, pairs, pos, example
-    
 
 def getLayout (device):
 
@@ -108,22 +23,45 @@ def getLayout (device):
 	# 
 	# * *device* - A string which specifies the device to be used.
 	# 
-	# Process:
-	# 
-	# * Look up the details of that device.
-	# 
 	# Output:
 	# 
 	# * *num* - The number of qubits in the device.
-	# * *area* - A list with two entries specifying the width and height for the plot of the device. These should be in units of qubits (i.e. *area=[8,2]* for an *8x2* grid of qubits).
+    #           NOTE: If the SDK refers to qubits by numbers, this program assumes that qubits are numbered from 0.
+    #           If your device has qubits numbered from 1, and you don't think the compiler will translate,
+    #           set num to one greater than the number of qubits in your device, and don't use qubit 0. 
+    #
+    # * *area* - A list with two entries specifying the width and height to be used in the plots for the game.
+    #            These should be in units of qubits (i.e. *area=[8,2]* for an *8x2* grid of qubits).
+    #
 	# * *entangleType* - Type of entangling gate ("CX" or "CZ").
-	# * *pairs* - A dictionary of pairs of qubits for which an entagling gate is possible. The key is a string which serves as the name of the pair. The value is a two element list with the qubit numbers of the two qubits in the pair. For controlled-NOTs, the control qubit is listed first.
-	# * *pos* - A dictionary of positions for the qubits in the plot. Keys are qubit numbers and values are a two element list of coordinates.
+    #                    This does not affect the gates used in the program. With a good compiler, it doesn't matter what you choose.
+    #
+	# * *pairs* - A dictionary of pairs of qubits for which an entagling gate is possible.
+    #             The key is a string which serves as the name of the pair.
+    #             The value is a two element list with the qubit numbers of the two qubits in the pair.
+    #             For controlled-NOTs, the control qubit is listed first.
+    #
+	# * *pos* - A dictionary of positions for the qubits to be used in the plots for the game.
+    #           Keys are qubit numbers and values are a two element list of coordinates.
+    #
 	# * *example* - An example set of noisy entanglement results for use in the tutorial.
+    #               This can be generated using the makeExample() function of devicePrep.py.
+    #
 	# * *sdk* - The SDK to be used when running jobs on this device.
-    # * *runs* - Data that has been obtained. As a dictionary with values of *sim* as keys.
-    
-    
+    #           'QISKit', 'ProjectQ', 'Forest' and 'Cirq' are currently supported.
+    #           To add another SDK, see the functions with *This function contains SDK specific code.* in QuantumAwesomeness.py.
+    #
+    # * *runs* - Specification of the data that should be obtained when run.
+    #            Also serves as a description of the data expected to exist for devices listed in supportedDevices().
+    #            We recommend using
+    #            runs = {True:{'shots':[100],'move':['C','R'],'maxScore':20,'samples':100},
+    #                    False:{'shots':[10000],'move':['C'],'maxScore':10,'samples':1000}}
+    #            - The True/False keys denote simulated/real runs.
+    #            - 'shots' is the number of times each given instance is repeated for statistics
+    #            - 'move' is the way moves are chosen in the game ('C' for correct, 'R' for random).
+    #            - 'maxScore' is the number of rounds each game goes on for.
+    #            - 'samples' is the number of times a game defined by a given set of the above paramaters is repeated.
+
     
     ######## IBM DEVICES ########
     
@@ -152,7 +90,7 @@ def getLayout (device):
         runs = {True:{'shots':[100],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[8192],'move':['C'],'maxScore':10,'samples':53}}
 
     
-    elif device=="ibmqx2": #
+    elif device=="ibmqx2":
         # A 5 qubit device by IBM
         # https://github.com/QISKit/ibmqx-backend-information/tree/master/backends/ibmqx2
     
@@ -335,11 +273,16 @@ def getLayout (device):
         # A device from the group of A. Wallraff at ETH
         # https://arxiv.org/abs/1801.07904
     
+        # Note: Since this is an even number of qubits on a line, only one pairing is possible using the standard method.
+        #       To spice things up a bit, a fake qubit is added, along with fake entangling gates.
+        #       QuantumAwesomeness.py knows to not implement entangling gates whose name starts with 'fake'.
+        #       But they will allow pairings to occur in which two (non-neighbouring) qubits are left unpaired.
+    
         num = 9 # actually there are 8. But they number from 1, so 0 is unused
         area = [4,2]
         entangleType = "CZ"
         pairs = { 'A': [1,2], 'B': [2,3], 'C': [3,4], 'D': [4,5], 'E': [5,6], 'F': [6,7], 'G': [7,8],
-                  'fake1':[0,1], 'fake1':[0,2], 'fake1':[0,3], 'fake1':[0,4], 'fake1':[0,5], 'fake1':[0,6], 'fake1':[0,7], 'fake1':[0,8] }
+                  'fake1':[0,1], 'fake2':[0,2], 'fake3':[0,3], 'fake4':[0,4], 'fake5':[0,5], 'fake6':[0,6], 'fake7':[0,7], 'fake8':[0,8] }
         pos = { 1: [0,1], 2: [1,1], 3: [2,1], 4: [3,1],
                 8: [0,0], 7: [1,0], 6: [2,0], 5: [3,0] }
         example = [None, 0.24, 0.25, 0.06, 0.075, 0.175, 0.165, 0.235, 0.225]
@@ -350,10 +293,11 @@ def getLayout (device):
     
     ######## PATTERN DEVICES (FOR SIMULATION ONLY) ########
     
+    # See devicePrep.py for the types of pattern devices that have currently been defined.
     
     else:
         
-        area,  pairs, pos, example = makeLayout ("ladder22")
+        area,  pairs, pos, example = makeLayout (device)
         entangleType = "CZ"
         sdk = "QISKit" # any could be used, but QISKit is the best sdk
         runs = {True:{'shots':[100],'move':['C','R'],'maxScore':20,'samples':100},False:{'shots':[],'move':[],'maxScore':0,'samples':0}}

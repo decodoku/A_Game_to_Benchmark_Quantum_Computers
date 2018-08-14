@@ -1,5 +1,6 @@
-# tools from quantum awesomeness directory
-from devices import *# info on supported devices
+# first, some tools we'll need from this directory
+from devices import * # info on supported devices
+from devicePrp import *
 try:
     import mwmatching as mw # perfect matching
 except:
