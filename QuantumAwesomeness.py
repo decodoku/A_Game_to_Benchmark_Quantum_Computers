@@ -1,6 +1,6 @@
 # first, some tools we'll need from this directory
 from devices import * # info on supported devices
-from devicePrp import *
+from devicePrep import *
 try:
     import mwmatching as mw # perfect matching
 except:
@@ -1539,4 +1539,3 @@ def PlayGame ( ):
     except Exception as e:
         print(e)
         input("> Something went wrong. This probably means there is no saved data to play the game you requested.\n> Try choosing a different device...\n")
-
