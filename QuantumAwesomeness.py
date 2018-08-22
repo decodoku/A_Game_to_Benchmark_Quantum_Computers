@@ -1514,7 +1514,7 @@ def PlayGame ( ):
     
     tut = str.upper(input("\n> Do you want to read the tutorial? (y/n)...\n"))
     if tut!="N":
-        printPuzzle(device,example,"M", ascii=ascii)
+        printPuzzle(device,example,"M")
         input("> The game is a series of puzzles, which look something like this...\n")
         input("> All the coloured circles" + ((num_active_qubits%2)==1)*" (except one)" + " are paired up...\n")
         input("> Your job is to identify these pairs...\n")
@@ -1535,7 +1535,7 @@ def PlayGame ( ):
     shots = min( runs[sim]['shots'] )
 
     try:
-        runGame ( device, 'M', shots, sim, cleanup=True, dataNeeded=False, ascii=ascii)
+        runGame ( device, 'M', shots, sim, cleanup=True, dataNeeded=False )
     except Exception as e:
         print(e)
         input("> Something went wrong. This probably means there is no saved data to play the game you requested.\n> Try choosing a different device...\n")
