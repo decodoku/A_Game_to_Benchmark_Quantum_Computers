@@ -1472,8 +1472,6 @@ def PlotGraphSet ( devices, sims_to_use ):
     MakeGraph(X,Yf,yf,["Game round","Average Fuzz"],labels=labels)
     MakeGraph(X,Yc,yc,["Game round","Average correctness for MWPM"],labels=labels)
     MakeGraph(X,Yd,yd,["Game round","Average difference from correct values"],labels=labels)
-    print(X)
-    print(Yf)
 
 def PlayGame ( ):
     
