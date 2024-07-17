@@ -1,10 +1,6 @@
 # first, some tools we'll need from this directory
 from devices import * # info on supported devices
 from devicePrep import *
-try:
-    import mwmatching as mw # perfect matching
-except:
-    pass
 
 # other tools
 import random, numpy, math, time, copy, os
@@ -246,7 +242,7 @@ def resultsLoad ( fileType, move, shots, sim, device ) :
     return samples
                 
             
-def getResults ( device, sim, shots, q, c, engine, script ):
+def getResults ( device, sim, move, shots, q, c, engine, script, sample=None, qasm_file=None):
     
     # *This function contains SDK specific code.*
     # 
@@ -273,6 +269,7 @@ def getResults ( device, sim, shots, q, c, engine, script ):
         else:
             backend = get_backend(device)
         # add measurement for all qubits
+        script.barrier()
         for n in range(num):
             script.measure( q[n], c[n] )
            
@@ -300,15 +297,15 @@ def getResults ( device, sim, shots, q, c, engine, script ):
             
     elif sdk=="ManualQISKit":
         # add measurement for all qubits
+        script.barrier()
         for n in range(num):
             script.measure( q[n], c[n] )
-        qasm = engine.get_qasm("script")
-        input("\nHere is a QASM representation of the circuit you need to run\n"+qasm)
-        input_data = input("Whatever you enter into the box below will go into the results file.\nObviously, it is best if you put the results. But you can also put a job ID that can be replaced with the results later.\n")
-        try: # if the input successfully evaluates, we treat it as data
-            resultsRaw = eval(input_data)
-        except: # otherwise we treat it as a job ID
-            resultsRaw = input_data
+        qasm = script.qasm()
+        qasm = qasm.replace('\n',r'\n')
+
+        qasm_file.write('\n'+qasm)
+
+        resultsRaw = None
     
     elif sdk=="ProjectQ":
         engine.flush()
@@ -419,7 +416,12 @@ def processResults ( resultsRaw, num, pairs, sim, shots ):
                 j = numpy.random.choice( len(strings), p=list(resultsRaw.values()) )
                 results[strings[j]] += 1/shots
         else:
-            results = resultsRaw
+            # results is just resultsRaw (but make sure it's normalized)
+            results = {}
+            for string, samples in resultsRaw.items():
+                if type(samples) is int:
+                    samples /= shots
+                results[string] = samples
 
         # determine the fraction of results that came out as 1 (instead of 0) for each qubit
         
@@ -427,8 +429,6 @@ def processResults ( resultsRaw, num, pairs, sim, shots ):
             for v in range(num):
                 if (bitString[v]=="1"):
                     oneProb[v] += results[bitString]
-
-
         
         for bitString in strings:
             for p in pairs:
@@ -449,7 +449,7 @@ def printM ( string, move ):
         print(string)
 
 
-def entangle( device, move, shots, sim, gates, conjugates ):
+def entangle( device, move, shots, sim, gates, conjugates, sample=None, qasm_file=None):
     
     # Input:
     # * *device* - String specifying the device on which the game is played.
@@ -504,6 +504,10 @@ def entangle( device, move, shots, sim, gates, conjugates ):
         # do the second part of conjugation
         for n in range(num):
             implementGate ( device, conjugates[r][n][0], q[n], script, frac=conjugates[r][n][1] )
+
+        if sdk in ["QISKit", "ManualQISKit"]:
+            script.barrier()
+        
     
     # then the same for the current round (only needs the exp[ i XX * (frac - frac_inverse) ] )
     r = rounds-1
@@ -511,7 +515,7 @@ def entangle( device, move, shots, sim, gates, conjugates ):
         implementGate ( device, "XX", [ q[ pairs[p][0] ], q[ pairs[p][1] ] ], script, frac=gates[2*r][p] )
     
     
-    resultsRaw = getResults( device, sim, shots, q, c, engine, script )
+    resultsRaw = getResults( device, sim, move, shots, q, c, engine, script, sample, qasm_file)
     
     oneProb, sameProb, results = processResults ( resultsRaw, num, pairs, sim, shots )
 
@@ -520,10 +524,11 @@ def entangle( device, move, shots, sim, gates, conjugates ):
     return oneProb, sameProb, results
 
 
-def calculateEntanglement( oneProb ):
+def calculateEntanglement( oneProb, use_oneProb=True):
     
     # Input:
     # * *oneProb* - Float representing the fraction of samples for which the measurement of a qubit returns *1*.
+    # * *use_oneProb* - Whether to use oneProb directly.
     # 
     # Process:
     # * Calculates the number that will be shown to the player, based on oneProb. This should be zero when oneProb is zero, 1 when oneProb is 0.5, and monotonic.
@@ -535,8 +540,11 @@ def calculateEntanglement( oneProb ):
     # Output:
     # * *E* - As described above.
     
-    E = ( 2 * calculateFrac( oneProb ) )    
-    return min( E, 1)
+    if use_oneProb:
+        return oneProb
+    else:
+        E = ( 2 * calculateFrac( oneProb ) )    
+        return min( E, 1)
 
 def calculateFrac ( oneProb ):
     
@@ -647,7 +655,7 @@ def calculateMutual ( oneProb, sameProb, pairs ):
         
     return I
 
-def printPuzzle ( device, oneProb, move, ascii=False ):
+def printPuzzle ( device, oneProb, move='M', ascii=False ):
     
     # Input:
     # * *device* - String specifying the device on which the game is played.
@@ -740,18 +748,19 @@ def printPuzzle ( device, oneProb, move, ascii=False ):
                     if (oneProb[node]>1): # if oneProb is out of bounds (due to this node having already been selected) make it grey
                         colors.append( (0.5,0.5,0.5) )
                     else: # otherwise it is on the spectrum between red and blue
-                        E = calculateEntanglement( oneProb[node] )
+                        E = calculateEntanglement( oneProb[node], use_oneProb=False)
                         colors.append( (1-E,0,E) )
-                    sizes.append( 3000 )
+                    sizes.append( 2500 ) # 1200 is also good (but set the font to 18)
                     if oneProb[node]>1:
                         labels[node] = ""
                     elif oneProb[node]==0.5:
                         labels[node] = "99"
                     else:
+                        E = calculateEntanglement( oneProb[node])
                         labels[node] = "%.0f" % ( 100 * ( E ) )
                 else:
                     colors.append( "black" )
-                    sizes.append( 1000 )
+                    sizes.append( 1000 ) # 600 is also good (but set the font to 18)
                     labels[node] = node
 
             # show it
@@ -763,7 +772,6 @@ def printPuzzle ( device, oneProb, move, ascii=False ):
             plt.figure(2,figsize=(2*area[0],2*ratio*area[1])) 
             nx.draw(G, pos, node_color = colors, node_size = sizes, labels = labels, with_labels = True,
                     font_color ='w', font_size = 22.5)
-
             plt.show()
 
         
@@ -799,29 +807,41 @@ def getDisjointPairs ( pairs, oneProb, weight ):
     if not weight:
         for p in pairs.keys():
             if oneProb:
-                weight[p] = -calculateFracDifference( calculateFrac( oneProb[ pairs[p][0] ] ) , calculateFrac( oneProb[ pairs[p][1] ] ) )
+                weight[p] = calculateFracDifference( calculateFrac( oneProb[ pairs[p][0] ] ) , calculateFrac( oneProb[ pairs[p][1] ] ) )
             else:
                 weight[p] = random.randint(0,100)
+    max_weight = max(list(weight.values()))
 
     edges = []
     for p in pairs.keys():
-        edges.append( ( pairs[p][0], pairs[p][1], weight[p] ) )
+        edges.append( ( pairs[p][0], pairs[p][1], max_weight+1-weight[p] ) )
     
-    # match[j] = k means that edge j and k are matched
-    match = mw.maxWeightMatching(edges, maxcardinality=True)
     
+    graph = nx.Graph()
+    for n0, n1, weight in edges:
+        graph.add_edge(n0, n1, weight=weight)
+    matching = nx.max_weight_matching(graph, maxcardinality=True)
+    if type(matching) == dict:
+        matching_list = []
+        for k,v in matching.items():
+            matching_list.append([k,v])
+        matching = matching_list
+
     # get a list of the pair names for each pair in the matching (not including fakes)
+    coords2pair = {}
+    for pair, n0n1 in pairs.items():
+        coords2pair[tuple(n0n1)] = pair
+        coords2pair[tuple(n0n1[::-1])] = pair
     matchingPairs = []
-    for v in range(len(match)):
-        for p in pairs.keys():
-            if pairs[p]==[v,match[v]] and p[0:4]!='fake' :
-                matchingPairs.append(p)
-    
+    for n0n1 in matching:
+        pair = coords2pair[tuple(n0n1)]
+        if pair[0:4]!='fake':
+            matchingPairs.append(pair)
     
     return matchingPairs
 
 
-def runGame ( device, move, shots, sim, maxScore=None, dataNeeded=True, cleanup=False, game=None, ascii=False):
+def runGame ( device, move, shots, sim, maxScore=None, dataNeeded=True, cleanup=False, game=None, ascii=False, sample=None, perfect=None):
         
     # Input:
     # * *device* - String specifying the device on which the game is played.
@@ -834,6 +854,7 @@ def runGame ( device, move, shots, sim, maxScore=None, dataNeeded=True, cleanup=
     # * *cleanup* - Boolean determining whether error mitigation post-processing is used
     # * *game* - Integer identifiying a specific game to play from a file (can only be True if dataNeeded=True)
     # * *ascii* - Boolean to convey whether the image presented to the player should be purely ascii.
+    # * *perfect* - Whether to use perfect rather than inferred inverses. Defaults to `not sim`.
 
     #
     # Process:
@@ -846,8 +867,16 @@ def runGame ( device, move, shots, sim, maxScore=None, dataNeeded=True, cleanup=
     # * *sameProbs*: Array of sameProb arrays (see processResults() for explanation of these), with an element for each round of the game.
     # * *resultsDicts*: Array of results arrays (see processResults() for explanation of these), with an element for each round of the game.
     
+    if perfect==None:
+        perfect = not sim
+
     num, area, entangleType, pairs, pos, example, sdk, runs = getLayout(device)
     
+    if sdk == 'ManualQISKit':
+        qasm_file = open(path+'/results/'+device+'/qasm/qasm_'+move+'_'+str(shots)+'_'+str(sample)+'.txt','w')
+    else:
+        qasm_file = None
+
     gates = []
     conjugates = []
     oneProbs = []
@@ -911,7 +940,7 @@ def runGame ( device, move, shots, sim, maxScore=None, dataNeeded=True, cleanup=
             gates.append(appliedGates)
           
             # all gates so far are then run
-            oneProb, sameProb, results = entangle( device, move, shots, sim, gates, conjugates)
+            oneProb, sameProb, results = entangle( device, move, shots, sim, gates, conjugates, sample=sample, qasm_file=qasm_file)
           
         else:
             
@@ -1003,9 +1032,9 @@ def runGame ( device, move, shots, sim, maxScore=None, dataNeeded=True, cleanup=
 
         for p in guessedPairs:
             
-            if (move=="C" and sim==False):
+            if (move=="C" and perfect):
                 
-                guessedFrac = gates[ 2*(score-1) ][p] + 0.1/math.sqrt(shots)
+                guessedFrac = gates[ 2*(score-1) ][p]
             
             else:
 
@@ -1056,6 +1085,9 @@ def runGame ( device, move, shots, sim, maxScore=None, dataNeeded=True, cleanup=
     if move=="M" and restart==False:
         input("> There is no more data on this game :( Press Enter to restart...\n")
     
+    if sdk == 'ManualQISKit':
+        qasm_file.close()
+
     return gates, conjugates, oneProbs, sameProbs, resultsDicts
 
 
@@ -1078,7 +1110,7 @@ def MakeGraph(X,Y,y,axisLabel,labels=[],verbose=False,log=False,tall=False):
     # * Nothing is returned, but the required graph is output to screen
     
     from matplotlib import pyplot as plt
-    plt.rcParams.update({'font.size': 30})
+    plt.rcParams.update({'font.size': 15})
     
     markers = ["o","^","h","D","*"]
     
@@ -1135,7 +1167,7 @@ def MakeGraph(X,Y,y,axisLabel,labels=[],verbose=False,log=False,tall=False):
     plt.rcParams.update(plt.rcParamsDefault)
 
 
-def GetData ( device, move, shots, sim, samples, maxScore ):
+def GetData ( device, move, shots, sim, samples, maxScore, perfect=None):
     
     # Input:
     # * *device* - String specifying the device on which the game is played.
@@ -1145,18 +1177,24 @@ def GetData ( device, move, shots, sim, samples, maxScore ):
     # * *sim* - Boolean for whether the simulator is to be used.
     # * *samples* - Number of full games to run
     # * *maxScore* - Number of rounds to run each game for
+    # * *perfect* - Whether to use perfect rather than inferred inverses. Defaults to `not sim`.
     #
     # Process:
     # * The game is the required number of times with the given specs. The information supplied by runGame() is then saved to file.
     # 
     # Output:
     # * Nothing is returned, but the collected data is saved to file.
+
+    if perfect==None:
+        pefect = not sim
+
+    _, _, _, _, _, _, sdk, _ = getLayout(device)
     
     for sample in range(samples):
 
-        print("move="+move+", shots="+str(shots)+", sample=" + str(sample+1) )
+        print("move="+move+", shots="+str(shots)+", sample=" + str(sample) )
 
-        gates, conjugates, oneProbs, sameProbs, resultsDicts = runGame( device, move, shots, sim, maxScore=maxScore )
+        gates, conjugates, oneProbs, sameProbs, resultsDicts = runGame( device, move, shots, sim, maxScore=maxScore, sample=sample, perfect=perfect)
 
         # make a directory for this device if it doesn't already exist
         if not os.path.exists(path+'/results/' + device):
@@ -1164,13 +1202,14 @@ def GetData ( device, move, shots, sim, samples, maxScore ):
 
         filename = 'move=' + move + '_shots=' + str(shots) + '_sim=' + str(sim) + '.txt'
 
-        saveFile = open(path+'/results/' + device + '/oneProbs_'+filename, 'a')
-        saveFile.write( str(oneProbs)+'\n' )
-        saveFile.close()
-        
-        saveFile = open(path+'/results/' + device + '/sameProbs_'+filename, 'a')
-        saveFile.write( str(sameProbs)+'\n' )
-        saveFile.close()
+        if sdk!='ManualQISKit':
+            saveFile = open(path+'/results/' + device + '/oneProbs_'+filename, 'a')
+            saveFile.write( str(oneProbs)+'\n' )
+            saveFile.close()
+            
+            saveFile = open(path+'/results/' + device + '/sameProbs_'+filename, 'a')
+            saveFile.write( str(sameProbs)+'\n' )
+            saveFile.close()
 
         saveFile = open(path+'/results/' + device + '/gates_'+filename, 'a')
         saveFile.write( str(gates)+'\n' )
@@ -1180,7 +1219,7 @@ def GetData ( device, move, shots, sim, samples, maxScore ):
         saveFile.write( str(conjugates)+'\n' )
         saveFile.close()
         
-        if sim==False:
+        if sim==False and sdk!='ManualQISKit':
             saveFile = open(path+'/results/' + device + '/results_'+filename, 'a')
             saveFile.write( str(resultsDicts)+'\n' )
             saveFile.close()
@@ -1253,13 +1292,14 @@ def CalculateQuality ( x, oneProbSamples, sameProbSamples, gateSamples, pairs, s
     return fractionCorrect, fracDifference
 
 
-def CleanData ( x, rawOneProb, sameProb, pairs ):
+def CleanData ( x, rawOneProb, sameProb, pairs, minI=0):
     
     # Input:
     # * **x* - Array of values used to perform an independent linear transformation on each qubit
     # * *rawOneProb* - A list with an entry for each qubit. Each entry is the fraction of samples for which the measurement of that qubit returns *1*.
     # * *sameProb* - A dictionary with pair names as keys, and probability that the two qubits each pair give the same results as values.
     # * *pairs* - A dictionary with names of pairs as keys and lists of the two qubits of each pair as values
+    # * *minI* - Minimum I to make it worth worrying about.
     #
     # Process:
     # * Each oneProb in the input is transformed according to the following linear transformation, given values from x
@@ -1277,7 +1317,7 @@ def CleanData ( x, rawOneProb, sameProb, pairs ):
         for p in pairs:
             for j in range(2):
                 if n==pairs[p][j]:
-                    if I[p]>maxI:
+                    if I[p]>maxI and I[p]>minI:
                         maxI = I[p]
                         matches[n] = pairs[p][(j+1)%2]
 
@@ -1446,6 +1486,9 @@ def PlotGraphSet ( devices, sims_to_use ):
     MakeGraph(X,Yf,yf,["Game round","Average Fuzz"],labels=labels)
     MakeGraph(X,Yc,yc,["Game round","Average correctness for MWPM"],labels=labels)
     MakeGraph(X,Yd,yd,["Game round","Average difference from correct values"],labels=labels)
+    print(Yf[0])
+    print(Yc[0])
+    print(Yd[0])
 
 def PlayGame ( ):
     
