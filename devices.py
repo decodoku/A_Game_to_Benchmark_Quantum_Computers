@@ -112,7 +112,7 @@ def getLayout (device):
         example = [0.11,0.09,0.49,0.52,0.31]
         sdk = "ManualQISKit"
         runs = {True:{'shots':[8192],'move':['C'],'maxScore':10,'samples':500}}
-       
+
     elif device=="ibmqx4":
         # A 5 qubit device by IBM
         # https://github.com/QISKit/ibmqx-backend-information/tree/master/backends/ibmqx4

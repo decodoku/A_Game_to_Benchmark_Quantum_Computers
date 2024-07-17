@@ -1,10 +1,6 @@
 # first, some tools we'll need from this directory
 from devices import * # info on supported devices
 from devicePrep import *
-try:
-    import mwmatching as mw # perfect matching
-except:
-    pass
 
 # other tools
 import random, numpy, math, time, copy, os
@@ -811,29 +807,41 @@ def getDisjointPairs ( pairs, oneProb, weight ):
     if not weight:
         for p in pairs.keys():
             if oneProb:
-                weight[p] = -calculateFracDifference( calculateFrac( oneProb[ pairs[p][0] ] ) , calculateFrac( oneProb[ pairs[p][1] ] ) )
+                weight[p] = calculateFracDifference( calculateFrac( oneProb[ pairs[p][0] ] ) , calculateFrac( oneProb[ pairs[p][1] ] ) )
             else:
                 weight[p] = random.randint(0,100)
+    max_weight = max(list(weight.values()))
 
     edges = []
     for p in pairs.keys():
-        edges.append( ( pairs[p][0], pairs[p][1], weight[p] ) )
+        edges.append( ( pairs[p][0], pairs[p][1], max_weight+1-weight[p] ) )
     
-    # match[j] = k means that edge j and k are matched
-    match = mw.maxWeightMatching(edges, maxcardinality=True)
     
+    graph = nx.Graph()
+    for n0, n1, weight in edges:
+        graph.add_edge(n0, n1, weight=weight)
+    matching = nx.max_weight_matching(graph, maxcardinality=True)
+    if type(matching) == dict:
+        matching_list = []
+        for k,v in matching.items():
+            matching_list.append([k,v])
+        matching = matching_list
+
     # get a list of the pair names for each pair in the matching (not including fakes)
+    coords2pair = {}
+    for pair, n0n1 in pairs.items():
+        coords2pair[tuple(n0n1)] = pair
+        coords2pair[tuple(n0n1[::-1])] = pair
     matchingPairs = []
-    for v in range(len(match)):
-        for p in pairs.keys():
-            if pairs[p]==[v,match[v]] and p[0:4]!='fake' :
-                matchingPairs.append(p)
-    
+    for n0n1 in matching:
+        pair = coords2pair[tuple(n0n1)]
+        if pair[0:4]!='fake':
+            matchingPairs.append(pair)
     
     return matchingPairs
 
 
-def runGame ( device, move, shots, sim, maxScore=None, dataNeeded=True, cleanup=False, game=None, ascii=False, sample=None, bias=0):
+def runGame ( device, move, shots, sim, maxScore=None, dataNeeded=True, cleanup=False, game=None, ascii=False, sample=None, perfect=None):
         
     # Input:
     # * *device* - String specifying the device on which the game is played.
@@ -846,7 +854,7 @@ def runGame ( device, move, shots, sim, maxScore=None, dataNeeded=True, cleanup=
     # * *cleanup* - Boolean determining whether error mitigation post-processing is used
     # * *game* - Integer identifiying a specific game to play from a file (can only be True if dataNeeded=True)
     # * *ascii* - Boolean to convey whether the image presented to the player should be purely ascii.
-    # * *bias* - Extra angle to add to inverses. 2016 work used 0.1/sqrt(shots). Default is now 0.
+    # * *perfect* - Whether to use perfect rather than inferred inverses. Defaults to `not sim`.
 
     #
     # Process:
@@ -859,6 +867,9 @@ def runGame ( device, move, shots, sim, maxScore=None, dataNeeded=True, cleanup=
     # * *sameProbs*: Array of sameProb arrays (see processResults() for explanation of these), with an element for each round of the game.
     # * *resultsDicts*: Array of results arrays (see processResults() for explanation of these), with an element for each round of the game.
     
+    if perfect==None:
+        perfect = not sim
+
     num, area, entangleType, pairs, pos, example, sdk, runs = getLayout(device)
     
     if sdk == 'ManualQISKit':
@@ -1021,7 +1032,7 @@ def runGame ( device, move, shots, sim, maxScore=None, dataNeeded=True, cleanup=
 
         for p in guessedPairs:
             
-            if (move=="C" and sim==False):
+            if (move=="C" and perfect):
                 
                 guessedFrac = gates[ 2*(score-1) ][p]
             
@@ -1156,7 +1167,7 @@ def MakeGraph(X,Y,y,axisLabel,labels=[],verbose=False,log=False,tall=False):
     plt.rcParams.update(plt.rcParamsDefault)
 
 
-def GetData ( device, move, shots, sim, samples, maxScore, bias=0):
+def GetData ( device, move, shots, sim, samples, maxScore, perfect=None):
     
     # Input:
     # * *device* - String specifying the device on which the game is played.
@@ -1166,7 +1177,7 @@ def GetData ( device, move, shots, sim, samples, maxScore, bias=0):
     # * *sim* - Boolean for whether the simulator is to be used.
     # * *samples* - Number of full games to run
     # * *maxScore* - Number of rounds to run each game for
-    # * *bias* - Bias angle of runGame
+    # * *perfect* - Whether to use perfect rather than inferred inverses. Defaults to `not sim`.
     #
     # Process:
     # * The game is the required number of times with the given specs. The information supplied by runGame() is then saved to file.
@@ -1174,13 +1185,16 @@ def GetData ( device, move, shots, sim, samples, maxScore, bias=0):
     # Output:
     # * Nothing is returned, but the collected data is saved to file.
 
+    if perfect==None:
+        pefect = not sim
+
     _, _, _, _, _, _, sdk, _ = getLayout(device)
     
     for sample in range(samples):
 
         print("move="+move+", shots="+str(shots)+", sample=" + str(sample) )
 
-        gates, conjugates, oneProbs, sameProbs, resultsDicts = runGame( device, move, shots, sim, maxScore=maxScore, sample=sample, bias=bias)
+        gates, conjugates, oneProbs, sameProbs, resultsDicts = runGame( device, move, shots, sim, maxScore=maxScore, sample=sample, perfect=perfect)
 
         # make a directory for this device if it doesn't already exist
         if not os.path.exists(path+'/results/' + device):
@@ -1472,6 +1486,9 @@ def PlotGraphSet ( devices, sims_to_use ):
     MakeGraph(X,Yf,yf,["Game round","Average Fuzz"],labels=labels)
     MakeGraph(X,Yc,yc,["Game round","Average correctness for MWPM"],labels=labels)
     MakeGraph(X,Yd,yd,["Game round","Average difference from correct values"],labels=labels)
+    print(Yf[0])
+    print(Yc[0])
+    print(Yd[0])
 
 def PlayGame ( ):
     
