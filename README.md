@@ -24,10 +24,6 @@ The easiest way to play is to use the browser version [here](https://mybinder.or
 
 This version either simulates a game on the chosen device, or creates one using data that has already been extracted from the real quantum computer.
 
-### How to use in 2024
-
-This software was made in 2018, and has not been updates to modern packages. To generate circuits for modern devices, we recommend you do it for the `'ManualQISKit'` sdk. This will use the old 0.24.0 version Qiskit version (as specified in requirements.txt) to generate the circuits and write them to file. You can then run and process them with modern packages, such as in [this notebook](notebooks/RunBigBirds.ipynb).
-
 ### Contributing data
 
 If you have a quantum device, please consider running this game and contributing the resulting data. This will allow the public to get some experience of how your device works, and how it compares to others.
